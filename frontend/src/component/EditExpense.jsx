@@ -51,7 +51,7 @@ export default function EditExpense() {
   const [expenseTitle, setExpenseTitle] = useState(null);
   const [filteredUser, setFilteredUser] = useState([]);
   const [showModal, setShowModal] = useState(false);
-
+  const API_URL = import.meta.env.VITE_API_URL
   const user = useSelector((state) => state?.user);
   const id = user?.currentUser?._id;
   const profilePicture = user?.currentUser?.profilePicture;
@@ -314,7 +314,7 @@ export default function EditExpense() {
 
   const editExpense = async () => {
     try {
-      const res = await fetch(`/api/expense/update/${expId}`, {
+      const res = await fetch(`${API_URL}/expense/update/${expId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

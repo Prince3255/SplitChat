@@ -10,6 +10,7 @@ export default function AddGroup({ showModal, setShowModal, userDetail }) {
   const [groupMemberSearchTerm, setGroupMemberSearchTerm] = useState("");
   const [filteredUser, setFilteredUser] = useState([]);
   const [userSelectDetail, setUserSelectDetail] = useState([]);
+  const API_URL = import.meta.env.VITE_API_URL
 
   const ref = useRef();
 
@@ -18,7 +19,7 @@ export default function AddGroup({ showModal, setShowModal, userDetail }) {
   const searchUsersApi = async (searchTerm) => {
     try {
       const res = await fetch(
-        `/api/user/search?query=${encodeURIComponent(searchTerm)}`,
+        `${VITE_API_URL}/user/search?query=${encodeURIComponent(searchTerm)}`,
         {
           method: "GET",
           headers: {
@@ -88,7 +89,7 @@ export default function AddGroup({ showModal, setShowModal, userDetail }) {
 
   const handleCreateGroup = async () => {
     try {
-      const res = await fetch(`/api/group/create`, {
+      const res = await fetch(`${VITE_API_URL}/group/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

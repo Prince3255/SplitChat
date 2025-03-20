@@ -8,6 +8,7 @@ export default function Login() {
   const [ formData, setFormData ] = useState({})
   const [ error, setError ] = useState(null)
   const [ loading, setLoading ] = useState(false)
+  const API_URL = import.meta.env.VITE_API_URL
 
   const navigate = useNavigate()
 
@@ -43,7 +44,7 @@ export default function Login() {
     try {
       setError(null)
       setLoading(true)
-      const res = await fetch('/api/auth/login', {
+      const res = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

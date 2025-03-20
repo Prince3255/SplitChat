@@ -9,6 +9,7 @@ export default function Signup() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const API_URL = import.meta.env.VITE_API_URL
 
   const validateForm = () => {
     if (!formData.username || formData.username.trim().length < 3) {
@@ -50,7 +51,7 @@ export default function Signup() {
     try {
       setError(null);
       setLoading(true);
-      const res = await fetch("/api/auth/signup", {
+      const res = await fetch(`${API_URL}/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

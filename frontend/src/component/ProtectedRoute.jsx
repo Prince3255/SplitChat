@@ -9,11 +9,12 @@ import Footer from './Footer'
 function ProtectedRoute() {
    const [isAuthenticated, setIsAuthenticated] = useState(null)
    const dispatch = useDispatch()
+   const API_URL = import.meta.env.VITE_API_URL
 
    useEffect(() => {
     const verifyUser = async () => {
         try {
-            const res = await fetch('/api/auth/verify', {
+            const res = await fetch(`${API_URL}/auth/verify`, {
                 method: 'GET',
                 credentials: 'include'
             })

@@ -20,6 +20,7 @@ export default function Comment({ postId }) {
   const [userData, setUserData] = useState([]);
   const user = useSelector((state) => state.user);
   const queryClient = useQueryClient();
+  const API_URL = import.meta.env.VITE_API_URL
 
   const {
     data: commentData,
@@ -94,7 +95,7 @@ export default function Comment({ postId }) {
 
   const onLike = async (commentId) => {
     try {
-      const response = await fetch(`/api/comment/likecomment/${commentId}`, {
+      const response = await fetch(`${API_URL}/comment/likecomment/${commentId}`, {
         method: "PUT",
         credentials: "include",
       });
@@ -131,7 +132,7 @@ export default function Comment({ postId }) {
 
   const deleteComment = async (commentId) => {
     try {
-      const response = await fetch(`/api/comment/deletecomment/${commentId}`, {
+      const response = await fetch(`${API_URL}/comment/deletecomment/${commentId}`, {
         method: "DELETE",
         credentials: "include",
       });
@@ -171,7 +172,7 @@ export default function Comment({ postId }) {
     }
 
     try {
-      const res = await fetch("/api/comment/create", {
+      const res = await fetch("${API_URL}/comment/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -206,7 +207,7 @@ export default function Comment({ postId }) {
 
   const handleSave = async (commentId) => {
     try {
-      const res = await fetch(`/api/comment/editcomment/${commentId}`, {
+      const res = await fetch(`${API_URL}/comment/editcomment/${commentId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

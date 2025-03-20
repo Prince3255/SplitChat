@@ -9,7 +9,8 @@ import { Link } from "react-router-dom";
 
 const userExpense = async ({ queryKey }) => {
   const [_, id, groupId] = queryKey;
-  let url = `/api/user/${id}/expense/user`;
+  const API_URL = import.meta.env.VITE_API_URL
+  let url = `${API_URL}/user/${id}/expense/user`;
 
   if (groupId) {
     url += `?groupId=${groupId}`;
@@ -44,7 +45,7 @@ const userExpense = async ({ queryKey }) => {
 
 const groupExpense = async ({ queryKey }) => {
   const [_, id] = queryKey;
-  let url = `/api/user/${id}/expense/group`;
+  let url = `${API_URL}/user/${id}/expense/group`;
 
   try {
     const res = await fetch(url, {

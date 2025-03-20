@@ -55,7 +55,7 @@ export default function GroupEdit() {
   const user = useSelector((state) => state?.user);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-
+  const API_URL = import.meta.env.VITE_API_URL
   const location = useLocation();
   const queryParam = new URLSearchParams(location.search);
 
@@ -209,7 +209,7 @@ export default function GroupEdit() {
 
   const handleLeaveGroup = async () => {
     try {
-      const res = await fetch(`/api/group/leave/${id}`, {
+      const res = await fetch(`${API_URL}/group/leave/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -259,7 +259,7 @@ export default function GroupEdit() {
 
   const handleSave = async () => {
     try {
-      const response = await fetch(`/api/group/update/${id}`, {
+      const response = await fetch(`${API_URL}/group/update/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

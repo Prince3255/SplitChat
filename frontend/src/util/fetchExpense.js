@@ -2,7 +2,8 @@ import toast from "react-hot-toast";
 
 const fetchExpense = async ({ queryKey }) => {
     const [_, expenseId] = queryKey;
-    let url = `/api/expense/${expenseId}`;
+    const API_URL = import.meta.env.VITE_API_URL
+    let url = `${API_URL}/expense/${expenseId}`;
     
     try {
       const res = await fetch(url, {

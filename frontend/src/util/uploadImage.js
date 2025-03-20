@@ -9,7 +9,7 @@ const uploadImage = async ({
   setIsCoverImageUploading = false,
 }) => {
   if (!imageFile) return;
-
+  const API_URL = import.meta.env.VITE_API_URL
   if (imageFile) {
     const formData = new FormData();
     formData.append("imageFile", imageFile);
@@ -20,7 +20,7 @@ const uploadImage = async ({
       setIsUploading(true);
     }
     try {
-      const response = await fetch("/api/upload", {
+      const response = await fetch(`${API_URL}/upload`, {
         method: "POST",
         body: formData,
         credentials: "include",

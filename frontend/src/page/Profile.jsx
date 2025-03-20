@@ -31,6 +31,7 @@ export default function Profile() {
   const fileInputRef = useRef(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const API_URL = import.meta.env.VITE_API_URL
 
   const {
     data: userData,
@@ -87,7 +88,7 @@ export default function Profile() {
 
   const updateProfile = async (imageUrl) => {
     try {
-      const res = await fetch(`/api/user/update/${user?.currentUser?._id}`, {
+      const res = await fetch(`${API_URL}/user/update/${user?.currentUser?._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -133,7 +134,7 @@ export default function Profile() {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch("/api/user/logout", {
+      const response = await fetch(`${API_URL}/user/logout`, {
         method: "POST",
       });
 

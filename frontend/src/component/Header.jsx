@@ -25,7 +25,7 @@ export default function Header() {
   const [id1, setId] = useState(null);
   const socket = getSocket();
   const navigate = useNavigate();
-
+  const API_URL = import.meta.env.VITE_API_URL
   const ref = useRef(null);
 
   const {
@@ -80,7 +80,7 @@ export default function Header() {
     if (searchTerm) {
       const search = async () => {
         try {
-          const res = await fetch(`/api/search?searchTerm=${searchTerm}`, {
+          const res = await fetch(`${API_URL}/search?searchTerm=${searchTerm}`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",

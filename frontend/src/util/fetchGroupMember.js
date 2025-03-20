@@ -1,8 +1,9 @@
 import toast from "react-hot-toast";
 
 const fetchGroupMember = async (groupId) => {
+  const API_URL = import.meta.env.VITE_API_URL
   try {
-    const res = await fetch(`/api/group/${groupId}/member`, {
+    const res = await fetch(`${API_URL}/group/${groupId}/member`, {
       headers: {
         "Content-Type": "application/json",
       },

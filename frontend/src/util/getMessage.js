@@ -2,7 +2,8 @@ import toast from "react-hot-toast";
 
 export const getMessage = async ({ queryKey }) => {
   const [_, receiverId, groupId] = queryKey;
-  let url = "/api/chat/";
+  const API_URL = import.meta.env.VITE_API_URL
+  let url = `${API_URL}/chat/`;
   // if (id !== groupId) url += `?receiverId=${id}`;
   // if (groupId) {
   //     url += `?receiverId=${id}&groupId=${groupId}`

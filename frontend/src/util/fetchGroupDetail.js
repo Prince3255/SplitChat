@@ -2,7 +2,8 @@ import toast from "react-hot-toast";
 
 export const fetchGroupDetail = async ({ queryKey }) => {
     const [_, id] = queryKey;
-    let url = `/api/group/${id}/detail`;
+    const API_URL = import.meta.env.VITE_API_URL
+    let url = `${API_URL}/group/${id}/detail`;
   
     try {
       const res = await fetch(url, {

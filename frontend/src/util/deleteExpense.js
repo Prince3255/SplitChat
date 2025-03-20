@@ -1,7 +1,8 @@
 import toast from "react-hot-toast";
 
 const deleteExpense = async (expenseId) => {
-  let url = `/api/expense/delete/${expenseId}`;
+  const API_URL = import.meta.env.VITE_API_URL
+  let url = `${API_URL}/expense/delete/${expenseId}`;
 
   try {
     const res = await fetch(url, {

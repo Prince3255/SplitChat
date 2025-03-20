@@ -8,6 +8,7 @@ export const sendMessage = async (
   audiofile = null,
   videoFile = null
 ) => {
+  const API_URL = import.meta.env.VITE_API_URL
   try {
     let imageUrl = null;
     let audioUrl = null;
@@ -18,7 +19,7 @@ export const sendMessage = async (
       if (audiofile) formData.append("audioFile", audiofile);
       if (videoFile) formData.append("videoFile", videoFile);
       console.log(formData);
-      const response = await fetch("/api/upload", {
+      const response = await fetch(`${API_URL}/upload`, {
         method: "POST",
         body: formData,
         credentials: "include",
@@ -39,7 +40,7 @@ export const sendMessage = async (
       audioUrl = data?.data?.audioUrl || null;
       videoUrl = data?.data?.videoUrl || null;
     }
-    let url = "/api/chat/send/";
+    let url = `${API_URL}/chat/send/`;
     let param = new URLSearchParams();
 
     if (rid) {

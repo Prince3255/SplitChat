@@ -32,6 +32,7 @@ export default function EditSettleUp() {
 
   const [groupId, setGroupId] = useState(null);
   const [groupSelectDetail, setGroupSelectDetail] = useState(null);
+  const API_URL = import.meta.env.VITE_API_URL
 
   const user = useSelector((state) => state?.user);
   const id = user?.currentUser?._id;
@@ -173,7 +174,7 @@ export default function EditSettleUp() {
 
   const handleSettleUpEdit = async () => {
     try {
-      const res = await fetch(`/api/settleup/update/${sid}`, {
+      const res = await fetch(`${API_URL}/settleup/update/${sid}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

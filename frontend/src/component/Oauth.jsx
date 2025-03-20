@@ -9,6 +9,7 @@ import { AiFillGoogleCircle } from 'react-icons/ai'
 export default function Oauth() {
   const auth = getAuth(app)
   const navigate = useNavigate()
+  const API_URL = import.meta.env.VITE_API_URL
   
   const handleClick = async () => {
     const provider = new GoogleAuthProvider()
@@ -18,7 +19,7 @@ export default function Oauth() {
 
     try {
       const resultFromGoogle = await signInWithPopup(auth, provider)
-      const res =  await fetch('/api/auth/google', {
+      const res =  await fetch(`${API_URL}/auth/google`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

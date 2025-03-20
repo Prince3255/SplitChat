@@ -53,6 +53,7 @@ export default function AddExpense({
   const [groupId, setGroupId] = useState(null);
   const [expenseTitle, setExpenseTitle] = useState("");
   const [filteredUser, setFilteredUser] = useState([]);
+  const API_URL = import.meta.env.VITE_API_URL
 
   const ref = useRef();
   const dropdownRef = useRef(null);
@@ -170,7 +171,7 @@ export default function AddExpense({
 
   const addExpense = async () => {
     try {
-      const res = await fetch(`/api/expense/create`, {
+      const res = await fetch(`${API_URL}/expense/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

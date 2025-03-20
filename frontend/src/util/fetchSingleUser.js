@@ -1,8 +1,9 @@
 import toast from "react-hot-toast";
 
 const fetchSingleUser = async (id) => {
+  const API_URL = import.meta.env.VITE_API_URL
   try {
-    const res = await fetch(`/api/user/${id}`, {
+    const res = await fetch(`${API_URL}/user/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

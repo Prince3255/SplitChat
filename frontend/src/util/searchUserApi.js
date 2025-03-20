@@ -1,9 +1,10 @@
 import toast from "react-hot-toast";
 
 const searchUsersApi = async (searchTerm) => {
+  const API_URL = import.meta.env.VITE_API_URL
   try {
     const res = await fetch(
-      `/api/user/search?query=${encodeURIComponent(searchTerm)}`,
+      `${API_URL}/user/search?query=${encodeURIComponent(searchTerm)}`,
       {
         method: "GET",
         headers: {

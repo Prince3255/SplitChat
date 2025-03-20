@@ -13,7 +13,8 @@ import { Link, useLocation } from "react-router-dom";
 
 const groupExpense = async ({ queryKey }) => {
   const [_, id] = queryKey;
-  let url = `/api/user/${id}/expense/group`;
+  const API_URL = import.meta.env.VITE_API_URL
+  let url = `${API_URL}/user/${id}/expense/group`;
 
   try {
     const res = await fetch(url, {

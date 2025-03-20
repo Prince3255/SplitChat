@@ -28,7 +28,8 @@ export const fetchData = async (url, method = "GET", body = null) => {
 
 export const groupExpense = async ({ queryKey }) => {
   const [_, userId, groupId] = queryKey;
-  let url = `/api/user/${userId}/expense/user`;
+  const API_URL = import.meta.env.VITE_API_URL
+  let url = `${API_URL}/user/${userId}/expense/user`;
   if (groupId) url += `?groupId=${groupId}`;
 
   return await fetchData(url, "POST");
@@ -37,7 +38,7 @@ export const groupExpense = async ({ queryKey }) => {
 export const settleUpDetail = async ({ queryKey }) => {
   const [_, id] = queryKey;
 
-  let url = `/api/settleup/settle-up`;
+  let url = `${API_URL}/settleup/settle-up`;
   if (id) {
     url += `?groupId=${id}`
   }

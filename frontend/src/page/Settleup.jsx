@@ -23,7 +23,7 @@ export default function Settleup({
   const [filteredUser, setFilteredUser] = useState([]);
   const [payerDetail, setPayerDetail] = useState(null);
   const [recipientDetail, setRecipientDetail] = useState(null);
-
+  const API_URL = import.meta.env.VITE_API_URL
   const [groupId, setGroupId] = useState(groupId1);
   const [groupSelectDetail, setGroupSelectDetail] = useState(null);
 
@@ -35,7 +35,7 @@ export default function Settleup({
     setGroupId(groupId1)
     const fetchGroupMember = async (groupId) => {
       try {
-        const res = await fetch(`/api/group/${groupId}/member`, {
+        const res = await fetch(`${API_URL}/group/${groupId}/member`, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -96,7 +96,7 @@ export default function Settleup({
 
   const handleSettleUpSubmit = async () => {
     try {
-      const res = await fetch(`/api/settleup/create`, {
+      const res = await fetch(`${API_URL}/settleup/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
