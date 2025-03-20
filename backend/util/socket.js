@@ -7,10 +7,19 @@ dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
-
+const allowedOrigins = [
+  'https://split-chat-eight.vercel.app',
+  'http://localhost:5173' // for local testing
+];
 const io = new Server(server, {
   cors: {
-    origin: process.env.CORS_ORIGIN,
+    origin: (origin, callback) => {
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
     transports: ["websocket", "polling"],
   },
