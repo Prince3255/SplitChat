@@ -7,7 +7,7 @@ import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { groupExpense, settleUpDetail } from "../util/fetchData";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
-import EditSettleUp from "./editSettleUp";
+import EditSettleUp from "./EditSettleUp";
 import deleteSettleUp from "../util/deleteSettleUp";
 import DeleteModal from "./DeleteModal";
 import GroupSettleUpSkeleton from "./GroupSettleUpSkeleton";
