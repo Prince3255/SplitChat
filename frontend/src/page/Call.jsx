@@ -18,7 +18,11 @@ export default function Call() {
   useEffect(() => {
     console.log(id1, isCaller)
     navigator.mediaDevices
-      .getUserMedia({ audio: true, video: true })
+      .getUserMedia({ audio: {
+        echoCancellation: true,
+        noiseSuppression: true,
+        autoGainControl: true
+      }, video: true })
       .then((stream) => {
         setLocalStream(stream);
         userVideo.current.srcObject = stream;
@@ -38,7 +42,7 @@ export default function Call() {
         };
 
         pc.current.ontrack = (e) => {
-          console.log(e)
+          console.log('e', e.streams[0])
           remoteVideo.current.srcObject = e.streams[0];
         };
 
