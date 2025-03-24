@@ -94,7 +94,7 @@ export const login = asyncHandler (async (req, res, next) => {
         const cookieOption = {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: "strict",
+            sameSite: "None",
             maxAge: 7 * 24 * 60 * 60 * 1000
         }
         
@@ -115,7 +115,7 @@ export const logout = asyncHandler( async (req, res) => {
     const cookieOption = {
          httpOnly: true,
          secure: process.env.NODE_ENV === 'production',
-         sameSite: 'strict',
+         sameSite: 'None',
          maxAge: 7 * 24 * 60 * 60 * 1000
     }
 
@@ -146,7 +146,7 @@ export const google = asyncHandler (async (req, res, next) => {
             const cookieOption = {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
-                sameSite: 'strict',
+                sameSite: 'None',
                 maxAge: 7 * 24 * 60 * 60 * 1000
             }
 
@@ -184,7 +184,7 @@ export const google = asyncHandler (async (req, res, next) => {
             const cookieOption = {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
-                sameSite: 'strict',
+                sameSite: 'None',
                 maxAge: 7 * 24 * 60 * 60 * 1000
             }
 
