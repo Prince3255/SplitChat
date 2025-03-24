@@ -8,7 +8,7 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 const allowedOrigins = [
-  'https://split-chat-eight.vercel.app',
+  'https://splitchat.vercel.app',
   'http://localhost:5173' // for local testing
 ];
 const io = new Server(server, {

@@ -21,7 +21,7 @@ dotenv.config();
 connect_DB();
 
 const allowedOrigins = [
-  "https://split-chat-eight.vercel.app",
+  "https://splitchat.vercel.app",
   "http://localhost:5173", // for local testing
 ];
 app.use((req, res, next) => {
