@@ -4,7 +4,7 @@ import { io } from "socket.io-client";
 const BASE_URL =
 import.meta.env.VITE_NODE_ENV === "development"
 ? "http://localhost:3000"
-: "/";
+: import.meta.env.VITE_API_URL;
 
 let socket = null;
 
