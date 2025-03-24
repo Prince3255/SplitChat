@@ -38,6 +38,7 @@ export default function Call() {
         };
 
         pc.current.ontrack = (e) => {
+          console.log(e)
           remoteVideo.current.srcObject = e.streams[0];
         };
 
