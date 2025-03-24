@@ -45,6 +45,7 @@ const userExpense = async ({ queryKey }) => {
 
 const groupExpense = async ({ queryKey }) => {
   const [_, id] = queryKey;
+  const API_URL = import.meta.env.VITE_API_URL
   let url = `${API_URL}/user/${id}/expense/group`;
 
   try {

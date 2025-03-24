@@ -37,7 +37,7 @@ export const groupExpense = async ({ queryKey }) => {
 
 export const settleUpDetail = async ({ queryKey }) => {
   const [_, id] = queryKey;
-
+  const API_URL = import.meta.env.VITE_API_URL
   let url = `${API_URL}/settleup/settle-up`;
   if (id) {
     url += `?groupId=${id}`
