@@ -57,7 +57,7 @@ export default function Call() {
             .createOffer()
             .then((offer) => pc.current.setLocalDescription(offer))
             .then(() => {
-              console.log('pcl', pc.current.localDescription)
+              console.log("pcl", pc.current.localDescription);
               socket.emit("offer", {
                 to: id1,
                 offer: pc.current.localDescription,
@@ -85,9 +85,21 @@ export default function Call() {
       new RTCSessionDescription(offer?.offer)
     );
 
+    if (pc.current.pendingCandidates) {
+      console.log('pending candidate ', pc.current.pendingCandidates);
+      pc.current.pendingCandidates.forEach(async (e) => {
+        try {
+          await pc.current.addIceCandidate(new RTCIceCandidate(e.candidate));
+        } catch (error) {
+          console.log('Error while adding pending candidate ', error);
+        }
+      })
+      pc.current.pendingCandidates = []
+    }
+
     const answer = await pc.current.createAnswer();
     await pc.current.setLocalDescription(answer);
-    console.log('pc12', pc)
+    console.log("pc12", pc);
     socket.emit("answer", {
       to: offer?.from,
       answer: answer,
@@ -95,22 +107,28 @@ export default function Call() {
   };
 
   const handleAnswer = (answer) => {
-    console.log('answer', answer);
-    pc.current.setRemoteDescription(
-      new RTCSessionDescription(answer?.answer)
-    );
+    console.log("answer", answer);
+    pc.current.setRemoteDescription(new RTCSessionDescription(answer?.answer));
   };
 
   const handleRemoteIce = async (candidate) => {
-    console.log('candidate', candidate)
+    console.log("Received ICE Candidate", candidate);
     if (candidate?.candidate) {
-      try {
+      if (pc.current.remoteDescription) {
+        try {
           await pc.current.addIceCandidate(new RTCIceCandidate(candidate?.candidate));
-      } catch (e) {
-          console.error('Error adding received ice candidate', e);
+        } catch (e) {
+          console.error("Error adding received ice candidate", e);
+        }
+      } else {
+        console.warn("Remote description not set. Storing candidate for later.");
+        if (!pc.current.pendingCandidates) {
+          pc.current.pendingCandidates = [];
+        }
+        pc.current.pendingCandidates.push(candidate);
       }
-  }
-  };
+    }
+  };  
 
   return (
     <div className="flex flex-col h-screen">
