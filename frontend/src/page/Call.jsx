@@ -16,7 +16,6 @@ export default function Call() {
   const user = useSelector((state) => state.user);
 
   useEffect(() => {
-    // console.log("id1", id1, isCaller);
     navigator.mediaDevices
       .getUserMedia({
         audio: {
@@ -34,10 +33,8 @@ export default function Call() {
           iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
           optional: [{ DtlsSrtpKeyAgreement: true }],
         });
-        // console.log("pc", pc);
 
         stream.getTracks().forEach((track) => {
-          // console.log("track", track);
           pc.current.addTrack(track, stream);
         });
 
@@ -48,7 +45,6 @@ export default function Call() {
         };
 
         pc.current.ontrack = (e) => {
-          console.log("Track Received Event:", e.streams);
           if (e.streams && e.streams[0] && remoteVideo.current) {
             remoteVideo.current.srcObject = e.streams[0];
             console.log("Remote video stream set successfully.");
@@ -84,17 +80,14 @@ export default function Call() {
   }, []);
 
   const handleOffer = async (offer) => {
-    console.log("offer", offer);
     try {
       await pc.current.setRemoteDescription(
         new RTCSessionDescription(offer?.offer)
       );
-      console.log("Remote description set with offer.");
     } catch (err) {
       console.error("Failed to set remote description", err);
     }
     if (pc.current.pendingCandidates) {
-      console.log("pending candidate ", pc.current.pendingCandidates);
       pc.current.pendingCandidates.forEach(async (e) => {
         try {
           await pc.current.addIceCandidate(e.candidate);
@@ -107,7 +100,6 @@ export default function Call() {
 
     const answer = await pc.current.createAnswer();
     await pc.current.setLocalDescription(answer);
-    console.log("pc12", pc);
     socket.emit("answer", {
       to: offer?.from,
       id: user?.currentUser?._id,
@@ -116,13 +108,10 @@ export default function Call() {
   };
 
   const handleAnswer = (answer) => {
-    console.log("answer", answer);
     pc.current.setRemoteDescription(new RTCSessionDescription(answer?.answer));
-    console.log("Remote description set with answer.");
   };
 
   const handleRemoteIce = async (candidate) => {
-    console.log("Received ICE Candidate", candidate);
     if (candidate?.candidate) {
       if (pc.current.remoteDescription) {
         try {
