@@ -114,8 +114,14 @@ export default function Call() {
     console.log("Received ICE Candidate", candidate);
     if (candidate?.candidate) {
       if (pc.current.remoteDescription) {
+        const rtcCandidate = new RTCIceCandidate({
+          candidate: candidate.candidate.candidate,
+          sdpMLineIndex: candidate.candidate.sdpMLineIndex,
+          sdpMid: candidate.candidate.sdpMid,
+          usernameFragment: candidate.candidate.usernameFragment,
+        });
         try {
-          await pc.current.addIceCandidate(new RTCIceCandidate(candidate?.candidate));
+          await pc.current.addIceCandidate(new RTCIceCandidate(rtcCandidate));
         } catch (e) {
           console.error("Error adding received ice candidate", e);
         }
