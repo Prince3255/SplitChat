@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { AiOutlineAudioMuted } from "react-icons/ai";
 import { CiMicrophoneOn, CiVideoOn, CiVideoOff } from "react-icons/ci";
+import { FcEndCall } from "react-icons/fc";
 
 export default function Call() {
   const [mute, setMute] = useState(false);
@@ -152,6 +153,13 @@ export default function Call() {
     setVideo(!video)
   }
 
+  const handleEndCall = () => {
+    userVideo.current.srcObject.getAudioTracks().forEach((track) => track.stop())
+    userVideo.current.srcObject.getVideoTracks().forEach((track) => track.stop())
+    pc?.current?.close();
+    socket?.current?.disconnect()
+  }
+
   return (
     <div className="flex flex-col h-screen">
       <div ref={videoGrid} className="flex-1 grid grid-cols-2 gap-4 p-4">
@@ -159,29 +167,29 @@ export default function Call() {
           muted
           autoPlay
           playsInline
-          className="w-full h-full object-cover rounded-lg"
+          className="w-full h-screen object-cover rounded-lg"
           ref={userVideo}
         ></video>
         <video
           autoPlay
           playsInline
-          className="w-full h-full object-cover rounded-lg"
+          className="w-full h-screen object-cover rounded-lg"
           ref={remoteVideo}
         ></video>
       </div>
 
       <div className="p-4 bg-gray-800 flex justify-center gap-4">
-        <Button className="p-3 bg-red-500 rounded-full text-white" size="sm">
-          End Call
+        <Button className="p-3 bg-red-500 rounded-full text-white" size="sm" onClick={handleEndCall}>
+            <FcEndCall className="text-2xl" />
         </Button>
         <Button className="p-3 bg-gray-600 rounded-full text-white" size="sm" onClick={handleVideo}>
           {
-            video ? <CiVideoOff size='lg' /> : <CiVideoOn />
+            video ? <CiVideoOff className="text-2xl" /> : <CiVideoOn className="text-2xl" />
           }
         </Button>
         <Button className='p-3 bg-gray-600 rounded-full text-white' size="sm" onClick={handleMute}>
           {
-            mute ? <AiOutlineAudioMuted size='lg' /> : <CiMicrophoneOn />
+            mute ? <AiOutlineAudioMuted className="text-2xl" /> : <CiMicrophoneOn className="text-2xl" />
           }
         </Button>
       </div>
