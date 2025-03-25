@@ -136,18 +136,18 @@ export default function Call() {
 
   const handleMute = () => {
     if (!mute) {
-      userVideo.current.getAudioTracks().forEach((track) => track.enabled = false)
+      userVideo.current.srcObject.getAudioTracks().forEach((track) => track.enabled = false)
     } else {
-      userVideo.current.getAudioTracks().forEach((track) => track.enabled = true)
+      userVideo.current.srcObject.getAudioTracks().forEach((track) => track.enabled = true)
     }
     setMute(!mute)
   }
 
   const handleVideo = () => {
     if (!video) {
-      userVideo.current.getVideoTracks().forEach((track) => track.enabled = false)
+      userVideo.current.srcObject.getVideoTracks().forEach((track) => track.enabled = false)
     } else {
-      userVideo.current.getVideoTracks().forEach((track) => track.enabled = true)
+      userVideo.current.srcObject.getVideoTracks().forEach((track) => track.enabled = true)
     }
     setVideo(!video)
   }
@@ -176,12 +176,12 @@ export default function Call() {
         </Button>
         <Button className="p-3 bg-gray-600 rounded-full text-white" size="sm" onClick={handleVideo}>
           {
-            video ? <CiVideoOff /> : <CiVideoOn />
+            video ? <CiVideoOff size='lg' /> : <CiVideoOn />
           }
         </Button>
         <Button className='p-3 bg-gray-600 rounded-full text-white' size="sm" onClick={handleMute}>
           {
-            mute ? <AiOutlineAudioMuted /> : <CiMicrophoneOn />
+            mute ? <AiOutlineAudioMuted size='lg' /> : <CiMicrophoneOn />
           }
         </Button>
       </div>
