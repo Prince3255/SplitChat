@@ -80,7 +80,7 @@ export default function Call() {
 
     return () => {
       //   localStream?.getTracks()?.forEach((track) => track.stop());
-      pc.current?.close();
+      // pc.current?.close();
     };
   }, []);
 
