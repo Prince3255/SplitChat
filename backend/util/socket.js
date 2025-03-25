@@ -87,10 +87,10 @@ io.on("connection", (socket) => {
 
   socket.on("answer", (data) => {
     console.log("data ", data);
-    const callerSocketId = userSocketMap[data.from];
+    const callerSocketId = userSocketMap[data.to];
     if (callerSocketId) {
       io.to(callerSocketId).emit("answer", {
-        from: data.from,
+        from: data.to,
         answer: data.answer
       })
     }

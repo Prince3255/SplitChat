@@ -57,6 +57,7 @@ export default function Call() {
             .createOffer()
             .then((offer) => pc.current.setLocalDescription(offer))
             .then(() => {
+              console.log('pcl', pc.current.localDescription)
               socket.emit("offer", {
                 to: id1,
                 offer: pc.current.localDescription,
@@ -79,9 +80,9 @@ export default function Call() {
   }, []);
 
   const handleOffer = async (offer) => {
-    // console.log("offer", offer);
+    console.log("offer", offer);
     await pc.current.setRemoteDescription(
-      new RTCSessionDescription({ type: "offer", sdp: offer?.offer?.sdp })
+      new RTCSessionDescription(offer?.offer)
     );
 
     const answer = await pc.current.createAnswer();
@@ -89,14 +90,14 @@ export default function Call() {
     console.log('pc12', pc)
     socket.emit("answer", {
       to: offer?.from,
-      answer: pc.current.localDescription,
+      answer: answer,
     });
   };
 
   const handleAnswer = (answer) => {
     console.log('answer', answer);
     pc.current.setRemoteDescription(
-      new RTCSessionDescription({ type: "answer", sdp: answer?.answer?.sdp })
+      new RTCSessionDescription(answer?.answer)
     );
   };
 
