@@ -14,26 +14,31 @@ export default function Call() {
   const location = useLocation();
   const { id1, isCaller } = location.state || {};
   const user = useSelector((state) => state.user);
-  
+
   useEffect(() => {
-    console.log(id1, isCaller)
+    console.log("id1", id1, isCaller);
     navigator.mediaDevices
-      .getUserMedia({ audio: {
-        echoCancellation: true,
-        noiseSuppression: true,
-        autoGainControl: true
-      }, video: true })
+      .getUserMedia({
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true,
+        },
+        video: true,
+      })
       .then((stream) => {
-        setLocalStream(stream);
+        // setLocalStream(stream);
         userVideo.current.srcObject = stream;
 
         pc.current = new RTCPeerConnection({
           iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
         });
+        console.log("pc", pc);
 
-        stream
-          .getTracks()
-          .forEach((track) => pc.current.addTrack(track, stream));
+        stream.getTracks().forEach((track) => {
+          console.log("track", track);
+          pc.current.addTrack(track, stream);
+        });
 
         pc.current.onicecandidate = (e) => {
           if (e.candidate) {
@@ -42,14 +47,11 @@ export default function Call() {
         };
 
         pc.current.ontrack = (e) => {
-          console.log('e', e.streams[0])
+          console.log("e", e.streams[0]);
           remoteVideo.current.srcObject = e.streams[0];
         };
 
-        console.log(id1);
-        console.log(isCaller)
         if (isCaller) {
-          console.log(user?.currentUser?._id)
           pc.current
             .createOffer()
             .then((offer) => pc.current.setLocalDescription(offer))
@@ -76,7 +78,7 @@ export default function Call() {
   }, []);
 
   const handleOffer = async (offer) => {
-    console.log("offer", offer)
+    console.log("offer", offer);
     await pc.current.setRemoteDescription(
       new RTCSessionDescription({ type: "offer", sdp: offer?.offer })
     );
@@ -91,13 +93,14 @@ export default function Call() {
   };
 
   const handleAnswer = (answer) => {
-    console.log(answer);
+    console.log('answer', answer);
     pc.current.setRemoteDescription(
       new RTCSessionDescription({ type: "answer", sdp: answer?.answer })
     );
   };
 
   const handleRemoteIce = (candidate) => {
+    console.log('candidate', candidate)
     pc.current.addIceCandidate(new RTCIceCandidate(candidate?.candidate));
   };
 
