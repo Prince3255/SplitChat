@@ -101,7 +101,7 @@ export default function Call() {
     console.log("pc12", pc);
     socket.emit("answer", {
       to: offer?.from,
-      answer: answer,
+      answer: pc.current.localDescription,
     });
   };
 
@@ -144,13 +144,13 @@ export default function Call() {
           className="w-full h-full object-cover rounded-lg"
           ref={userVideo}
         />
+      </div>
         <video
           autoPlay
           playsInline
-          className="w-full h-full object-cover rounded-lg"
+          className="w-full h-1/2 object-cover rounded-lg"
           ref={remoteVideo}
         />
-      </div>
 
       <div className="p-4 bg-gray-800 flex justify-center gap-4">
         <Button className="p-3 bg-red-500 rounded-full text-white" size="sm">
