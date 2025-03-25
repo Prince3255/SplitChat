@@ -80,7 +80,7 @@ export default function Call() {
   const handleOffer = async (offer) => {
     console.log("offer", offer);
     await pc.current.setRemoteDescription(
-      new RTCSessionDescription({ type: "offer", sdp: offer?.offer })
+      new RTCSessionDescription({ type: "offer", sdp: offer?.offer?.sdp })
     );
 
     const answer = await pc.current.createAnswer();
@@ -95,7 +95,7 @@ export default function Call() {
   const handleAnswer = (answer) => {
     console.log('answer', answer);
     pc.current.setRemoteDescription(
-      new RTCSessionDescription({ type: "answer", sdp: answer?.answer })
+      new RTCSessionDescription({ type: "answer", sdp: answer?.answer?.sdp })
     );
   };
 
