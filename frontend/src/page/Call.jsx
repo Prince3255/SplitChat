@@ -47,7 +47,7 @@ export default function Call() {
         };
 
         pc.current.ontrack = (e) => {
-          // console.log("e", e.streams[0]);
+          console.log("e", e.streams);
           const [remoteStream] = e.streams;
           remoteVideo.current.srcObject = remoteStream;
         };
@@ -57,7 +57,6 @@ export default function Call() {
             .createOffer()
             .then((offer) => pc.current.setLocalDescription(offer))
             .then(() => {
-              console.log("pcl", pc.current.localDescription);
               socket.emit("offer", {
                 to: id1,
                 offer: pc.current.localDescription,
