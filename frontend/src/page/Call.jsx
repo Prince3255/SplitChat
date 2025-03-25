@@ -47,9 +47,13 @@ export default function Call() {
         };
 
         pc.current.ontrack = (e) => {
-          console.log("e", e.streams);
-          const [remoteStream] = e.streams;
-          remoteVideo.current.srcObject = remoteStream;
+          console.log("Track Received Event:", e.streams);
+          if (e.streams && e.streams[0] && remoteVideo.current) {
+            remoteVideo.current.srcObject = e.streams[0];
+            console.log("Remote video stream set successfully.");
+          } else {
+            console.error("No remote stream or video element not found.");
+          }
         };
 
         if (isCaller) {
@@ -80,20 +84,22 @@ export default function Call() {
 
   const handleOffer = async (offer) => {
     console.log("offer", offer);
-    await pc.current.setRemoteDescription(
-      new RTCSessionDescription(offer?.offer)
-    );
-
+    try {
+      await pc.current.setRemoteDescription(new RTCSessionDescription(offer?.offer));
+      console.log("Remote description set with offer.");
+    } catch (err) {
+      console.error("Failed to set remote description", err);
+    }
     if (pc.current.pendingCandidates) {
-      console.log('pending candidate ', pc.current.pendingCandidates);
+      console.log("pending candidate ", pc.current.pendingCandidates);
       pc.current.pendingCandidates.forEach(async (e) => {
         try {
-          await pc.current.addIceCandidate(new RTCIceCandidate(e.candidate));
+          await pc.current.addIceCandidate(e.candidate);
         } catch (error) {
-          console.log('Error while adding pending candidate ', error);
+          console.log("Error while adding pending candidate ", error);
         }
-      })
-      pc.current.pendingCandidates = []
+      });
+      pc.current.pendingCandidates = [];
     }
 
     const answer = await pc.current.createAnswer();
@@ -109,32 +115,29 @@ export default function Call() {
   const handleAnswer = (answer) => {
     console.log("answer", answer);
     pc.current.setRemoteDescription(new RTCSessionDescription(answer?.answer));
+    console.log("Remote description set with answer.");
   };
 
   const handleRemoteIce = async (candidate) => {
     console.log("Received ICE Candidate", candidate);
     if (candidate?.candidate) {
       if (pc.current.remoteDescription) {
-        const rtcCandidate = new RTCIceCandidate({
-          candidate: candidate.candidate.candidate,
-          sdpMLineIndex: candidate.candidate.sdpMLineIndex,
-          sdpMid: candidate.candidate.sdpMid,
-          usernameFragment: candidate.candidate.usernameFragment,
-        });
         try {
-          await pc.current.addIceCandidate(new RTCIceCandidate(rtcCandidate));
+          await pc.current.addIceCandidate(candidate.candidate);
         } catch (e) {
           console.error("Error adding received ice candidate", e);
         }
       } else {
-        console.warn("Remote description not set. Storing candidate for later.");
+        console.warn(
+          "Remote description not set. Storing candidate for later."
+        );
         if (!pc.current.pendingCandidates) {
           pc.current.pendingCandidates = [];
         }
         pc.current.pendingCandidates.push(candidate);
       }
     }
-  };  
+  };
 
   return (
     <div className="flex flex-col h-screen">
@@ -146,12 +149,12 @@ export default function Call() {
           ref={userVideo}
         />
       </div>
-        <video
-          autoPlay
-          playsInline
-          className="w-full h-1/2 object-cover rounded-lg"
-          ref={remoteVideo}
-        />
+      <video
+        autoPlay
+        playsInline
+        className="w-full h-1/2 object-cover rounded-lg"
+        ref={remoteVideo}
+      />
 
       <div className="p-4 bg-gray-800 flex justify-center gap-4">
         <Button className="p-3 bg-red-500 rounded-full text-white" size="sm">
