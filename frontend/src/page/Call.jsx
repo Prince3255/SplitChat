@@ -32,6 +32,7 @@ export default function Call() {
 
         pc.current = new RTCPeerConnection({
           iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
+          optional: [{ DtlsSrtpKeyAgreement: true }],
         });
         // console.log("pc", pc);
 
@@ -85,7 +86,9 @@ export default function Call() {
   const handleOffer = async (offer) => {
     console.log("offer", offer);
     try {
-      await pc.current.setRemoteDescription(new RTCSessionDescription(offer?.offer));
+      await pc.current.setRemoteDescription(
+        new RTCSessionDescription(offer?.offer)
+      );
       console.log("Remote description set with offer.");
     } catch (err) {
       console.error("Failed to set remote description", err);
@@ -143,18 +146,19 @@ export default function Call() {
     <div className="flex flex-col h-screen">
       <div ref={videoGrid} className="flex-1 grid grid-cols-2 gap-4 p-4">
         <video
+          muted
           autoPlay
           playsInline
           className="w-full h-full object-cover rounded-lg"
           ref={userVideo}
-        />
+        ></video>
+        <video
+          autoPlay
+          playsInline
+          className="w-full h-full object-cover rounded-lg"
+          ref={remoteVideo}
+        ></video>
       </div>
-      <video
-        autoPlay
-        playsInline
-        className="w-full h-1/2 object-cover rounded-lg"
-        ref={remoteVideo}
-      ></video>
 
       <div className="p-4 bg-gray-800 flex justify-center gap-4">
         <Button className="p-3 bg-red-500 rounded-full text-white" size="sm">
