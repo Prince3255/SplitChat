@@ -52,7 +52,6 @@ export default function Call() {
         pc.current.ontrack = (e) => {
           if (e.streams && e.streams[0] && remoteVideo.current) {
             remoteVideo.current.srcObject = e.streams[0];
-            console.log("Remote video stream set successfully.");
           } else {
             console.error("No remote stream or video element not found.");
           }
