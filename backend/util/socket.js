@@ -111,6 +111,13 @@ io.on("connection", (socket) => {
     }
   })
 
+  socket.on('end-call', (data) => {
+    const receiverSocketId = userSocketMap[data.id];
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit('end-call');
+    }
+  })
+
   socket.on("disconnect", () => {
     delete userSocketMap[userId];
     io.emit("getOnlineUser", Object.keys(userSocketMap));

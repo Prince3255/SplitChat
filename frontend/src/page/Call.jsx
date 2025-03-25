@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { getSocket } from "../util/socketAction";
 import { Button } from "flowbite-react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { AiOutlineAudioMuted } from "react-icons/ai";
 import { CiMicrophoneOn, CiVideoOn, CiVideoOff } from "react-icons/ci";
@@ -18,6 +18,7 @@ export default function Call() {
   const location = useLocation();
   const { id1, isCaller } = location.state || {};
   const user = useSelector((state) => state.user);
+  const navigate = useNavigate()
 
   useEffect(() => {
     navigator.mediaDevices
@@ -73,6 +74,7 @@ export default function Call() {
         socket.on("offer", handleOffer);
         socket.on("answer", handleAnswer);
         socket.on("ice-candidate", handleRemoteIce);
+        socket.on("end-call", handleCallEnd)
       })
       .catch((err) => console.log("Error in accessing camera or mic ", err));
 
@@ -135,30 +137,77 @@ export default function Call() {
     }
   };
 
-  const handleMute = () => {
-    if (!mute) {
-      userVideo.current.srcObject.getAudioTracks().forEach((track) => track.enabled = false)
-    } else {
-      userVideo.current.srcObject.getAudioTracks().forEach((track) => track.enabled = true)
+  const handleCallEnd = () => {
+    try {
+      userVideo.current.srcObject
+        .getAudioTracks()
+        .forEach((track) => track.stop());
+      userVideo.current.srcObject
+        .getVideoTracks()
+        .forEach((track) => track.stop());
+      pc?.current?.close();
+      socket?.current?.disconnect();
+      if (window.history.length > 1) {
+        navigate(-1) 
+      }
+      else {
+        navigate("/chat")
+      }
+    } catch (error) {
+      console.log(error);
     }
-    setMute(!mute)
   }
+
+  const handleMute = () => {
+    console.log('id1', id1)
+    if (!mute) {
+      userVideo.current.srcObject
+        .getAudioTracks()
+        .forEach((track) => (track.enabled = false));
+    } else {
+      userVideo.current.srcObject
+        .getAudioTracks()
+        .forEach((track) => (track.enabled = true));
+    }
+    setMute(!mute);
+  };
 
   const handleVideo = () => {
     if (!video) {
-      userVideo.current.srcObject.getVideoTracks().forEach((track) => track.enabled = false)
+      userVideo.current.srcObject
+        .getVideoTracks()
+        .forEach((track) => (track.enabled = false));
     } else {
-      userVideo.current.srcObject.getVideoTracks().forEach((track) => track.enabled = true)
+      userVideo.current.srcObject
+        .getVideoTracks()
+        .forEach((track) => (track.enabled = true));
     }
-    setVideo(!video)
-  }
+    setVideo(!video);
+  };
 
   const handleEndCall = () => {
-    userVideo.current.srcObject.getAudioTracks().forEach((track) => track.stop())
-    userVideo.current.srcObject.getVideoTracks().forEach((track) => track.stop())
-    pc?.current?.close();
-    socket?.current?.disconnect()
-  }
+    try {
+      userVideo.current.srcObject
+        .getAudioTracks()
+        .forEach((track) => track.stop());
+      userVideo.current.srcObject
+        .getVideoTracks()
+        .forEach((track) => track.stop());
+      socket.emit('end-call', {
+        to: id1
+      })
+      pc?.current?.close();
+      socket?.current?.disconnect();
+      if (window.history.length > 1) {
+        navigate(-1) 
+      }
+      else {
+        navigate("/chat")
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="flex flex-col h-screen">
@@ -179,18 +228,34 @@ export default function Call() {
       </div>
 
       <div className="p-4 bg-gray-800 flex justify-center gap-4">
-        <Button className="p-3 bg-red-500 rounded-full text-white" size="sm" onClick={handleEndCall}>
-            <FcEndCall className="text-2xl" />
+        <Button
+          className="p-3 rounded-full text-white"
+          size="sm"
+          onClick={handleEndCall}
+        >
+          <FcEndCall className="text-2xl" />
         </Button>
-        <Button className="p-3 bg-gray-600 rounded-full text-white" size="sm" onClick={handleVideo}>
-          {
-            video ? <CiVideoOff className="text-2xl" /> : <CiVideoOn className="text-2xl" />
-          }
+        <Button
+          className="p-3 bg-gray-600 rounded-full text-white"
+          size="sm"
+          onClick={handleVideo}
+        >
+          {video ? (
+            <CiVideoOff className="text-2xl" />
+          ) : (
+            <CiVideoOn className="text-2xl" />
+          )}
         </Button>
-        <Button className='p-3 bg-gray-600 rounded-full text-white' size="sm" onClick={handleMute}>
-          {
-            mute ? <AiOutlineAudioMuted className="text-2xl" /> : <CiMicrophoneOn className="text-2xl" />
-          }
+        <Button
+          className="p-3 bg-gray-600 rounded-full text-white"
+          size="sm"
+          onClick={handleMute}
+        >
+          {mute ? (
+            <AiOutlineAudioMuted className="text-2xl" />
+          ) : (
+            <CiMicrophoneOn className="text-2xl" />
+          )}
         </Button>
       </div>
     </div>
