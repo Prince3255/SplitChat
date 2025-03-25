@@ -3,9 +3,12 @@ import { getSocket } from "../util/socketAction";
 import { Button } from "flowbite-react";
 import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { AiOutlineAudioMuted } from "react-icons/ai";
+import { CiMicrophoneOn, CiVideoOn, CiVideoOff } from "react-icons/ci";
 
 export default function Call() {
-  const [localStream, setLocalStream] = useState(null);
+  const [mute, setMute] = useState(false);
+  const [video, setVideo] = useState(false);
   const socket = getSocket();
   const videoGrid = useRef();
   const userVideo = useRef();
@@ -131,6 +134,24 @@ export default function Call() {
     }
   };
 
+  const handleMute = () => {
+    if (!mute) {
+      userVideo.current.getAudioTracks().forEach((track) => track.enabled = false)
+    } else {
+      userVideo.current.getAudioTracks().forEach((track) => track.enabled = true)
+    }
+    setMute(!mute)
+  }
+
+  const handleVideo = () => {
+    if (!video) {
+      userVideo.current.getVideoTracks().forEach((track) => track.enabled = false)
+    } else {
+      userVideo.current.getVideoTracks().forEach((track) => track.enabled = true)
+    }
+    setVideo(!video)
+  }
+
   return (
     <div className="flex flex-col h-screen">
       <div ref={videoGrid} className="flex-1 grid grid-cols-2 gap-4 p-4">
@@ -153,11 +174,15 @@ export default function Call() {
         <Button className="p-3 bg-red-500 rounded-full text-white" size="sm">
           End Call
         </Button>
-        <Button className="p-3 bg-gray-600 rounded-full text-white" size="sm">
-          Toggle Video
+        <Button className="p-3 bg-gray-600 rounded-full text-white" size="sm" onClick={handleVideo}>
+          {
+            video ? <CiVideoOff /> : <CiVideoOn />
+          }
         </Button>
-        <Button className="p-3 bg-gray-600 rounded-full text-white" size="sm">
-          Mute
+        <Button className='p-3 bg-gray-600 rounded-full text-white' size="sm" onClick={handleMute}>
+          {
+            mute ? <AiOutlineAudioMuted /> : <CiMicrophoneOn />
+          }
         </Button>
       </div>
     </div>
