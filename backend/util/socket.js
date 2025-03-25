@@ -112,7 +112,7 @@ io.on("connection", (socket) => {
   })
 
   socket.on('end-call', (data) => {
-    const receiverSocketId = userSocketMap[data.id];
+    const receiverSocketId = userSocketMap[data.to];
     if (receiverSocketId) {
       io.to(receiverSocketId).emit('end-call');
     }

@@ -80,8 +80,7 @@ export default function Call() {
 
     return () => {
       //   localStream?.getTracks()?.forEach((track) => track.stop());
-      socket.current.disconnect();
-      // pc.current?.close();
+      pc.current?.close();
     };
   }, []);
 
@@ -146,7 +145,6 @@ export default function Call() {
         .getVideoTracks()
         .forEach((track) => track.stop());
       pc?.current?.close();
-      socket?.current?.disconnect();
       if (window.history.length > 1) {
         navigate(-1) 
       }
@@ -159,7 +157,6 @@ export default function Call() {
   }
 
   const handleMute = () => {
-    console.log('id1', id1)
     if (!mute) {
       userVideo.current.srcObject
         .getAudioTracks()
@@ -197,7 +194,6 @@ export default function Call() {
         to: id1
       })
       pc?.current?.close();
-      socket?.current?.disconnect();
       if (window.history.length > 1) {
         navigate(-1) 
       }
