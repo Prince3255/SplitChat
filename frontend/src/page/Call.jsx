@@ -101,6 +101,7 @@ export default function Call() {
     console.log("pc12", pc);
     socket.emit("answer", {
       to: offer?.from,
+      id: user?.currentUser?._id,
       answer: pc.current.localDescription,
     });
   };

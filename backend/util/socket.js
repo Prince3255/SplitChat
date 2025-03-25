@@ -87,7 +87,13 @@ io.on("connection", (socket) => {
 
   socket.on("answer", (data) => {
     console.log("data ", data);
-    const callerSocketId = userSocketMap[data.to];
+    let callerSocketId = null
+    if (data.to == data.id) {
+      callerSocketId = userSocketMap[socket.id] 
+    }
+    else {
+      callerSocketId = userSocketMap[data.to];
+    }
     if (callerSocketId) {
       io.to(callerSocketId).emit("answer", {
         from: data.to,
