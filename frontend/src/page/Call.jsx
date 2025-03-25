@@ -16,7 +16,7 @@ export default function Call() {
   const user = useSelector((state) => state.user);
 
   useEffect(() => {
-    console.log("id1", id1, isCaller);
+    // console.log("id1", id1, isCaller);
     navigator.mediaDevices
       .getUserMedia({
         audio: {
@@ -33,10 +33,10 @@ export default function Call() {
         pc.current = new RTCPeerConnection({
           iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
         });
-        console.log("pc", pc);
+        // console.log("pc", pc);
 
         stream.getTracks().forEach((track) => {
-          console.log("track", track);
+          // console.log("track", track);
           pc.current.addTrack(track, stream);
         });
 
@@ -47,8 +47,9 @@ export default function Call() {
         };
 
         pc.current.ontrack = (e) => {
-          console.log("e", e.streams[0]);
-          remoteVideo.current.srcObject = e.streams[0];
+          // console.log("e", e.streams[0]);
+          const [remoteStream] = e.streams;
+          remoteVideo.current.srcObject = remoteStream;
         };
 
         if (isCaller) {
@@ -73,19 +74,19 @@ export default function Call() {
     return () => {
       //   localStream?.getTracks()?.forEach((track) => track.stop());
       socket.current.disconnect();
-      pc.current?.close();
+      // pc.current?.close();
     };
   }, []);
 
   const handleOffer = async (offer) => {
-    console.log("offer", offer);
+    // console.log("offer", offer);
     await pc.current.setRemoteDescription(
       new RTCSessionDescription({ type: "offer", sdp: offer?.offer?.sdp })
     );
 
     const answer = await pc.current.createAnswer();
     await pc.current.setLocalDescription(answer);
-
+    console.log('pc12', pc)
     socket.emit("answer", {
       to: offer?.from,
       answer: pc.current.localDescription,
@@ -99,9 +100,15 @@ export default function Call() {
     );
   };
 
-  const handleRemoteIce = (candidate) => {
+  const handleRemoteIce = async (candidate) => {
     console.log('candidate', candidate)
-    pc.current.addIceCandidate(new RTCIceCandidate(candidate?.candidate));
+    if (candidate?.candidate) {
+      try {
+          await pc.current.addIceCandidate(new RTCIceCandidate(candidate?.candidate));
+      } catch (e) {
+          console.error('Error adding received ice candidate', e);
+      }
+  }
   };
 
   return (
