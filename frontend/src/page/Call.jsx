@@ -154,7 +154,7 @@ export default function Call() {
         playsInline
         className="w-full h-1/2 object-cover rounded-lg"
         ref={remoteVideo}
-      />
+      ></video>
 
       <div className="p-4 bg-gray-800 flex justify-center gap-4">
         <Button className="p-3 bg-red-500 rounded-full text-white" size="sm">
