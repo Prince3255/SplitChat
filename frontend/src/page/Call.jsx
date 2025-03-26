@@ -38,21 +38,23 @@ export default function Call() {
   useEffect(() => {
     navigator.mediaDevices
       .enumerateDevices()
-      .then((device) => {
-        let videoDevice = device.filter((d) => d.kind === "videoinput");
+      .then((devices) => {
+        const videoDevices = devices.filter((d) => d.kind === "videoinput");
 
-        let backCamera1 = videoDevice.find(
-          (device1) =>
-            device1.label.toLowerCase().includes("back") ||
-            device1.label.toLowerCase().includes("environment")
+        const backCamera1 = videoDevices.find(
+          (device) =>
+            device.label.toLowerCase().includes("back") ||
+            device.label.toLowerCase().includes("environment")
         );
 
         if (backCamera1) {
           setBackCamera(backCamera1);
+        } else {
+          console.log("No back camera found. Using front camera.");
         }
       })
       .catch((err) => {
-        console.log("Error while getting back camera", err);
+        console.error("Error while getting camera devices:", err);
       });
   }, []);
 
