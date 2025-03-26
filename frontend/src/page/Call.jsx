@@ -47,7 +47,9 @@ export default function Call() {
             device.label.toLowerCase().includes("environment")
         );
 
+        toast(backCamera1)
         if (backCamera1) {
+          toast(backCamera1)
           setBackCamera(backCamera1);
         } else {
           console.log("No back camera found. Using front camera.");
