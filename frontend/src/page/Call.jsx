@@ -36,7 +36,7 @@ export default function Call() {
   }, []);
 
   useEffect(() => {
-    navigate.mediaDevices
+    navigator.mediaDevices
       .enumerateDevices()
       .then((device) => {
         let videoDevice = device.filter((d) => d.kind === "videoinput");
