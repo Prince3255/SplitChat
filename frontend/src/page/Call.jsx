@@ -46,8 +46,7 @@ export default function Call() {
         userVideo.current.srcObject = stream;
 
         pc.current = new RTCPeerConnection({
-          iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
-          optional: [{ DtlsSrtpKeyAgreement: true }],
+          iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
         });
 
         stream.getTracks().forEach((track) => {
