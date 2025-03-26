@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { persistor } from '../store'
 
 const initialState = {
     currentUser: null,
@@ -27,7 +26,6 @@ const usserSlice = createSlice({
             state.socket = null
             state.onlineUsers = []
             state.selectedUser = null;
-            persistor.purge()
         },
         authenticateState: (state, action) => {
             state.isAuthenticated = true

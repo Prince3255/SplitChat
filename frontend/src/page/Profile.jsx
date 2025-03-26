@@ -17,6 +17,7 @@ import toast from "react-hot-toast";
 import { logoutUserSuccess, updateUserSuccess } from "../redux/user/userSlice";
 import uploadImage from "../util/uploadImage";
 import ProfileSkeleton from "../component/skeleton/ProfileSkeleton";
+import { persistor } from "../redux/store";
 
 export default function Profile() {
   const user = useSelector((state) => state.user);
@@ -151,6 +152,7 @@ export default function Profile() {
         return;
       } else {
         dispatch(logoutUserSuccess());
+        // persistor.purge()
         navigate("/login");
       }
     } catch (error) {
