@@ -36,10 +36,10 @@ export default function ChatHeader() {
   const handleVideoCall = () => {
     let socket = getSocket();
     if (calling) {
+      setCalling(false);
       socket.emit('end-call-by-caller', {
         to: selectedUser?._id
       })
-      setCalling(false);
     }
     else {
       socket.emit("incoming-call", {
