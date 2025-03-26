@@ -8,6 +8,7 @@ import { CiMicrophoneOn, CiVideoOn, CiVideoOff } from "react-icons/ci";
 import { FcEndCall } from "react-icons/fc";
 import { setCalling } from "../redux/user/userSlice";
 import { MdOutlineFlipCameraIos } from "react-icons/md";
+import toast from "react-hot-toast";
 
 export default function Call() {
   const [mute, setMute] = useState(false);
