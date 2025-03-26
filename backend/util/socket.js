@@ -60,6 +60,13 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("already-on-call", (data) => {
+    const receiverSocketId = userSocketMap[data.from];
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("already-on-call", data.username);
+    }
+  })
+
   socket.on("accept-click", ({ id1, id }) => {
     const receiverSocketId = userSocketMap[id1];
     if (receiverSocketId) {

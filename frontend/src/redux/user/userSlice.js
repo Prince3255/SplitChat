@@ -7,6 +7,7 @@ const initialState = {
     isAuthenticated: false,
     onlineUsers: [],
     selectedUser: null,
+    calling: false
 }
 
 const usserSlice = createSlice({
@@ -17,6 +18,7 @@ const usserSlice = createSlice({
             state.currentUser.profilePicture = action.payload,
             state.loading = false
             state.error = null
+            state.calling = false
         },
         logoutUserSuccess: (state) => {
             state.currentUser = null,
@@ -26,6 +28,7 @@ const usserSlice = createSlice({
             state.socket = null
             state.onlineUsers = []
             state.selectedUser = null;
+            state.calling = false
         },
         authenticateState: (state, action) => {
             state.isAuthenticated = true
@@ -36,10 +39,13 @@ const usserSlice = createSlice({
         },
         setSelectedUser: (state, action) => {
             state.selectedUser = action.payload
+        },
+        setCalling: (state, action) => {
+            state.calling = action.payload
         }
     }
 })
 
-export const { updateUserSuccess, logoutUserSuccess, authenticateState, setOnlineUsers, setSelectedUser } = usserSlice.actions
+export const { updateUserSuccess, logoutUserSuccess, authenticateState, setOnlineUsers, setSelectedUser, setCalling } = usserSlice.actions
 
 export default usserSlice.reducer

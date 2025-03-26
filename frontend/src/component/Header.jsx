@@ -11,6 +11,7 @@ import useGroupDetail from "../util/useGroupDetail";
 import toast from "react-hot-toast";
 import { getSocket } from "../util/socketAction";
 import { MdCall, MdCallEnd } from "react-icons/md";
+import { setCalling } from "../redux/user/userSlice";
 
 export default function Header() {
   const user = useSelector((state) => state?.user);
@@ -42,12 +43,21 @@ export default function Header() {
     if (!socket) return;
 
     socket.on("incoming-call", ({ id, name, profilePicture, from }) => {
+      if (id1 || user?.calling) {
+        toast(`${name} is calling you!`)
+        socket.emit('already-on-call', { from, username });
+      }
       if (name) {
         setId(from);
         setName(name);
         setProfilePicture(profilePicture);
       }
     });
+
+    socket.on("already-on-call", ({ username }) => {
+      setCalling(false)
+      toast.info(`${username} is busy on another call`)
+    })
 
     socket.on("accept-click", ({ id }) => {
       toast.success("Call accepted");
@@ -67,6 +77,7 @@ export default function Header() {
       setId(null);
       setName(null);
       setProfilePicture(null);
+      setCalling(false)
     });
 
     socket.on("end-call-by-caller", () => {

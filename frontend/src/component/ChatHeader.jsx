@@ -1,16 +1,15 @@
 import { Button } from "flowbite-react";
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RxCross2 } from "react-icons/rx";
-import { setSelectedUser } from "../redux/user/userSlice";
+import { setCalling, setSelectedUser } from "../redux/user/userSlice";
 import { getSocket } from "../util/socketAction";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineMissedVideoCall } from "react-icons/md";
 import { FcEndCall } from "react-icons/fc";
 
 export default function ChatHeader() {
-  const [calling, setCalling] = useState(false);
-  const { selectedUser, onlineUsers, currentUser } = useSelector(
+  const { selectedUser, onlineUsers, currentUser, calling } = useSelector(
     (state) => state.user
   );
   const dispatch = useDispatch();
