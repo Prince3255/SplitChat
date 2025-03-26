@@ -94,6 +94,7 @@ export default function Header() {
       socket.off("accept-click");
       socket.off("decline-click");
       socket.off("end-call-by-caller");
+      socket.off("already-on-call");
     };
   }, [socket, user, name, id1, profilePicture1]);
 
