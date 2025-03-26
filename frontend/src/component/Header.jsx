@@ -82,9 +82,9 @@ export default function Header() {
 
     socket.on("end-call-by-caller", () => {
       if (name) {
-        setId(from);
-        setName(name);
-        setProfilePicture(profilePicture);
+        setId(null);
+        setName(null);
+        setProfilePicture(null);
       }
     })
 
