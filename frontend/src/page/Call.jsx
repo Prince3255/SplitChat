@@ -21,6 +21,17 @@ export default function Call() {
   const navigate = useNavigate()
 
   useEffect(() => {
+    if (id1 == null) {
+      if (window.history.length > 1) {
+        navigate(-1)
+      }
+      else {
+        navigate('/chat')
+      }
+    }
+  }, [])
+
+  useEffect(() => {
     navigator.mediaDevices
       .getUserMedia({
         audio: {
