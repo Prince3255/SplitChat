@@ -44,6 +44,8 @@ export default function Header() {
     if (!socket) return;
 
     socket.on("incoming-call", ({ id, name, profilePicture, from }) => {
+      console.log(id1)
+      console.log(user?.calling)
       if (id1 || user?.calling) {
         toast(`${name} is calling you!`);
         socket.emit("already-on-call", { from, username });

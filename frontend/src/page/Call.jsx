@@ -2,10 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 import { getSocket } from "../util/socketAction";
 import { Button } from "flowbite-react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AiOutlineAudioMuted } from "react-icons/ai";
 import { CiMicrophoneOn, CiVideoOn, CiVideoOff } from "react-icons/ci";
 import { FcEndCall } from "react-icons/fc";
+import { setCalling } from "../redux/user/userSlice";
 
 export default function Call() {
   const [mute, setMute] = useState(false);
@@ -19,6 +20,7 @@ export default function Call() {
   const { id1, isCaller } = location.state || {};
   const user = useSelector((state) => state.user);
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   useEffect(() => {
     if (id1 == null) {
@@ -154,6 +156,7 @@ export default function Call() {
         .getVideoTracks()
         .forEach((track) => track.stop());
       pc?.current?.close();
+      dispatch(setCalling(false))
       if (window.history.length > 1) {
         navigate(-1) 
       }
@@ -202,6 +205,7 @@ export default function Call() {
       socket.emit('end-call', {
         to: id1
       })
+      dispatch(setCalling(false))
       pc?.current?.close();
       if (window.history.length > 1) {
         navigate(-1) 
