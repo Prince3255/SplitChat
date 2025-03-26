@@ -211,13 +211,13 @@ export default function Call() {
           muted
           autoPlay
           playsInline
-          className="w-full h-[calc(100vh-30px)] object-cover rounded-lg"
+          className="w-full [height:calc(100vh-30px)] object-cover rounded-lg"
           ref={userVideo}
         ></video>
         <video
           autoPlay
           playsInline
-          className="w-full h-[calc(100vh-30px)] object-cover rounded-lg"
+          className="w-full [height:calc(100vh-30px)] object-cover rounded-lg"
           ref={remoteVideo}
         ></video>
       </div>
