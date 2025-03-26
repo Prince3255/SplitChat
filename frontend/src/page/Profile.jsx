@@ -152,7 +152,7 @@ export default function Profile() {
         return;
       } else {
         dispatch(logoutUserSuccess());
-        // persistor.purge()
+        persistor.purge()
         navigate("/login");
       }
     } catch (error) {
