@@ -205,19 +205,19 @@ export default function Call() {
   };
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col max-h-screen">
       <div ref={videoGrid} className="flex-1 grid grid-cols-2 gap-4 p-4">
         <video
           muted
           autoPlay
           playsInline
-          className="w-full h-screen object-cover rounded-lg"
+          className="w-full h-[calc(100vh-30px)] object-cover rounded-lg"
           ref={userVideo}
         ></video>
         <video
           autoPlay
           playsInline
-          className="w-full h-screen object-cover rounded-lg"
+          className="w-full h-[calc(100vh-30px)] object-cover rounded-lg"
           ref={remoteVideo}
         ></video>
       </div>

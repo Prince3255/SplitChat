@@ -39,8 +39,7 @@ function ProtectedRoute() {
 
    if (isAuthenticated === null) {
     return <div className='flex justify-center items-center w-full min-h-screen'>
-        <Spinner size='sm' className='disabled' />
-        <span>Loading...</span>
+        <Spinner size='lg' className='disabled' />
     </div>
    }
     

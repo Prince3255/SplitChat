@@ -1,14 +1,18 @@
 import { Button } from "flowbite-react";
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RxCross2 } from "react-icons/rx";
 import { setSelectedUser } from "../redux/user/userSlice";
 import { getSocket } from "../util/socketAction";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineMissedVideoCall } from "react-icons/md";
+import { FcEndCall } from "react-icons/fc";
 
 export default function ChatHeader() {
-  const { selectedUser, onlineUsers, currentUser } = useSelector((state) => state.user);
+  const [calling, setCalling] = useState(false);
+  const { selectedUser, onlineUsers, currentUser } = useSelector(
+    (state) => state.user
+  );
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -31,8 +35,22 @@ export default function ChatHeader() {
 
   const handleVideoCall = () => {
     const socket = getSocket();
-    socket.emit('incoming-call', { id: selectedUser._id, from: currentUser?._id, name: currentUser?.username, profilePicture: currentUser?.profilePicture });
-  }
+    if (calling) {
+      setCalling(false);
+      socket.emit('end-call-by-caller', {
+        to: selectedUser?._id
+      })
+    }
+    else {
+      socket.emit("incoming-call", {
+        id: selectedUser._id,
+        from: currentUser?._id,
+        name: currentUser?.username,
+        profilePicture: currentUser?.profilePicture,
+      });
+      setCalling(true);
+    }
+  };
 
   return (
     <div className="p-2.5 border-b border-base-300">
@@ -70,11 +88,12 @@ export default function ChatHeader() {
         </div>
 
         <div className="flex space-x-3 justify-end items-center">
-          <Button
-          onClick={handleVideoCall}
-            color="gray"
-          >
-            <MdOutlineMissedVideoCall className="size-5" />
+          <Button onClick={handleVideoCall} color="gray">
+            {calling ? (
+              <FcEndCall className="size-5" />
+            ) : (
+              <MdOutlineMissedVideoCall className="size-5" />
+            )}
           </Button>
           <Button
             onClick={() => {

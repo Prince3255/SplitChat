@@ -69,6 +69,10 @@ export default function Header() {
       setProfilePicture(null);
     });
 
+    socket.on("end-call-by-caller", () => {
+      setName(null)
+    })
+
     return () => {
       socket.off("incoming-call");
       socket.off("accept-click");
@@ -125,9 +129,9 @@ export default function Header() {
 
   if (userLoading || groupLoading) {
     return (
-      <>
+      <div className="text-center mx-auto">
         <Spinner size="sm" className="disabled" />
-      </>
+      </div>
     );
   }
 
@@ -138,20 +142,6 @@ export default function Header() {
   if (groupError) {
     return <div>Error: {groupErrorMessage}</div>;
   }
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  };
-
-  const handleSearchChange = (e) => {
-    const term = e.target.value;
-    setSearchTerm(term);
-
-    if (term.length) {
-    } else {
-      setSearchTerm("");
-    }
-  };
 
   const handleGroupClick = (grp) => {
     setSearchTerm("");
