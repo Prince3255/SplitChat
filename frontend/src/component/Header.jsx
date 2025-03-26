@@ -54,9 +54,8 @@ export default function Header() {
         setProfilePicture(profilePicture);
       }
     });
-    console.log(id1)
 
-    socket.on("already-on-call", ({ username }) => {
+    socket.on("already-on-call", (username) => {
       dispacth(setCalling(false));
       toast(`${username} is busy on another call`);
     });
@@ -204,6 +203,7 @@ export default function Header() {
     setName(null);
     setId(null);
     setProfilePicture(null);
+    dispacth(setCalling(true))
     navigate("/call", {
       state: {
         isCaller: false,
