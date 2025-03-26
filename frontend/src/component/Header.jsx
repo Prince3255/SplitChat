@@ -70,13 +70,18 @@ export default function Header() {
     });
 
     socket.on("end-call-by-caller", () => {
-      setName(null)
+      if (name) {
+        setId(from);
+        setName(name);
+        setProfilePicture(profilePicture);
+      }
     })
 
     return () => {
       socket.off("incoming-call");
       socket.off("accept-click");
       socket.off("decline-click");
+      socket.off("end-call-by-caller")
     };
   }, [socket, user, name, id1, profilePicture1]);
 
