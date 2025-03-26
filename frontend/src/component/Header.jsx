@@ -26,7 +26,7 @@ export default function Header() {
   const [id1, setId] = useState(null);
   const socket = getSocket();
   const navigate = useNavigate();
-  const API_URL = import.meta.env.VITE_API_URL
+  const API_URL = import.meta.env.VITE_API_URL;
   const ref = useRef(null);
   const dispacth = useDispatch();
 
@@ -45,10 +45,10 @@ export default function Header() {
 
     socket.on("incoming-call", ({ id, name, profilePicture, from }) => {
       if (id1 || user?.calling) {
-        toast(`${name} is calling you!`)
-        socket.emit('already-on-call', { from, username });
-      }
-      if (name) {
+        toast(`${name} is calling you!`);
+        socket.emit("already-on-call", { from, username });
+        return;
+      } else if (name) {
         setId(from);
         setName(name);
         setProfilePicture(profilePicture);
@@ -56,9 +56,9 @@ export default function Header() {
     });
 
     socket.on("already-on-call", ({ username }) => {
-      dispacth(setCalling(false))
-      toast.info(`${username} is busy on another call`)
-    })
+      dispacth(setCalling(false));
+      toast(`${username} is busy on another call`);
+    });
 
     socket.on("accept-click", ({ id }) => {
       toast.success("Call accepted");
@@ -78,7 +78,7 @@ export default function Header() {
       setId(null);
       setName(null);
       setProfilePicture(null);
-      dispacth(setCalling(false))
+      dispacth(setCalling(false));
     });
 
     socket.on("end-call-by-caller", () => {
@@ -87,13 +87,13 @@ export default function Header() {
         setName(null);
         setProfilePicture(null);
       }
-    })
+    });
 
     return () => {
       socket.off("incoming-call");
       socket.off("accept-click");
       socket.off("decline-click");
-      socket.off("end-call-by-caller")
+      socket.off("end-call-by-caller");
     };
   }, [socket, user, name, id1, profilePicture1]);
 
@@ -101,13 +101,16 @@ export default function Header() {
     if (searchTerm) {
       const search = async () => {
         try {
-          const res = await fetch(`${API_URL}/search?searchTerm=${searchTerm}`, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-          });
+          const res = await fetch(
+            `${API_URL}/search?searchTerm=${searchTerm}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              credentials: "include",
+            }
+          );
 
           const data = await res.json();
 
