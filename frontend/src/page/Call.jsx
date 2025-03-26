@@ -7,10 +7,13 @@ import { AiOutlineAudioMuted } from "react-icons/ai";
 import { CiMicrophoneOn, CiVideoOn, CiVideoOff } from "react-icons/ci";
 import { FcEndCall } from "react-icons/fc";
 import { setCalling } from "../redux/user/userSlice";
+import { MdOutlineFlipCameraIos } from "react-icons/md";
 
 export default function Call() {
   const [mute, setMute] = useState(false);
   const [video, setVideo] = useState(false);
+  const [camera, setCamera] = useState(false);
+  const [backCamera, setBackCamera] = useState(false);
   const socket = getSocket();
   const videoGrid = useRef();
   const userVideo = useRef();
@@ -19,19 +22,39 @@ export default function Call() {
   const location = useLocation();
   const { id1, isCaller } = location.state || {};
   const user = useSelector((state) => state.user);
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (id1 == null) {
       if (window.history.length > 1) {
-        navigate(-1)
-      }
-      else {
-        navigate('/chat')
+        navigate(-1);
+      } else {
+        navigate("/chat");
       }
     }
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    navigate.mediaDevices
+      .enumerateDevices()
+      .then((device) => {
+        let videoDevice = device.filter((d) => d.kind === "videoinput");
+
+        let backCamera1 = videoDevice.find(
+          (device1) =>
+            device1.label.toLowerCase().includes("back") ||
+            device1.label.toLowerCase().includes("environment")
+        );
+
+        if (backCamera1) {
+          setBackCamera(backCamera1);
+        }
+      })
+      .catch((err) => {
+        console.log("Error while getting back camera", err);
+      });
+  }, []);
 
   useEffect(() => {
     navigator.mediaDevices
@@ -41,14 +64,16 @@ export default function Call() {
           noiseSuppression: true,
           autoGainControl: true,
         },
-        video: true,
+        video: {
+          facingMode: camera ? "environment" : "user",
+        },
       })
       .then((stream) => {
         // setLocalStream(stream);
         userVideo.current.srcObject = stream;
 
         pc.current = new RTCPeerConnection({
-          iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
+          iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
         });
 
         stream.getTracks().forEach((track) => {
@@ -85,13 +110,17 @@ export default function Call() {
         socket.on("offer", handleOffer);
         socket.on("answer", handleAnswer);
         socket.on("ice-candidate", handleRemoteIce);
-        socket.on("end-call", handleCallEnd)
+        socket.on("end-call", handleCallEnd);
       })
       .catch((err) => console.log("Error in accessing camera or mic ", err));
 
     return () => {
       //   localStream?.getTracks()?.forEach((track) => track.stop());
       // pc.current?.close();
+      socket.off("offer", handleOffer);
+      socket.off("answer", handleAnswer);
+      socket.off("ice-candidate", handleRemoteIce);
+      socket.off("end-call", handleCallEnd);
     };
   }, []);
 
@@ -156,17 +185,16 @@ export default function Call() {
         .getVideoTracks()
         .forEach((track) => track.stop());
       pc?.current?.close();
-      dispatch(setCalling(false))
+      dispatch(setCalling(false));
       if (window.history.length > 1) {
-        navigate(-1) 
-      }
-      else {
-        navigate("/chat")
+        navigate(-1);
+      } else {
+        navigate("/chat");
       }
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const handleMute = () => {
     if (!mute) {
@@ -202,16 +230,15 @@ export default function Call() {
       userVideo.current.srcObject
         .getVideoTracks()
         .forEach((track) => track.stop());
-      socket.emit('end-call', {
-        to: id1
-      })
-      dispatch(setCalling(false))
+      socket.emit("end-call", {
+        to: id1,
+      });
+      dispatch(setCalling(false));
       pc?.current?.close();
       if (window.history.length > 1) {
-        navigate(-1) 
-      }
-      else {
-        navigate("/chat")
+        navigate(-1);
+      } else {
+        navigate("/chat");
       }
     } catch (error) {
       console.log(error);
@@ -255,6 +282,15 @@ export default function Call() {
             <CiVideoOn className="text-2xl" />
           )}
         </Button>
+        {backCamera && (
+          <Button
+            className="p-3 bg-gray-600 rounded-full text-white"
+            size="sm"
+            onClick={setCamera(!camera)}
+          >
+            <MdOutlineFlipCameraIos className="text-2xl" />
+          </Button>
+        )}
         <Button
           className="p-3 bg-gray-600 rounded-full text-white"
           size="sm"
