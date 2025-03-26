@@ -53,6 +53,7 @@ export default function Call() {
           toast(backCamera1)
           setBackCamera(backCamera1);
         } else {
+          toast('abcd')
           console.log("No back camera found. Using front camera.");
         }
       })
