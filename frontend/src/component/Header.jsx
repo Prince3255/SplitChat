@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Avatar, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { LuMessageCircleMore } from "react-icons/lu";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import AddExpense from "./AddExpense";
 import useUserDetail from "../util/useUserDetail";
 import useGroupDetail from "../util/useGroupDetail";
@@ -28,6 +28,7 @@ export default function Header() {
   const navigate = useNavigate();
   const API_URL = import.meta.env.VITE_API_URL
   const ref = useRef(null);
+  const dispacth = useDispatch();
 
   const {
     userDetail,
@@ -55,7 +56,7 @@ export default function Header() {
     });
 
     socket.on("already-on-call", ({ username }) => {
-      setCalling(false)
+      dispacth(setCalling(false))
       toast.info(`${username} is busy on another call`)
     })
 
@@ -77,7 +78,7 @@ export default function Header() {
       setId(null);
       setName(null);
       setProfilePicture(null);
-      setCalling(false)
+      dispacth(setCalling(false))
     });
 
     socket.on("end-call-by-caller", () => {
