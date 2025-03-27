@@ -84,7 +84,7 @@ export const verifyOtp = asyncHandler(async (req, res) => {
       throw new ApiError(409, "OTP expired or invalid");
     }
 
-    const isValidOtp = bcrypt.compare(otp, existingOtp);
+    const isValidOtp = bcrypt.compare(otp, existingOtp?.otp);
     if (!isValidOtp) {
       throw new ApiError(409, "Invalid OTP");
     }
