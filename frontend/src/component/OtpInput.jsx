@@ -1,13 +1,21 @@
-"use client";
-
 import { Button } from "flowbite-react";
-import { useState, useRef, useEffect } from "react";
-import { HiOutlineArrowLeft } from "react-icons/hi";
+import { React, useState, useRef, useEffect } from "react";
 
-const OtpInput = ({ onSubmit, loading, sendOtp, handleBackButton }) => {
+const OtpInput = ({ onSubmit, loading, sendOtp }) => {
   const [otp, setOtp] = useState(Array(6).fill(""));
+  const [time, setTime] = useState(120);
   const inputRefs = useRef([]);
   const buttonRef = useRef(null);
+
+  useEffect(() => {
+    let interval;
+    if (time > 0) {
+      interval = setInterval(() => {
+        setTime((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [time]);
 
   useEffect(() => {
     inputRefs.current = inputRefs.current.slice(0, 6);
@@ -83,18 +91,15 @@ const OtpInput = ({ onSubmit, loading, sendOtp, handleBackButton }) => {
     }
   };
 
+  const formatTime = () => {
+    const minute = Math.floor(minute/60)
+    const second = minute % 60
+
+    return `${minute}:${second >= 10 ? "" : "0"}${second}`
+  }
+
   return (
     <div className="w-full max-w-md mx-auto p-6">
-      <Button
-        type="button"
-        size="xs"
-        outline
-        gradientDuoTone="cyanToBlue"
-        className="w-fit absolute text-xs mt-0 ml-2 left-0"
-        onClick={handleBackButton}
-      >
-        <HiOutlineArrowLeft className="size-4" />
-      </Button>
       <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
         Enter Verification Code
       </h2>
@@ -148,17 +153,19 @@ const OtpInput = ({ onSubmit, loading, sendOtp, handleBackButton }) => {
 
           <p className="mt-4 text-sm text-gray-600 text-center">
             Didn't receive the code?
-            <button
+            <Button
               type="button"
-              className="ml-1 text-blue-600 hover:text-blue-800 focus:outline-none"
+              className={`ml-1 text-blue-600 hover:text-blue-800 focus:outline-none ${time > 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
               onClick={() => {
                 setOtp(Array(6).fill(""));
                 inputRefs.current[0].focus();
                 sendOtp(e);
+                setTime(120)
               }}
+              disabled={time > 0}
             >
-              Resend
-            </button>
+              Resend {time > 0 ? `in ${formatTime()} seconds` : `now`}
+            </Button>
           </p>
         </div>
       </form>

@@ -37,7 +37,7 @@ export default function Signup() {
   };
 
   const createNewUser = async () => {
-    setEmail(null)
+    setEmail(null);
     setLoading(true);
     try {
       const res = await fetch(`${API_URL}/auth/signup`, {
@@ -63,7 +63,7 @@ export default function Signup() {
   };
 
   const handleSubmit = async (e) => {
-    setEmail(null)
+    setEmail(null);
     e.preventDefault();
     const validate = validateForm();
 
@@ -110,7 +110,7 @@ export default function Signup() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(form),
-        credentials: 'include'
+        credentials: "include",
       });
 
       const data = await res.json();
@@ -133,15 +133,29 @@ export default function Signup() {
   };
 
   const handleBackButton = () => {
-    setEmail(null)
-  }
+    setEmail(null);
+  };
 
   return (
     <>
       {email === "done" ? (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 relative">
           <div className="w-full max-w-md bg-white rounded-xl shadow-md p-6">
-            <OtpInput onSubmit={handleOTPSubmit} loading={loading} sendOtp={handleSubmit} handleBackButton={handleBackButton} />
+            <Button
+              type="button"
+              size="xs"
+              outline
+              gradientDuoTone="cyanToBlue"
+              className="w-fit absolute text-xs mt-0 ml-2 left-0"
+              onClick={handleBackButton}
+            >
+              <HiOutlineArrowLeft className="size-4" />
+            </Button>
+            <OtpInput
+              onSubmit={handleOTPSubmit}
+              loading={loading}
+              sendOtp={handleSubmit}
+            />
           </div>
         </div>
       ) : (
