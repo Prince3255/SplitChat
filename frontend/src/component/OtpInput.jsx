@@ -154,7 +154,7 @@ const OtpInput = ({ onSubmit, loading, sendOtp, handleBackButton }) => {
               onClick={() => {
                 setOtp(Array(6).fill(""));
                 inputRefs.current[0].focus();
-                sendOtp();
+                sendOtp(e);
               }}
             >
               Resend
