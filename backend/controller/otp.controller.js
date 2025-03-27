@@ -8,25 +8,25 @@ import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import dotenv from "dotenv";
 
-dotenv.config()
+dotenv.config();
 
 export const sendOtp = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
 
   try {
     if ([username, email, password].some((field) => field.trim() === "")) {
-        throw new ApiError(400, "All fields are required")
+      throw new ApiError(400, "All fields are required");
     }
 
     const existingUser = await User.findOne({
-        $or: [
-            { username: username },
-            { email: email }
-        ]
+      $or: [{ username: username }, { email: email }],
     });
 
     if (existingUser) {
-        throw new ApiError(409, "Username with this email or username already exists")
+      throw new ApiError(
+        409,
+        "Username with this email or username already exists"
+      );
     }
 
     const otp = crypto.randomInt(100000, 999999).toString();
@@ -73,7 +73,9 @@ export const verifyOtp = asyncHandler(async (req, res) => {
 
   try {
     if ([otp, email].some((field) => field.trim() === "")) {
-      throw new ApiError(400, "Please enter valid OTP");
+      return res
+        .status(400)
+        .json(new ApiResponse(400, null, "Please enter valid OTP"));
     }
 
     const existingOtp = await OTP.findOne({
@@ -81,17 +83,21 @@ export const verifyOtp = asyncHandler(async (req, res) => {
     });
 
     if (!existingOtp) {
-      throw new ApiError(409, "OTP expired or invalid");
+      return res
+        .status(409)
+        .json(new ApiResponse(409, null, "OTP expired or invalid"));
     }
 
     const isValidOtp = await bcrypt.compare(otp, existingOtp?.otp);
     if (!isValidOtp) {
-      throw new ApiError(409, "Invalid OTP");
+      return res.status(409).json(new ApiResponse(409, null, "Invalid OTP"));
     }
 
     if (isValidOtp) {
-        await OTP.deleteOne({ email: email });
-        return res.status(200).json(new ApiResponse(200, null, "OTP verified successfully"));
+      await OTP.deleteOne({ email: email });
+      return res
+        .status(200)
+        .json(new ApiResponse(200, null, "OTP verified successfully"));
     }
   } catch (error) {
     console.log("Error while comparing OTP", error.message);
