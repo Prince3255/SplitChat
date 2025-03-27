@@ -25,41 +25,49 @@ const allowedOrigins = [
   "https://splitchat.vercel.app",
   "http://localhost:5173", // for local testing
 ];
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-    res.setHeader("Access-Control-Allow-Credentials", "true");
-    res.setHeader(
-      "Access-Control-Allow-Methods",
-      "GET, POST, PUT, DELETE, OPTIONS"
-    );
-    res.setHeader(
-      "Access-Control-Allow-Headers",
-      "Content-Type, Authorization"
-    );
-  }
-  res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
-  res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
-  next();
-});
 app.use(express.json());
 
 app.use(cors({
   origin: (origin, callback) => {
-    const allowedOrigins = [
-      'http://localhost:5173',
-      'https://splitchat.vercel.app'
-    ];
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
+    if (!origin) return callback(null, true);
+    // if (allowedOrigins.includes(origin) != -1) {
+    //   return callback(null, true);
+    // }
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = `CORS policy: ${origin} not allowed`;
+      return callback(new Error(msg), false);
     }
+    return callback(null, true);
+    // if (!origin || allowedOrigins.includes(origin)) {
+    //   callback(null, true);
+    // } else {
+    //   callback(new Error('Not allowed by CORS'));
+    // }
   },
   credentials: true,
+  allowedHeaders: ["Content-Type", "Authorization"],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
 }));
 app.use(cookieParser());
+
+app.use((req, res, next) => {
+  // const origin = req.headers.origin;
+  // if (allowedOrigins.includes(origin)) {
+  //   // res.setHeader("Access-Control-Allow-Origin", origin);
+  //   // res.setHeader("Access-Control-Allow-Credentials", "true");
+  //   // res.setHeader(
+  //   //   "Access-Control-Allow-Methods",
+  //   //   "GET, POST, PUT, DELETE, OPTIONS"
+  //   // );
+  //   // res.setHeader(
+  //   //   "Access-Control-Allow-Headers",
+  //   //   "Content-Type, Authorization"
+  //   // );
+  // }
+  res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
+  res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
+  next();
+});
 
 app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/user", userRoute);
