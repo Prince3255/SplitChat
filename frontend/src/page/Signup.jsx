@@ -119,12 +119,12 @@ export default function Signup() {
         return;
       }
       toast.success(data.message || "OTP verified successfully");
+      setEmail(null);
       createNewUser();
     } catch (error) {
       toast.error(error.message);
     } finally {
       setLoading(false);
-      setEmail(null);
     }
   };
 
