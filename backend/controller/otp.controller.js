@@ -61,7 +61,7 @@ export const sendOtp = asyncHandler(async (req, res) => {
 
     return res
       .status(201)
-      .json(new ApiResponse(201, createdUser, "OTP sent successfully"));
+      .json(new ApiResponse(201, null, "OTP sent successfully"));
   } catch (error) {
     console.log("Error while sending OTP", error.message);
     return res.status(400).json(new ApiError(400, error.message));
