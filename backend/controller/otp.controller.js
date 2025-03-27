@@ -1,8 +1,8 @@
-import OTP from "../model/otp.model";
-import User from "../model/user.model";
-import { ApiError } from "../util/ApiError";
-import { ApiResponse } from "../util/ApiResponse";
-import { asyncHandler } from "../util/AsyncHandler";
+import OTP from "../model/otp.model.js";
+import User from "../model/user.model.js";
+import { ApiError } from "../util/ApiError.js";
+import { ApiResponse } from "../util/ApiResponse.js";
+import { asyncHandler } from "../util/AsyncHandler.js";
 import nodemailer from "nodemailer";
 import bcrypt from "bcryptjs";
 
