@@ -115,7 +115,8 @@ export default function Signup() {
 
       const data = await res.json();
       if (!data.success) {
-        throw new Error(data.message || "OTP verification failed");
+        toast.error(data?.message || "OTP verification failed");
+        return;
       }
       toast.success(data.message || "OTP verified successfully");
       createNewUser();
