@@ -4,6 +4,7 @@ import { Button, TextInput, Label, Spinner } from "flowbite-react";
 import toast from "react-hot-toast";
 import { Oauth } from "../component";
 import OtpInput from "../component/OtpInput";
+import { HiOutlineArrowLeft } from "react-icons/hi";
 
 export default function Signup() {
   const [formData, setFormData] = useState({});
