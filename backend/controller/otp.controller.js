@@ -6,6 +6,9 @@ import { asyncHandler } from "../util/AsyncHandler.js";
 import nodemailer from "nodemailer";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
+import dotenv from "dotenv";
+
+dotenv.config()
 
 export const sendOtp = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
