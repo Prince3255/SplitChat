@@ -92,11 +92,11 @@ const OtpInput = ({ onSubmit, loading, sendOtp }) => {
   };
 
   const formatTime = () => {
-    const minute = Math.floor(time/60)
-    const second = minute % 60
+    const minute = Math.floor(time / 60);
+    const second = minute % 60;
 
-    return `${minute}:${second.toString().padStart(2, '0')}`
-  }
+    return `${minute}:${second.toString().padStart(2, "0")}`;
+  };
 
   return (
     <div className="w-full max-w-md mx-auto p-6">
@@ -155,12 +155,14 @@ const OtpInput = ({ onSubmit, loading, sendOtp }) => {
             Didn't receive the code?
             <Button
               type="button"
-              className={`ml-1 text-blue-600 hover:text-blue-800 focus:outline-none ${time > 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`ml-1 text-blue-600 hover:text-blue-800 focus:outline-none ${
+                time > 0 ? "opacity-50 cursor-not-allowed" : ""
+              }`}
               onClick={() => {
                 setOtp(Array(6).fill(""));
                 inputRefs.current[0].focus();
                 sendOtp(e);
-                setTime(120)
+                setTime(120);
               }}
               disabled={time > 0}
             >
