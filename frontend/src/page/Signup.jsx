@@ -36,7 +36,7 @@ export default function Signup() {
     return true;
   };
 
-  const createNewUser = async (e) => {
+  const createNewUser = async () => {
     setEmail(null)
     setLoading(true);
     e.preventDefault();
@@ -99,7 +99,6 @@ export default function Signup() {
   };
 
   const handleOTPSubmit = async (otp) => {
-    e.preventDefault();
     try {
       setLoading(true);
       const form = {
@@ -119,7 +118,7 @@ export default function Signup() {
         throw new Error(data.message || "OTP verification failed");
       }
       toast.success(data.message || "OTP verified successfully");
-      createNewUser(e);
+      createNewUser();
     } catch (error) {
       toast.error(error.message);
     } finally {
