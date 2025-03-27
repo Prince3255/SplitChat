@@ -92,10 +92,10 @@ const OtpInput = ({ onSubmit, loading, sendOtp }) => {
   };
 
   const formatTime = () => {
-    const minute = Math.floor(minute/60)
+    const minute = Math.floor(time/60)
     const second = minute % 60
 
-    return `${minute}:${second >= 10 ? "" : "0"}${second}`
+    return `${minute}:${second.toString().padStart(2, '0')}`
   }
 
   return (
