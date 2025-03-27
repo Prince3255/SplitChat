@@ -39,7 +39,6 @@ export default function Signup() {
   const createNewUser = async () => {
     setEmail(null)
     setLoading(true);
-    e.preventDefault();
     try {
       const res = await fetch(`${API_URL}/auth/signup`, {
         method: "POST",

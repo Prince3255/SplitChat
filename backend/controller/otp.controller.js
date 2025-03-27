@@ -91,7 +91,7 @@ export const verifyOtp = asyncHandler(async (req, res) => {
 
     if (isValidOtp) {
         await OTP.deleteOne({ email: email });
-        return res.status(200).json(new ApiResponse(200, "OTP verified successfully"));
+        return res.status(200).json(new ApiResponse(200, null, "OTP verified successfully"));
     }
   } catch (error) {
     console.log("Error while comparing OTP", error.message);
