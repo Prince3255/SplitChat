@@ -10,6 +10,7 @@ import settleupRoute from "./route/settleup.route.js";
 import commentRoute from "./route/comment.route.js";
 import chatRoute from "./route/chat.route.js";
 import searchRoute from "./route/search.route.js";
+import otpRoute from "./route/otp.route.js"
 import { uploadFile } from "./util/cloudinary.js";
 import { upload } from "./middleware/multer.middleware.js";
 import dotenv from "dotenv";
@@ -68,6 +69,7 @@ app.use("/api/v1/settleup", settleupRoute);
 app.use("/api/v1/comment", commentRoute);
 app.use("/api/v1/chat", chatRoute);
 app.use("/api/v1/search", searchRoute);
+app.use("/api/v1/otp", otpRoute);
 app.post(
   "/api/v1/upload",
   upload.fields([

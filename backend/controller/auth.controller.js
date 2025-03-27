@@ -7,20 +7,20 @@ export const signup = asyncHandler (async (req, res, next) => {
     const { username, email, password } = req.body;
 
     try {
-        if ([username, email, password].some((field) => field.trim() === "")) {
-            throw new ApiError(400, "All fields are required")
-        }
+        // if ([username, email, password].some((field) => field.trim() === "")) {
+        //     throw new ApiError(400, "All fields are required")
+        // }
     
-        const existingUser = await User.findOne({
-            $or: [
-                { username: username },
-                { email: email }
-            ]
-        });        
+        // const existingUser = await User.findOne({
+        //     $or: [
+        //         { username: username },
+        //         { email: email }
+        //     ]
+        // });
     
-        if (existingUser) {
-            throw new ApiError(409, "Username with this email or username already exists")
-        }
+        // if (existingUser) {
+        //     throw new ApiError(409, "Username with this email or username already exists")
+        // }
     
     
         const user = new User({

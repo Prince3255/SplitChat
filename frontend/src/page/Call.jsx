@@ -292,7 +292,7 @@ export default function Call() {
           <Button
             className="p-3 bg-gray-600 rounded-full text-white"
             size="sm"
-            onClick={setCamera(!camera)}
+            onClick={() => setCamera(!camera)}
           >
             <MdOutlineFlipCameraIos className="text-2xl" />
           </Button>
