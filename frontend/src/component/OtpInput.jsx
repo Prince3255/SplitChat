@@ -1,5 +1,5 @@
+import React, { useState, useRef, useEffect } from "react";
 import { Button } from "flowbite-react";
-import { React, useState, useRef, useEffect } from "react";
 
 const OtpInput = ({ onSubmit, loading, sendOtp }) => {
   const [otp, setOtp] = useState(Array(6).fill(""));

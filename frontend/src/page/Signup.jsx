@@ -119,7 +119,7 @@ export default function Signup() {
         toast.error(data?.message || "OTP verification failed");
         return;
       }
-      toast.success(data.message || "OTP verified successfully");
+      toast.success(data?.message || "OTP verified successfully");
       setEmail(null);
       createNewUser();
     } catch (error) {
