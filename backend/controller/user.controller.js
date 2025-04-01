@@ -199,84 +199,149 @@ export const getUserDetails = asyncHandler(async (req, res) => {
   }
 });
 
+// export const updateUser = asyncHandler(async (req, res) => {
+//   try {
+//     if (req?.params?.id !== req?.user?._id) {
+//       throw new ApiError(403, "You are not allowed to update this user");
+//     }
+
+//     // if (req.body.password) {
+//     //   if (req.body.password < 8) {
+//     //     throw new ApiError(400, "Password must be at least 8 characters long");
+//     //   }
+//     // }
+
+//     // if (req.body.username) {
+//     //   if (req.body.username < 4 && req.body.username > 20) {
+//     //     throw new ApiError(400, "Username must be between 4 and 20 character");
+//     //   }
+
+//     //   if (
+//     //     typeof req.body.username === "string" &&
+//     //     req.body.username.includes(" ")
+//     //   ) {
+//     //     throw new ApiError("Username cannot contain space");
+//     //   }
+
+//     //   if (!req?.body?.username?.match(/^[a-zA-Z0-9]+$/)) {
+//     //     throw new ApiError(404, "Username can only contain letter and number");
+//     //   }
+
+//     //   const user = User.findOne({
+//     //     username: req.body.username,
+//     //   });
+
+//     //   if (user) {
+//     //     throw new ApiError(400, "Username already exists");
+//     //   }
+//     // }
+
+//     const updatedUser = await User.findByIdAndUpdate(
+//       req.params.id,
+//       {
+//         // $set: {
+//         //   username: req.body.username,
+//         //   email: req.body.email,
+//         //   password: req.body.password,
+//         //   profilePicture: req.body.profilePicture,
+//         //   coverImage: req.body.coverImage,
+//         // },
+//         $set: {
+//           profilePicture: req?.body?.profilePicture,
+//         },
+//       },
+//       {
+//         new: true,
+//       }
+//     );
+
+//     await updatedUser.save();
+
+//     const user = await User.findById(req.params.id).select(" -password ");
+
+//     if (!user) {
+//       throw new ApiError(404, "User not found");
+//     }
+
+//     res.status(201).json(
+//       new ApiResponse(
+//         201,
+//         {
+//           user,
+//         },
+//         "User updated successfully"
+//       )
+//     );
+//   } catch (error) {
+//     console.log("Error while updating user", error.message);
+//     return res.status(400).json(new ApiError(400, error.message));
+//   }
+// });
+
 export const updateUser = asyncHandler(async (req, res) => {
   try {
     if (req?.params?.id !== req?.user?._id) {
       throw new ApiError(403, "You are not allowed to update this user");
     }
 
-    // if (req.body.password) {
-    //   if (req.body.password < 8) {
-    //     throw new ApiError(400, "Password must be at least 8 characters long");
-    //   }
-    // }
+    const updates = {};
 
-    // if (req.body.username) {
-    //   if (req.body.username < 4 && req.body.username > 20) {
-    //     throw new ApiError(400, "Username must be between 4 and 20 character");
-    //   }
+    // Check for valid fields to update
+    if (req?.body?.username) {
+      if (req.body.username.length < 4 || req.body.username.length > 20) {
+        throw new ApiError(400, "Username must be between 4 and 20 characters");
+      }
 
-    //   if (
-    //     typeof req.body.username === "string" &&
-    //     req.body.username.includes(" ")
-    //   ) {
-    //     throw new ApiError("Username cannot contain space");
-    //   }
+      if (/\s/.test(req.body.username)) {
+        throw new ApiError(400, "Username cannot contain spaces");
+      }
 
-    //   if (!req?.body?.username?.match(/^[a-zA-Z0-9]+$/)) {
-    //     throw new ApiError(404, "Username can only contain letter and number");
-    //   }
+      if (!/^[a-zA-Z0-9]+$/.test(req.body.username)) {
+        throw new ApiError(400, "Username can only contain letters and numbers");
+      }
 
-    //   const user = User.findOne({
-    //     username: req.body.username,
-    //   });
+      const existingUser = await User.findOne({ username: req.body.username });
+      if (existingUser && existingUser._id.toString() !== req.params.id) {
+        throw new ApiError(400, "Username already exists");
+      }
+      updates.username = req.body.username;
+    }
 
-    //   if (user) {
-    //     throw new ApiError(400, "Username already exists");
-    //   }
-    // }
+    if (req?.body?.email) {
+      if (!/\S+@\S+\.\S+/.test(req.body.email)) {
+        throw new ApiError(400, "Invalid email address");
+      }
+      updates.email = req.body.email;
+    }
+
+    if (req?.body?.phone) {
+      if (!/^\d{10}$/.test(req.body.phone)) {
+        throw new ApiError(400, "Phone number must be 10 digits");
+      }
+      updates.phone = req.body.phone;
+    }
+
+    if (req?.body?.profilePicture) {
+      updates.profilePicture = req.body.profilePicture;
+    }
 
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
-      {
-        // $set: {
-        //   username: req.body.username,
-        //   email: req.body.email,
-        //   password: req.body.password,
-        //   profilePicture: req.body.profilePicture,
-        //   coverImage: req.body.coverImage,
-        // },
-        $set: {
-          profilePicture: req?.body?.profilePicture,
-        },
-      },
-      {
-        new: true,
-      }
-    );
+      { $set: updates },
+      { new: true }
+    ).select("-password");
 
-    await updatedUser.save();
-
-    const user = await User.findById(req.params.id).select(" -password ");
-
-    if (!user) {
+    if (!updatedUser) {
       throw new ApiError(404, "User not found");
     }
 
-    res.status(201).json(
-      new ApiResponse(
-        201,
-        {
-          user,
-        },
-        "User updated successfully"
-      )
-    );
+    res.status(200).json(new ApiResponse(200, updatedUser, "User updated successfully"));
   } catch (error) {
-    console.log("Error while updating user", error.message);
+    console.error("Error while updating user:", error.message);
     return res.status(400).json(new ApiError(400, error.message));
   }
 });
+
 
 export const deleteUser = asyncHandler(async (req, res) => {
   try {

@@ -13,11 +13,11 @@ import fetchUser from "../util/fetchUser";
 import { useQuery } from "@tanstack/react-query";
 import { FiLogOut } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
 import { logoutUserSuccess, updateUserSuccess } from "../redux/user/userSlice";
 import uploadImage from "../util/uploadImage";
 import ProfileSkeleton from "../component/skeleton/ProfileSkeleton";
 import { persistor } from "../redux/store";
+import toast from "react-hot-toast";
 
 export default function Profile() {
   const user = useSelector((state) => state.user);

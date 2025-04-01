@@ -153,7 +153,7 @@ const OtpInput = ({ onSubmit, loading, sendOtp }) => {
 
           <p className="mt-4 text-sm text-gray-600 text-center">
             Didn't receive the code?
-            <Button
+            <button
               type="button"
               className={`ml-1 text-blue-600 hover:text-blue-800 focus:outline-none ${
                 time > 0 ? "opacity-50 cursor-not-allowed" : ""
@@ -167,7 +167,7 @@ const OtpInput = ({ onSubmit, loading, sendOtp }) => {
               disabled={time > 0}
             >
               Resend {time > 0 ? `in ${formatTime()} seconds` : `now`}
-            </Button>
+            </button>
           </p>
         </div>
       </form>
