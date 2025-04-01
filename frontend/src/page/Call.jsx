@@ -478,8 +478,8 @@ import toast from "react-hot-toast";
 
 export default function Call() {
   const [mute, setMute] = useState(false);
-  const [video, setVideo] = useState(true); // Start with video on
-  const [camera, setCamera] = useState(false); // false = front, true = back
+  const [video, setVideo] = useState(true);
+  const [camera, setCamera] = useState(false);
   const [backCamera, setBackCamera] = useState(false);
   const socket = getSocket();
   const videoGrid = useRef();
@@ -514,6 +514,12 @@ export default function Call() {
       localStream.current = stream;
       userVideo.current.srcObject = stream;
 
+      if (!stream.getAudioTracks().length) {
+        console.warn("No audio track available.");
+        toast.error("Microphone not detected or permission denied.");
+      }
+      stream.getAudioTracks().forEach((track) => (track.enabled = true)); // Ensure audio is on
+
       const devices = await navigator.mediaDevices.enumerateDevices();
       const videoDevices = devices.filter((d) => d.kind === "videoinput");
       const hasBackCamera = videoDevices.some((device) =>
@@ -527,7 +533,10 @@ export default function Call() {
       });
       pc.current.pendingCandidates = [];
 
-      stream.getTracks().forEach((track) => pc.current.addTrack(track, stream));
+      stream.getTracks().forEach((track) => {
+        console.log(`Adding track: ${track.kind}, enabled: ${track.enabled}`);
+        pc.current.addTrack(track, stream);
+      });
 
       pc.current.onicecandidate = (e) => {
         if (e.candidate) {
@@ -559,9 +568,6 @@ export default function Call() {
   const flipCamera = async () => {
     if (!backCamera || !pc.current) return;
     setCamera((prev) => !prev);
-    if (localStream.current) {
-      localStream.current.getTracks().forEach((track) => track.stop());
-    }
     try {
       const newStream = await navigator.mediaDevices.getUserMedia({
         audio: {
@@ -580,12 +586,13 @@ export default function Call() {
       const videoTrack = newStream.getVideoTracks()[0];
       const audioTrack = newStream.getAudioTracks()[0];
       senders.forEach((sender) => {
-        if (sender.track.kind === "video") {
+        if (sender.track.kind === "video" && videoTrack) {
           sender.replaceTrack(videoTrack);
-        } else if (sender.track.kind === "audio") {
+        } else if (sender.track.kind === "audio" && audioTrack) {
           sender.replaceTrack(audioTrack);
         }
       });
+      setVideo(true); // Reset video state to on after flip
     } catch (error) {
       toast.error(`Failed to flip camera: ${error.message}`);
       console.error("Error flipping camera:", error);
@@ -670,16 +677,22 @@ export default function Call() {
   };
 
   const handleMute = () => {
-    if (localStream.current) {
-      localStream.current.getAudioTracks().forEach((track) => (track.enabled = !mute));
-      setMute(!mute);
+    if (localStream.current && localStream.current.getAudioTracks().length) {
+      const enabled = !mute;
+      localStream.current.getAudioTracks().forEach((track) => (track.enabled = enabled));
+      setMute(enabled);
+    } else {
+      toast.error("No audio track available to mute.");
     }
   };
 
   const handleVideo = () => {
-    if (localStream.current) {
-      localStream.current.getVideoTracks().forEach((track) => (track.enabled = !video));
-      setVideo(!video);
+    if (localStream.current && localStream.current.getVideoTracks().length) {
+      const enabled = !video;
+      localStream.current.getVideoTracks().forEach((track) => (track.enabled = enabled));
+      setVideo(enabled);
+    } else {
+      toast.error("No video track available to toggle.");
     }
   };
 
