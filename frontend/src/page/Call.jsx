@@ -605,9 +605,7 @@ export default function Call() {
       const audioTrack = newStream.getAudioTracks()[0]
       const videoSender = senders.find((sender) => sender.track?.kind === "video");
       const audioSender = senders.find((sender) => sender.track?.kind === "audio");
-      if (audioSender) {
-        await audioSender.replaceTrack(newStream.getAudioTracks()[0]);
-      }
+      
       if (videoSender && videoTrack) {
         await videoSender.replaceTrack(videoTrack);
       }
@@ -762,7 +760,7 @@ export default function Call() {
           </Button>
         )}
         <Button className="p-3 bg-gray-600 rounded-full text-white" size="sm" onClick={handleMute}>
-          {mute ? <CiMicrophoneOn className="text-2xl" /> : <AiOutlineAudioMuted className="text-2xl" /> }
+          {mute ? <AiOutlineAudioMuted className="text-2xl" /> : <CiMicrophoneOn className="text-2xl" /> }
         </Button>
       </div>
     </div>
