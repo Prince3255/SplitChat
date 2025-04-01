@@ -602,9 +602,17 @@ export default function Call() {
 
       const senders = pc.current.getSenders();
       const videoTrack = newStream.getVideoTracks()[0];
+      const audioTrack = newStream.getAudioTracks()[0]
       const videoSender = senders.find((sender) => sender.track?.kind === "video");
+      const audioSender = senders.find((sender) => sender.track?.kind === "audio");
+      if (audioSender) {
+        await audioSender.replaceTrack(newStream.getAudioTracks()[0]);
+      }
       if (videoSender && videoTrack) {
         await videoSender.replaceTrack(videoTrack);
+      }
+      if (audioTrack && audioSender) {
+        await audioSender.replaceTrack(audioTrack);
       }
       setVideo(true); // Ensure video is on after flip
     } catch (error) {
