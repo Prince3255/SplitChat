@@ -101,8 +101,8 @@ export default function Call() {
         });
       }
     } catch (error) {
-      toast.error(`Failed to access camera/microphone: ${err.message}`);
-      console.error("Error in accessing media devices:", err);
+      toast.error(`Failed to access camera/microphone: ${error.message}`);
+      console.error("Error in accessing media devices:", error);
     }
   }
 
