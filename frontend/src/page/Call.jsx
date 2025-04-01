@@ -61,7 +61,7 @@ export default function Call() {
         iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
       })
 
-      stream.getTracks.forEach((track) => pc.current.addTrack(track, stream))
+      stream.getTracks().forEach((track) => pc.current.addTrack(track, stream))
 
       pc.current.onicecandidate = (e) => {
         if (e.candidate) {
@@ -76,7 +76,7 @@ export default function Call() {
       }
 
       if (isCaller) {
-        const offer = pc.current.createOffer()
+        const offer = await pc.current.createOffer()
         await pc.current.setLocalDescription(offer)
         socket.emit("offer", {
           to: id1,
@@ -85,8 +85,8 @@ export default function Call() {
         });
       }
     } catch (error) {
-      toast.error(`Failed to access camera/microphone: ${err.message}`);
-      console.error("Error in accessing media devices:", err);
+      toast.error(`Failed to access camera/microphone: ${error.message}`);
+      console.error("Error in accessing media devices:", error);
     }
   }
 
