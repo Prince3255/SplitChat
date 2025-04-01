@@ -463,7 +463,6 @@
 //   );
 // }
 
-
 import React, { useEffect, useRef, useState } from "react";
 import { getSocket } from "../util/socketAction";
 import { Button } from "flowbite-react";
@@ -522,9 +521,10 @@ export default function Call() {
 
       const devices = await navigator.mediaDevices.enumerateDevices();
       const videoDevices = devices.filter((d) => d.kind === "videoinput");
-      const hasBackCamera = videoDevices.some((device) =>
-        device.label.toLowerCase().includes("back") ||
-        device.label.toLowerCase().includes("environment")
+      const hasBackCamera = videoDevices.some(
+        (device) =>
+          device.label.toLowerCase().includes("back") ||
+          device.label.toLowerCase().includes("environment")
       );
       setBackCamera(hasBackCamera);
 
@@ -569,13 +569,11 @@ export default function Call() {
     if (!backCamera || !pc.current) return;
     setCamera((prev) => !prev);
 
-    // Stop existing tracks to release the camera
     if (localStream.current) {
       localStream.current.getTracks().forEach((track) => track.stop());
     }
 
     try {
-      console.log("Attempting to flip camera to:", !camera ? "environment" : "user");
       const constraints = {
         audio: {
           echoCancellation: true,
@@ -586,33 +584,45 @@ export default function Call() {
           facingMode: !camera ? "environment" : "user",
         },
       };
-      const newStream = await navigator.mediaDevices.getUserMedia(constraints).catch((error) => {
-        if (error.name === "OverconstrainedError" || error.message.includes("video source")) {
-          console.warn("Requested facingMode not available, falling back to default camera.");
-          return navigator.mediaDevices.getUserMedia({
-            audio: constraints.audio,
-            video: true,
-          });
-        }
-        throw error;
-      });
+      const newStream = await navigator.mediaDevices
+        .getUserMedia(constraints)
+        .catch((error) => {
+          if (
+            error.name === "OverconstrainedError" ||
+            error.message.includes("video source")
+          ) {
+            console.warn(
+              "Requested facingMode not available, falling back to default camera."
+            );
+            return navigator.mediaDevices.getUserMedia({
+              audio: constraints.audio,
+              video: true,
+            });
+          }
+          throw error;
+        });
 
       localStream.current = newStream;
       userVideo.current.srcObject = newStream;
 
       const senders = pc.current.getSenders();
       const videoTrack = newStream.getVideoTracks()[0];
-      const audioTrack = newStream.getAudioTracks()[0]
-      const videoSender = senders.find((sender) => sender.track?.kind === "video");
-      const audioSender = senders.find((sender) => sender.track?.kind === "audio");
-      
+      const audioTrack = newStream.getAudioTracks()[0];
+      const videoSender = senders.find(
+        (sender) => sender.track?.kind === "video"
+      );
+      const audioSender = senders.find(
+        (sender) => sender.track?.kind === "audio"
+      );
+
       if (videoSender && videoTrack) {
         await videoSender.replaceTrack(videoTrack);
       }
-      if (audioTrack && audioSender) {
+      if (audioSender && audioTrack) {
         await audioSender.replaceTrack(audioTrack);
+        audioTrack.enabled = !mute; // Preserve mute state
       }
-      setVideo(true); // Ensure video is on after flip
+      setVideo(true); // Video on after flip
     } catch (error) {
       toast.error(`Failed to flip camera: ${error.message}`);
       console.error("Error flipping camera:", error);
@@ -641,7 +651,9 @@ export default function Call() {
 
   const handleOffer = async (offer) => {
     try {
-      await pc.current.setRemoteDescription(new RTCSessionDescription(offer?.offer));
+      await pc.current.setRemoteDescription(
+        new RTCSessionDescription(offer?.offer)
+      );
       if (pc.current?.pendingCandidates?.length) {
         for (const candidate of pc.current.pendingCandidates) {
           try {
@@ -699,8 +711,10 @@ export default function Call() {
   const handleMute = () => {
     if (localStream.current && localStream.current.getAudioTracks().length) {
       const enabled = !mute;
-      localStream.current.getAudioTracks().forEach((track) => (track.enabled = enabled));
-      setMute(enabled);
+      localStream.current
+        .getAudioTracks()
+        .forEach((track) => (track.enabled = enabled));
+      setMute(!mute); // Toggle mute state
     } else {
       toast.error("No audio track available to mute.");
     }
@@ -709,7 +723,9 @@ export default function Call() {
   const handleVideo = () => {
     if (localStream.current && localStream.current.getVideoTracks().length) {
       const enabled = !video;
-      localStream.current.getVideoTracks().forEach((track) => (track.enabled = enabled));
+      localStream.current
+        .getVideoTracks()
+        .forEach((track) => (track.enabled = enabled));
       setVideo(enabled);
     } else {
       toast.error("No video track available to toggle.");
@@ -748,19 +764,43 @@ export default function Call() {
         />
       </div>
       <div className="p-4 bg-gray-800 flex justify-center gap-4">
-        <Button className="p-3 rounded-full text-white" size="sm" onClick={handleEndCall}>
+        <Button
+          className="p-3 rounded-full text-white"
+          size="sm"
+          onClick={handleEndCall}
+        >
           <FcEndCall className="text-2xl" />
         </Button>
-        <Button className="p-3 bg-gray-600 rounded-full text-white" size="sm" onClick={handleVideo}>
-          {video ? <CiVideoOn className="text-2xl" /> : <CiVideoOff className="text-2xl" />}
+        <Button
+          className="p-3 bg-gray-600 rounded-full text-white"
+          size="sm"
+          onClick={handleVideo}
+        >
+          {video ? (
+            <CiVideoOn className="text-2xl" />
+          ) : (
+            <CiVideoOff className="text-2xl" />
+          )}
         </Button>
         {backCamera && (
-          <Button className="p-3 bg-gray-600 rounded-full text-white" size="sm" onClick={flipCamera}>
+          <Button
+            className="p-3 bg-gray-600 rounded-full text-white"
+            size="sm"
+            onClick={flipCamera}
+          >
             <MdOutlineFlipCameraIos className="text-2xl" />
           </Button>
         )}
-        <Button className="p-3 bg-gray-600 rounded-full text-white" size="sm" onClick={handleMute}>
-          {mute ? <AiOutlineAudioMuted className="text-2xl" /> : <CiMicrophoneOn className="text-2xl" /> }
+        <Button
+          className="p-3 bg-gray-600 rounded-full text-white"
+          size="sm"
+          onClick={handleMute}
+        >
+          {mute ? (
+            <AiOutlineAudioMuted className="text-2xl" />
+          ) : (
+            <CiMicrophoneOn className="text-2xl" />
+          )}
         </Button>
       </div>
     </div>
