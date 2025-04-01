@@ -518,7 +518,7 @@ export default function Call() {
         console.warn("No audio track available.");
         toast.error("Microphone not detected or permission denied.");
       }
-      stream.getAudioTracks().forEach((track) => (track.enabled = true)); // Ensure audio is on
+      stream.getAudioTracks().forEach((track) => (track.enabled = true));
 
       const devices = await navigator.mediaDevices.enumerateDevices();
       const videoDevices = devices.filter((d) => d.kind === "videoinput");
@@ -568,8 +568,15 @@ export default function Call() {
   const flipCamera = async () => {
     if (!backCamera || !pc.current) return;
     setCamera((prev) => !prev);
+
+    // Stop existing tracks to release the camera
+    if (localStream.current) {
+      localStream.current.getTracks().forEach((track) => track.stop());
+    }
+
     try {
-      const newStream = await navigator.mediaDevices.getUserMedia({
+      console.log("Attempting to flip camera to:", !camera ? "environment" : "user");
+      const constraints = {
         audio: {
           echoCancellation: true,
           noiseSuppression: true,
@@ -578,21 +585,28 @@ export default function Call() {
         video: {
           facingMode: !camera ? "environment" : "user",
         },
+      };
+      const newStream = await navigator.mediaDevices.getUserMedia(constraints).catch((error) => {
+        if (error.name === "OverconstrainedError" || error.message.includes("video source")) {
+          console.warn("Requested facingMode not available, falling back to default camera.");
+          return navigator.mediaDevices.getUserMedia({
+            audio: constraints.audio,
+            video: true,
+          });
+        }
+        throw error;
       });
+
       localStream.current = newStream;
       userVideo.current.srcObject = newStream;
 
       const senders = pc.current.getSenders();
       const videoTrack = newStream.getVideoTracks()[0];
-      const audioTrack = newStream.getAudioTracks()[0];
-      senders.forEach((sender) => {
-        if (sender.track.kind === "video" && videoTrack) {
-          sender.replaceTrack(videoTrack);
-        } else if (sender.track.kind === "audio" && audioTrack) {
-          sender.replaceTrack(audioTrack);
-        }
-      });
-      setVideo(true); // Reset video state to on after flip
+      const videoSender = senders.find((sender) => sender.track?.kind === "video");
+      if (videoSender && videoTrack) {
+        await videoSender.replaceTrack(videoTrack);
+      }
+      setVideo(true); // Ensure video is on after flip
     } catch (error) {
       toast.error(`Failed to flip camera: ${error.message}`);
       console.error("Error flipping camera:", error);
@@ -740,7 +754,7 @@ export default function Call() {
           </Button>
         )}
         <Button className="p-3 bg-gray-600 rounded-full text-white" size="sm" onClick={handleMute}>
-          {mute ? <AiOutlineAudioMuted className="text-2xl" /> : <CiMicrophoneOn className="text-2xl" />}
+          {mute ? <CiMicrophoneOn className="text-2xl" /> : <AiOutlineAudioMuted className="text-2xl" /> }
         </Button>
       </div>
     </div>
