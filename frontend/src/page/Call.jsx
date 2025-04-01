@@ -256,19 +256,25 @@ export default function Call() {
 
   const handleCallEnd = () => {
     try {
-      userVideo.current.srcObject
-        .getAudioTracks()
-        .forEach((track) => track.stop());
-      userVideo.current.srcObject
-        .getVideoTracks()
-        .forEach((track) => track.stop());
-      pc?.current?.close();
-      dispatch(setCalling(false));
-      if (window.history.length > 1) {
-        navigate(-1);
-      } else {
-        navigate("/chat");
+      // userVideo.current.srcObject
+      //   .getAudioTracks()
+      //   .forEach((track) => track.stop());
+      // userVideo.current.srcObject
+      //   .getVideoTracks()
+      //   .forEach((track) => track.stop());
+      // pc?.current?.close();
+      // dispatch(setCalling(false));
+      // if (window.history.length > 1) {
+      //   navigate(-1);
+      // } else {
+      //   navigate("/chat");
+      // }
+      if (localStream.current) {
+        localStream.current.getTracks().forEach((track) => track.stop());
       }
+      pc.current?.close();
+      dispatch(setCalling(false));
+      navigate(window.history.length > 1 ? -1 : "/chat");
     } catch (error) {
       console.log(error);
     }
