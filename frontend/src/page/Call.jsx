@@ -77,7 +77,7 @@ export default function Call() {
         iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
       })
 
-      stream.getTracks.forEach((track) => pc.current.addTrack(track, stream))
+      stream.getTracks().forEach((track) => pc.current.addTrack(track, stream))
 
       pc.current.onicecandidate = (e) => {
         if (e.candidate) {
