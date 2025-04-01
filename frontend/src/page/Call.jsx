@@ -12,7 +12,7 @@ import toast from "react-hot-toast";
 
 export default function Call() {
   const [mute, setMute] = useState(false);
-  const [video, setVideo] = useState(false);
+  const [video, setVideo] = useState(true);
   const [camera, setCamera] = useState(false);
   const [backCamera, setBackCamera] = useState(false);
   const socket = getSocket();
@@ -43,7 +43,7 @@ export default function Call() {
         audio: {
           echoCancellation: true,
           noiseSuppression: true,
-          audioGainControl: true
+          autoGainControl: true
         },
         video: {
           facingMode: camera ? 'environment' : 'user'
@@ -53,13 +53,18 @@ export default function Call() {
       userVideo.current.srcObject = stream
 
       const device = await navigator.mediaDevices.enumerateDevices()
-      const videoDevices = device.filter((d) => d.kind === "videonput")
-      const hasBackCamera = videoDevices.some((device) => device.label.toLowerCase() == "back" || device.label.toLowerCase() == "environment")
+      const videoDevices = device.filter((d) => d.kind === "videoinput");
+      const hasBackCamera = videoDevices.some((device) => 
+        device.label.toLowerCase().includes("back") || 
+        device.label.toLowerCase().includes("environment")
+      );
       setBackCamera(hasBackCamera)
 
       pc.current = new RTCPeerConnection({
         iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
       })
+
+      pc.current.pendingCandidates = [];
 
       stream.getTracks().forEach((track) => pc.current.addTrack(track, stream))
 
@@ -108,7 +113,7 @@ export default function Call() {
       socket.off("ice-candidate", handleRemoteIce);
       socket.off("end-call", handleCallEnd);
     };
-  }, [])
+  }, [id1, isCaller, user?.currentUser?._id])
 
   // useEffect(() => {
   //   navigator.mediaDevices
@@ -202,6 +207,15 @@ export default function Call() {
   //   };
   // }, []);
 
+  const flipCamera = async () => {
+    if (!backCamera) return;
+    setCamera((prev) => !prev);
+    if (localStream.current) {
+      localStream.current.getTracks().forEach((track) => track.stop());
+    }
+    await startStream();
+  };
+
   const handleOffer = async (offer) => {
     try {
       await pc.current.setRemoteDescription(
@@ -219,6 +233,17 @@ export default function Call() {
         }
       });
       pc.current.pendingCandidates = [];
+    }
+
+    if (pc.current?.pendingCandidates?.length) {
+      for (const candidate of pc.current.pendingCandidates) {
+        try {
+          await pc.current.addIceCandidate(candidate.candidate);
+        } catch (error) {
+          console.error("Error adding pending candidate:", error);
+        }
+      }
+      pc.current.pendingCandidates = []
     }
 
     const answer = await pc.current.createAnswer();
@@ -281,39 +306,48 @@ export default function Call() {
   };
 
   const handleMute = () => {
-    if (!mute) {
-      userVideo.current.srcObject
-        .getAudioTracks()
-        .forEach((track) => (track.enabled = false));
-    } else {
-      userVideo.current.srcObject
-        .getAudioTracks()
-        .forEach((track) => (track.enabled = true));
+    // if (!mute) {
+    //   userVideo.current.srcObject
+    //     .getAudioTracks()
+    //     .forEach((track) => (track.enabled = false));
+    // } else {
+    //   userVideo.current.srcObject
+    //     .getAudioTracks()
+    //     .forEach((track) => (track.enabled = true));
+    // }
+    if (localStream.current) {
+      localStream.current.getAudioTracks().forEach((track) => track.enabled = false)
     }
     setMute(!mute);
   };
 
   const handleVideo = () => {
-    if (!video) {
-      userVideo.current.srcObject
-        .getVideoTracks()
-        .forEach((track) => (track.enabled = false));
-    } else {
-      userVideo.current.srcObject
-        .getVideoTracks()
-        .forEach((track) => (track.enabled = true));
+    // if (!video) {
+    //   userVideo.current.srcObject
+    //     .getVideoTracks()
+    //     .forEach((track) => (track.enabled = false));
+    // } else {
+    //   userVideo.current.srcObject
+    //     .getVideoTracks()
+    //     .forEach((track) => (track.enabled = true));
+    // }
+    if (localStream.current) {
+      localStream.current.getVideoTracks().forEach((track) => track.enabled = false)
     }
     setVideo(!video);
   };
 
   const handleEndCall = () => {
     try {
-      userVideo.current.srcObject
-        .getAudioTracks()
-        .forEach((track) => track.stop());
-      userVideo.current.srcObject
-        .getVideoTracks()
-        .forEach((track) => track.stop());
+      // userVideo.current.srcObject
+      //   .getAudioTracks()
+      //   .forEach((track) => track.stop());
+      // userVideo.current.srcObject
+      //   .getVideoTracks()
+      //   .forEach((track) => track.stop());
+      if (localStream.current) {
+        localStream.current.getTracks().forEach((track) => track.stop())
+      }
       socket.emit("end-call", {
         to: id1,
       });
@@ -370,7 +404,7 @@ export default function Call() {
           <Button
             className="p-3 bg-gray-600 rounded-full text-white"
             size="sm"
-            onClick={() => setCamera(!camera)}
+            onClick={flipCamera}
           >
             <MdOutlineFlipCameraIos className="text-2xl" />
           </Button>
