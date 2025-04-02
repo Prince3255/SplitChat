@@ -621,23 +621,23 @@ export default function Call() {
 
       const senders = pc.current.getSenders();
       const videoTrack = newStream.getVideoTracks()[0];
-      const audioTrack = newStream.getAudioTracks()[0];
+      // const audioTrack = newStream.getAudioTracks()[0];
       const videoSender = senders.find(
         (sender) => sender.track?.kind === "video"
       );
-      const audioSender = senders.find(
-        (sender) => sender.track?.kind === "audio"
-      );
+      // const audioSender = senders.find(
+      //   (sender) => sender.track?.kind === "audio"
+      // );
 
       if (videoSender && videoTrack) {
         await videoSender.replaceTrack(videoTrack);
       }
-      if (audioTrack && audioSender) {
-        console.log(mute)
-        await audioSender.replaceTrack(audioTrack);
-      }
+      // if (audioTrack && audioSender) {
+        
+      //   await audioSender.replaceTrack(audioTrack);
+      // }
       setVideo(true);
-      setMute(true);
+      // setMute(true);
     } catch (error) {
       toast.error(`Failed to flip camera: ${error.message}`);
       console.error("Error flipping camera:", error);
@@ -732,8 +732,6 @@ export default function Call() {
 
   const handleMute = () => {
     if (localStream.current && localStream.current.getAudioTracks().length) {
-      console.log(mute)
-      // const enabled = !mute;
       localStream.current
         .getAudioTracks()
         .forEach((track) => (track.enabled = mute));
