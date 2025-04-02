@@ -785,7 +785,7 @@ import { FaRegFileVideo } from "react-icons/fa";
 import { LuSend } from "react-icons/lu";
 import { SiPhoton } from "react-icons/si";
 import { TbSwitchVertical } from "react-icons/tb";
-import { BsMicMute, BsMic } from "react-icons/bs"; // Icons for mute/unmute
+import { BsMicMute, BsMic } from "react-icons/bs";
 import toast from "react-hot-toast";
 
 function MessageInput({ setMessage }) {
@@ -801,7 +801,7 @@ function MessageInput({ setMessage }) {
   const [capturing, setCapturing] = useState(false);
   const [facingMode, setFacingMode] = useState("environment");
   const [hasBackCamera, setHasBackCamera] = useState(false);
-  const [isAudioMuted, setIsAudioMuted] = useState(false); // Track audio mute state
+  const [isAudioMuted, setIsAudioMuted] = useState(false);
   const recordedChunks = useRef([]);
   const streamRef = useRef(null);
   const { selectedUser } = useSelector((state) => state.user);
@@ -817,13 +817,11 @@ function MessageInput({ setMessage }) {
         const devices = await navigator.mediaDevices.enumerateDevices();
         const videoDevices = devices.filter((device) => device.kind === "videoinput");
         const backCameraExists = videoDevices.some((device) =>
-          device.label.toLowerCase().includes("back") ||
-          device.facingMode === "environment"
+          device.label.toLowerCase().includes("back") || device.facingMode === "environment"
         );
         setHasBackCamera(backCameraExists);
         if (!backCameraExists) {
-          setFacingMode("user"); // Default to front/user camera if no back camera
-          toast("No back camera detected. Using default camera.");
+          setFacingMode("user");
         }
       } catch (error) {
         console.log("Error enumerating devices:", error);
@@ -832,64 +830,31 @@ function MessageInput({ setMessage }) {
     checkCameras();
   }, []);
 
-  const removeImage = () => {
-    setImagePreview(null);
-    if (fileInputRef.current) fileInputRef.current.value = "";
-  };
-
-  const removeAudio = () => {
-    setAudioPreview(null);
-    setAudioFile(null);
-  };
-
-  const removeVideo = () => {
-    setVideoPreview(null);
-    setVideoFile(null);
-  };
-
-  const handleSendMessage = async (e) => {
-    e.preventDefault();
-    if (!text.trim() && !imagePreview && !audioFile && !videoFile) return;
-
-    try {
-      let data = null;
-      if (selectedUser?.id && selectedUser?.groupProfile) {
-        data = await sendMessage(null, selectedUser?._id, text.trim(), imageFile, audioFile, videoFile);
-      } else {
-        data = await sendMessage(selectedUser?._id, null, text.trim(), imageFile, audioFile, videoFile);
-      }
-      setMessage((prevMessage) => [...prevMessage, data?.data]);
-    } catch (error) {
-      console.log("Failed to send message ", error);
-    } finally {
-      setText("");
-      setImagePreview(null);
-      setImageFile(null);
-      setAudioFile(null);
-      setAudioPreview(null);
-      setVideoFile(null);
-      setVideoPreview(null);
-      setMediaType(null);
+  // Restart camera when facingMode changes during capturing or video recording
+  useEffect(() => {
+    if (capturing || mediaType === "video") {
+      startCamera({ video: true, audio: mediaType === "video" && !isAudioMuted });
     }
-  };
+  }, [facingMode, capturing, mediaType]);
 
   const stopStream = () => {
     if (streamRef.current) {
       streamRef.current.getTracks().forEach((track) => track.stop());
       streamRef.current = null;
+      if (videoRef.current) videoRef.current.srcObject = null;
     }
   };
 
   const startCamera = async (options = { video: true }) => {
     try {
-      stopStream();
+      stopStream(); // Ensure previous stream is fully stopped
       const constraints = {
-        video: { facingMode: hasBackCamera ? { exact: facingMode } : "user" },
+        video: { facingMode: hasBackCamera ? facingMode : "user" },
         ...(options.audio && { audio: true }),
       };
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
       streamRef.current = stream;
-      videoRef.current.srcObject = stream;
+      if (videoRef.current) videoRef.current.srcObject = stream;
       return stream;
     } catch (error) {
       console.log("Error accessing camera:", error);
@@ -910,12 +875,10 @@ function MessageInput({ setMessage }) {
 
   const flipCamera = () => {
     if (!hasBackCamera) {
-      toast("No back camera available to flip to.");
+      toast.error("No back camera available to flip to.");
       return;
     }
-    const newFacingMode = facingMode === "environment" ? "user" : "environment";
-    setFacingMode(newFacingMode);
-    startCamera({ video: true, audio: mediaType === "video" && !isAudioMuted });
+    setFacingMode((prev) => (prev === "environment" ? "user" : "environment"));
   };
 
   const toggleAudio = async () => {
@@ -923,11 +886,9 @@ function MessageInput({ setMessage }) {
 
     const audioTracks = streamRef.current.getAudioTracks();
     if (audioTracks.length > 0) {
-      // Mute/unmute existing audio track
       audioTracks.forEach((track) => (track.enabled = isAudioMuted));
       setIsAudioMuted(!isAudioMuted);
     } else if (!isAudioMuted) {
-      // Add audio track if none exists
       try {
         const audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
         audioStream.getAudioTracks().forEach((track) => streamRef.current.addTrack(track));
@@ -945,7 +906,7 @@ function MessageInput({ setMessage }) {
       const constraint =
         type === "audio"
           ? { audio: true }
-          : { video: { facingMode: hasBackCamera ? { exact: facingMode } : "user" }, audio: true };
+          : { video: { facingMode: hasBackCamera ? facingMode : "user" }, audio: true };
       const stream = await navigator.mediaDevices.getUserMedia(constraint);
       if (type === "video") videoRef.current.srcObject = stream;
       streamRef.current = stream;
@@ -985,9 +946,11 @@ function MessageInput({ setMessage }) {
   };
 
   const stopRecording = () => {
-    mediaRecorderer.current.stop();
+    if (mediaRecorderer.current) {
+      mediaRecorderer.current.stop();
+    }
     setMediaType(null);
-    setIsAudioMuted(false); // Reset audio mute state
+    setIsAudioMuted(false);
   };
 
   const handleImageChange = (e) => {
@@ -1028,6 +991,47 @@ function MessageInput({ setMessage }) {
     setCapturing(false);
   };
 
+  const handleSendMessage = async (e) => {
+    e.preventDefault();
+    if (!text.trim() && !imagePreview && !audioFile && !videoFile) return;
+
+    try {
+      let data = null;
+      if (selectedUser?.id && selectedUser?.groupProfile) {
+        data = await sendMessage(null, selectedUser?._id, text.trim(), imageFile, audioFile, videoFile);
+      } else {
+        data = await sendMessage(selectedUser?._id, null, text.trim(), imageFile, audioFile, videoFile);
+      }
+      setMessage((prevMessage) => [...prevMessage, data?.data]);
+    } catch (error) {
+      console.log("Failed to send message ", error);
+    } finally {
+      setText("");
+      setImagePreview(null);
+      setImageFile(null);
+      setAudioFile(null);
+      setAudioPreview(null);
+      setVideoFile(null);
+      setVideoPreview(null);
+      setMediaType(null);
+    }
+  };
+
+  const removeImage = () => {
+    setImagePreview(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const removeAudio = () => {
+    setAudioPreview(null);
+    setAudioFile(null);
+  };
+
+  const removeVideo = () => {
+    setVideoPreview(null);
+    setVideoFile(null);
+  };
+
   return (
     <div className="p-4 w-full">
       {(capturing || mediaType === "video") && (
@@ -1039,7 +1043,6 @@ function MessageInput({ setMessage }) {
                 setMediaType(null);
                 setCapturing(false);
                 stopStream();
-                videoRef.current.srcObject = null;
               }}
               className="absolute top-1.5 right-1.5 size-6 rounded-full bg-base-300 flex items-center justify-center"
             >
