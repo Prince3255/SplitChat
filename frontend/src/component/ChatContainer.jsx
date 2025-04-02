@@ -8,7 +8,7 @@ import MessageInput from "./MessageInput";
 import moment from "moment";
 import { getSocket } from "../util/socketAction";
 import { fetchUserDetail } from "../util/fetchUserDetail";
-import { Modal } from "flowbite-react";
+import { Button, Modal } from "flowbite-react";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 
 export default function ChatContainer() {
