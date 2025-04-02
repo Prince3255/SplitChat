@@ -620,6 +620,7 @@ export default function Call() {
         await videoSender.replaceTrack(videoTrack);
       }
       if (audioTrack && audioSender) {
+        toast(mute)
         await audioSender.replaceTrack(audioTrack);
       }
       setVideo(true);
