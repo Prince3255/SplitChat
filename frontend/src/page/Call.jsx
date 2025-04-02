@@ -569,6 +569,7 @@ export default function Call() {
     if (!backCamera || !pc.current) return;
     setCamera((prev) => !prev);
 
+    // Stop existing tracks to release the camera
     if (localStream.current) {
       localStream.current.getTracks().forEach((track) => track.stop());
     }
@@ -578,7 +579,7 @@ export default function Call() {
         audio: {
           echoCancellation: true,
           noiseSuppression: true,
-          autoGainControl: false,
+          autoGainControl: true,
         },
         video: {
           facingMode: !camera ? "environment" : "user",
@@ -591,7 +592,7 @@ export default function Call() {
             error.name === "OverconstrainedError" ||
             error.message.includes("video source")
           ) {
-            toast(
+            console.warn(
               "Requested facingMode not available, falling back to default camera."
             );
             return navigator.mediaDevices.getUserMedia({
@@ -618,11 +619,11 @@ export default function Call() {
       if (videoSender && videoTrack) {
         await videoSender.replaceTrack(videoTrack);
       }
-      if (audioSender && audioTrack) {
+      if (audioTrack && audioSender) {
         await audioSender.replaceTrack(audioTrack);
-        // audioTrack.enabled = !mute; // Preserve mute state
       }
-      setVideo(true); // Video on after flip
+      setVideo(true);
+      setMute(true);
     } catch (error) {
       toast.error(`Failed to flip camera: ${error.message}`);
       console.error("Error flipping camera:", error);
@@ -708,34 +709,16 @@ export default function Call() {
     }
   };
 
-  // const handleMute = () => {
-  //   if (localStream.current && localStream.current.getAudioTracks().length) {
-  //     const enabled = !mute;
-  //     localStream.current
-  //       .getAudioTracks()
-  //       .forEach((track) => (track.enabled = enabled));
-  //     setMute(!mute); // Toggle mute state
-  //   } else {
-  //     toast.error("No audio track available to mute.");
-  //   }
-  // };
-
   const handleMute = () => {
-    if (!mute) {
-      userVideo.current.srcObject
-        .getAudioTracks()
-        .forEach((track) => (track.enabled = false));
-    } else {
-      userVideo.current.srcObject
-        .getAudioTracks()
-        .forEach((track) => (track.enabled = true));
-    }
-    if (localStream.current) {
+    if (localStream.current && localStream.current.getAudioTracks().length) {
+      const enabled = !mute;
       localStream.current
         .getAudioTracks()
-        .forEach((track) => (track.enabled = !mute));
+        .forEach((track) => (track.enabled = enabled));
+      setMute(enabled);
+    } else {
+      toast.error("No audio track available to mute.");
     }
-    setMute(!mute);
   };
 
   const handleVideo = () => {
