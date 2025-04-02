@@ -127,6 +127,15 @@ io.on("connection", (socket) => {
     }
   })
 
+  socket.on("delete-message", (data) => {
+    const targetSocketId = userSocketMap[data.id]
+    if (targetSocketId) {
+      io.to(targetSocketId).emit("delete-message", {
+        msgId: data.msgId
+      })
+    }
+  })
+
   socket.on("error-reciever", (data) => {
     const targetSocketId = userSocketMap[data.to]
     if (targetSocketId) {

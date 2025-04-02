@@ -65,15 +65,16 @@ export default function ChatContainer() {
       setMessage((prevMessage) => [...prevMessage, message1]);
     });
 
-    if (message) {
-      // messageEndRef?.current?.scrollIntoView({ behaviour: "smooth" });
-      // setTimeout(() => {
-      //   messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
-      // }, 100);
-    }
+    socket.on('delete-message', (data) => {
+      const msgId = data?.msgId;
+      setMessage((prevMessage) =>
+        prevMessage.filter((msg) => msg?._id !== msgId)
+      );
+    });
 
     return () => {
       socket.off("message1");
+      socket.off("delete-message")
     };
   }, [
     socket,
@@ -153,6 +154,10 @@ export default function ChatContainer() {
           );
           setShowModal(false);
           setMessageId(null);
+          socket.emit('delete-message', {
+            id: selectedUser?._id,
+            msgId: msgId
+          });
           toast.success(data?.message || "Comment deleted successfully");
         }
       }
@@ -167,7 +172,7 @@ export default function ChatContainer() {
       longPressTimer.current = setTimeout(() => {
         setShowModal(true);
         setMessageId(msgId);
-      }, 500);
+      }, 1000);
     }
   };
 
