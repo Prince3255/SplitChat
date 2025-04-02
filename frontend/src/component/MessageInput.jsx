@@ -816,7 +816,7 @@ function MessageInput({ setMessage }) {
       try {
         const devices = await navigator.mediaDevices.enumerateDevices();
         const videoDevices = devices.filter((device) => device.kind === "videoinput");
-        console.log("Available video devices:", videoDevices); // Debug log
+        console.log("Available video devices:", videoDevices);
         const backCameraExists = videoDevices.some((device) =>
           device.label.toLowerCase().includes("back") || device.label.toLowerCase().includes("rear")
         );
@@ -844,10 +844,10 @@ function MessageInput({ setMessage }) {
     try {
       stopStream();
       const constraints = {
-        video: { facingMode: facingMode }, // Removed exact constraint for broader compatibility
+        video: { facingMode: facingMode },
         ...(options.audio && { audio: true }),
       };
-      console.log("Starting camera with constraints:", constraints); // Debug log
+      console.log("Starting camera with constraints:", constraints);
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
       streamRef.current = stream;
       if (videoRef.current) videoRef.current.srcObject = stream;
@@ -879,34 +879,36 @@ function MessageInput({ setMessage }) {
     setFacingMode(newFacingMode);
 
     if (mediaType === "video" && mediaRecorderer.current) {
-      // Pause recording
+      // Pause the current recording
       mediaRecorderer.current.pause();
-      console.log("Recording paused, switching camera...");
+      console.log("Recording paused for camera switch");
 
-      // Start new stream with the updated facing mode
+      // Stop the current stream's tracks
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((track) => track.stop());
+      }
+
+      // Start a new stream with the updated facing mode
       const newStream = await startCamera({ video: true, audio: !isAudioMuted });
 
       if (newStream) {
-        // Stop old stream tracks
-        streamRef.current.getTracks().forEach((track) => track.stop());
-
-        // Update stream reference
         streamRef.current = newStream;
 
-        // Create a new MediaRecorder with the new stream, preserving old chunks
+        // Create a new MediaRecorder with the new stream, preserving chunks
         const oldRecorder = mediaRecorderer.current;
         mediaRecorderer.current = new MediaRecorder(newStream);
 
-        mediaRecorderer.current.ondataavailable = (event) => {
-          if (event.data.size > 0) recordedChunks.current.push(event.data);
-        };
-        mediaRecorderer.current.onstop = oldRecorder.onstop; // Reuse the old onstop handler
+        // Reuse the old event handlers to preserve chunks
+        mediaRecorderer.current.ondataavailable = oldRecorder.ondataavailable;
+        mediaRecorderer.current.onstop = oldRecorder.onstop;
 
-        // Resume recording
+        // Resume recording with the new stream
         mediaRecorderer.current.start();
-        console.log("Recording resumed with new camera");
+        console.log("Recording resumed with", newFacingMode);
       } else {
-        mediaRecorderer.current.resume(); // Resume old recording if new stream fails
+        // If new stream fails, resume the old recording
+        mediaRecorderer.current.resume();
+        toast.error("Failed to switch camera, resuming with previous");
       }
     } else if (capturing) {
       await startCamera({ video: true });
@@ -947,10 +949,14 @@ function MessageInput({ setMessage }) {
       recordedChunks.current = [];
 
       mediaRecorderer.current.ondataavailable = (event) => {
-        if (event.data.size > 0) recordedChunks.current.push(event.data);
+        if (event.data.size > 0) {
+          recordedChunks.current.push(event.data);
+          console.log("Chunk recorded, total chunks:", recordedChunks.current.length);
+        }
       };
 
       mediaRecorderer.current.onstop = () => {
+        console.log("Recording stopped, combining chunks:", recordedChunks.current.length);
         const blob = new Blob(recordedChunks.current, {
           type: type === "audio" ? "audio/webm" : "video/webm",
         });
