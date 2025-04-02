@@ -146,6 +146,9 @@ export default function ChatContainer() {
           toast.error(data.message);
           return { success: false, data: [] };
         } else {
+          setMessage((prevMessage) =>
+            prevMessage.filter((msg) => msg?._id != msgId)
+          );
           setShowModal(false);
           setMessageId(null);
           toast.success(data?.message || "Comment deleted successfully");
@@ -176,13 +179,13 @@ export default function ChatContainer() {
                 }`}
                 onContextMenu={(e) => {
                   e.preventDefault();
-                  setShowModal((showModal) => !showModal),
-                    setMessageId(message?._id);
+                  setShowModal((prev) => !prev);
+                  setMessageId(message?._id);
                 }}
-                onTouchStart={
-                  (setShowModal((showModal) => !showModal),
-                  setMessageId(message?._id))
-                }
+                onTouchStart={() => {
+                  setShowModal((prev) => !prev);
+                  setMessageId(message?._id);
+                }}
               >
                 <div className="chat-image avatar">
                   <div className="size-10 rounded-full border">
