@@ -8,13 +8,17 @@ import MessageInput from "./MessageInput";
 import moment from "moment";
 import { getSocket } from "../util/socketAction";
 import { fetchUserDetail } from "../util/fetchUserDetail";
+import { Modal } from "flowbite-react";
 
 export default function ChatContainer() {
   const user = useSelector((state) => state?.user);
   const [message, setMessage] = useState([]);
   const [userDetail, setUserDetail] = useState({});
+  const [showModal, setShowModal] = useState(false);
+  const [messageId, setMessageId] = useState(null);
   const messageEndRef = useRef(null);
   const socket = getSocket();
+  const API_URL = import.meta.env.VITE_API_URL
 
   const {
     data: userData,
@@ -122,6 +126,36 @@ export default function ChatContainer() {
     }
   };
 
+  const deleteMessage = async (msgId) => {
+    try {
+      if (msgId) {
+        const response = await fetch(`${API_URL}/chat/delete/${msgId}`, {
+          method: "DELETE",
+          credentials: "include",
+        });
+  
+        if (!response.ok) {
+          toast.error(response.statusText);
+          return;
+        }
+  
+        const data = await response.json();
+  
+        if (!data.success) {
+          toast.error(data.message);
+          return { success: false, data: [] };
+        } else {
+          setShowModal(false);
+          setMessageId(null);
+          toast.success(data?.message || "Comment deleted successfully");
+        }
+      }
+    } catch (error) {
+      console.log("error", error.message);
+      toast.error(error.message);
+    }
+  };
+
   return (
     <div className="flex flex-col h-full">
       <div className="flex-shrink-0">
@@ -139,6 +173,14 @@ export default function ChatContainer() {
                     ? "chat-end"
                     : "chat-start"
                 }`}
+                onContextMenu={
+                  (setShowModal((showModal) => !showModal),
+                  setMessageId(message?._id))
+                }
+                onTouchStart={
+                  (setShowModal((showModal) => !showModal),
+                  setMessageId(message?._id))
+                }
               >
                 <div className="chat-image avatar">
                   <div className="size-10 rounded-full border">
@@ -187,6 +229,39 @@ export default function ChatContainer() {
       <div className="flex-shrink-0">
         <MessageInput setMessage={setMessage} />
       </div>
+      <Modal
+        show={showModal}
+        onClose={() => {
+          setShowModal(false);
+          setMessageId(null)
+        }}
+        size="md"
+        popup
+      >
+        <Modal.Header />
+        <Modal.Body>
+          <div className="text-center">
+            <HiOutlineExclamationCircle className="h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto" />
+            <h3 className="text-lg mb-5 text-gray-500 dark:text-gray-400">
+              Are you sure you want to delete this message?
+            </h3>
+            <div className="flex justify-center gap-4">
+              <Button color="failure" onClick={() => deleteMessage(messageId)}>
+                Yes, I'm sure
+              </Button>
+              <Button
+                color="gray"
+                onClick={() => {
+                  setShowModal(false);
+                  setMessageId(null)
+                }}
+              >
+                No, cancel
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 }

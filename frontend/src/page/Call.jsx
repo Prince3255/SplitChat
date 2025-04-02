@@ -69,7 +69,6 @@ export default function Call() {
       pc.current.pendingCandidates = [];
 
       stream.getTracks().forEach((track) => {
-        console.log(`Adding track: ${track.kind}, enabled: ${track.enabled}`);
         pc.current.addTrack(track, stream);
       });
 
@@ -191,10 +190,6 @@ export default function Call() {
       }
       if (audioTrack && audioSender) {
         await audioSender.replaceTrack(audioTrack);
-      }
-      if (!video) {
-        setVideo((prev) => !prev);
-        handleVideo();
       }
       if (mute) {
         setMute((prevMute) => !prevMute);

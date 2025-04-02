@@ -7,6 +7,7 @@ import { getSocket } from "../util/socketAction";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineMissedVideoCall } from "react-icons/md";
 import { FcEndCall } from "react-icons/fc";
+import toast from "react-hot-toast";
 
 export default function ChatHeader() {
   const { selectedUser, onlineUsers, currentUser, calling } = useSelector(
@@ -19,7 +20,7 @@ export default function ChatHeader() {
   useEffect(() => {
     socket.on("error-reciever", (data) => {
       toast.error(data.error);
-      setCalling(false)
+      setCalling(false);
       navigate(window.history.length > 1 ? -1 : "/chat");
     });
   }, [socket]);
@@ -41,19 +42,23 @@ export default function ChatHeader() {
   };
 
   const handleVideoCall = () => {
-    if (calling) {
-      dispatch(setCalling(false));
-      socket.emit("end-call-by-caller", {
-        to: selectedUser?._id,
-      });
+    if (!onlineUsers?.includes(selectedUser?._id)) {
+      toast.error(`${selectedUser?.username} is offline`);
     } else {
-      socket.emit("incoming-call", {
-        id: selectedUser._id,
-        from: currentUser?._id,
-        name: currentUser?.username,
-        profilePicture: currentUser?.profilePicture,
-      });
-      dispatch(setCalling(true));
+      if (calling) {
+        dispatch(setCalling(false));
+        socket.emit("end-call-by-caller", {
+          to: selectedUser?._id,
+        });
+      } else {
+        socket.emit("incoming-call", {
+          id: selectedUser._id,
+          from: currentUser?._id,
+          name: currentUser?.username,
+          profilePicture: currentUser?.profilePicture,
+        });
+        dispatch(setCalling(true));
+      }
     }
   };
 
@@ -93,13 +98,15 @@ export default function ChatHeader() {
         </div>
 
         <div className="flex space-x-3 justify-end items-center">
-          <Button onClick={handleVideoCall} color="gray">
-            {calling ? (
-              <FcEndCall className="size-5" />
-            ) : (
-              <MdOutlineMissedVideoCall className="size-5" />
-            )}
-          </Button>
+          {selectedUser?.username && (
+            <Button onClick={handleVideoCall} color="gray">
+              {calling ? (
+                <FcEndCall className="size-5" />
+              ) : (
+                <MdOutlineMissedVideoCall className="size-5" />
+              )}
+            </Button>
+          )}
           <Button
             onClick={() => {
               handleCrossClick(selectedUser);
