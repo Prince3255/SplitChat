@@ -20,8 +20,8 @@ export default function ChatHeader() {
     socket.on("error-reciever", (data) => {
       toast.error(data.error);
       setCalling(false)
+      navigate(window.history.length > 1 ? -1 : "/chat");
     });
-    navigate(window.history.length > 1 ? -1 : "/chat");
   }, [socket]);
 
   const handleCrossClick = (user) => {
