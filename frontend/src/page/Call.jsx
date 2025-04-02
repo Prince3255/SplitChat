@@ -711,6 +711,7 @@ export default function Call() {
 
   const handleMute = () => {
     if (localStream.current && localStream.current.getAudioTracks().length) {
+      toast(mute)
       const enabled = !mute;
       localStream.current
         .getAudioTracks()
