@@ -713,11 +713,11 @@ export default function Call() {
   const handleMute = () => {
     if (localStream.current && localStream.current.getAudioTracks().length) {
       console.log(mute)
-      const enabled = !mute;
+      // const enabled = !mute;
       localStream.current
         .getAudioTracks()
-        .forEach((track) => (track.enabled = enabled));
-      setMute(enabled);
+        .forEach((track) => (track.enabled = mute));
+      setMute(!mute);
     } else {
       toast.error("No audio track available to mute.");
     }
