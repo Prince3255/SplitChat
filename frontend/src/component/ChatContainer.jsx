@@ -19,7 +19,7 @@ export default function ChatContainer() {
   const [messageId, setMessageId] = useState(null);
   const messageEndRef = useRef(null);
   const socket = getSocket();
-  const API_URL = import.meta.env.VITE_API_URL
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const {
     data: userData,
@@ -134,14 +134,14 @@ export default function ChatContainer() {
           method: "DELETE",
           credentials: "include",
         });
-  
+
         if (!response.ok) {
           toast.error(response.statusText);
           return;
         }
-  
+
         const data = await response.json();
-  
+
         if (!data.success) {
           toast.error(data.message);
           return { success: false, data: [] };
@@ -174,10 +174,11 @@ export default function ChatContainer() {
                     ? "chat-end"
                     : "chat-start"
                 }`}
-                onContextMenu={
-                  (setShowModal((showModal) => !showModal),
-                  setMessageId(message?._id))
-                }
+                onContextMenu={(e) => {
+                  e.preventDefault();
+                  setShowModal((showModal) => !showModal),
+                    setMessageId(message?._id);
+                }}
                 onTouchStart={
                   (setShowModal((showModal) => !showModal),
                   setMessageId(message?._id))
@@ -234,7 +235,7 @@ export default function ChatContainer() {
         show={showModal}
         onClose={() => {
           setShowModal(false);
-          setMessageId(null)
+          setMessageId(null);
         }}
         size="md"
         popup
@@ -254,7 +255,7 @@ export default function ChatContainer() {
                 color="gray"
                 onClick={() => {
                   setShowModal(false);
-                  setMessageId(null)
+                  setMessageId(null);
                 }}
               >
                 No, cancel
