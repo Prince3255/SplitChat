@@ -15,9 +15,9 @@ export default function ChatHeader() {
   );
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const socket = getSocket();
 
   useEffect(() => {
+    const socket = getSocket();
     socket.on("error-reciever", (data) => {
       toast.error(data.error);
       setCalling(false);
@@ -26,6 +26,7 @@ export default function ChatHeader() {
   }, [socket]);
 
   const handleCrossClick = (user) => {
+    const socket = getSocket();
     if (user?.id) {
       socket.emit("leave-group", user.id);
     }
@@ -42,6 +43,7 @@ export default function ChatHeader() {
   };
 
   const handleVideoCall = () => {
+    const socket = getSocket();
     if (!onlineUsers?.includes(selectedUser?._id)) {
       toast.error(`${selectedUser?.username} is offline`);
     } else {
