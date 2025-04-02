@@ -620,7 +620,7 @@ export default function Call() {
         await videoSender.replaceTrack(videoTrack);
       }
       if (audioTrack && audioSender) {
-        toast(mute)
+        console.log(mute)
         await audioSender.replaceTrack(audioTrack);
       }
       setVideo(true);
@@ -712,7 +712,7 @@ export default function Call() {
 
   const handleMute = () => {
     if (localStream.current && localStream.current.getAudioTracks().length) {
-      toast(mute)
+      console.log(mute)
       const enabled = !mute;
       localStream.current
         .getAudioTracks()
