@@ -19,6 +19,7 @@ export default function ChatContainer() {
   const [showModal, setShowModal] = useState(false);
   const [messageId, setMessageId] = useState(null);
   const messageEndRef = useRef(null);
+  const longPressTimer = useRef(null);
   const socket = getSocket();
   const API_URL = import.meta.env.VITE_API_URL;
 
@@ -161,6 +162,23 @@ export default function ChatContainer() {
     }
   };
 
+  const handleLongPressStart = (msgId) => {
+    if (msgId) {
+      longPressTimer.current = setTimeout(() => {
+        setShowModal(true);
+        setMessageId(msgId);
+      }, 500);
+    }
+  };
+
+  const handleLongPressEnd = () => {
+    if (longPressTimer.current) {
+      longPressTimer.current = null;
+      setMessageId(null);
+      setShowModal(false);
+    }
+  };
+
   return (
     <div className="flex flex-col h-full">
       <div className="flex-shrink-0">
@@ -209,8 +227,17 @@ export default function ChatContainer() {
                   }}
                   onTouchStart={() => {
                     if (message?.senderId === user?.currentUser?._id) {
-                      setShowModal((prev) => !prev);
-                      setMessageId(message?._id);
+                      handleLongPressStart(message?._id);
+                    }
+                  }}
+                  onTouchMove={() => {
+                    if (message?.senderId === user?.currentUser?._id) {
+                      handleLongPressEnd();
+                    }
+                  }}
+                  onTouchEnd={() => {
+                    if (message?.senderId === user?.currentUser?._id) {
+                      handleLongPressEnd();
                     }
                   }}
                 >
