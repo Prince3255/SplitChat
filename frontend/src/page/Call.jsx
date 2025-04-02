@@ -100,16 +100,38 @@ export default function Call() {
         socket.emit("error-caller", {
           to: id1,
           error: "Failed to access camera/microphone of other caller",
-        })
-      }
-      else {
+        });
+      } else {
         socket.emit("error-reciever", {
           to: id1,
           error: "Failed to access camera/microphone of reciever",
-        })
+        });
       }
       console.error("Error in accessing media devices:", error);
       navigate(window.history.length > 1 ? -1 : "/chat");
+    }
+  };
+
+  const handleMute = () => {
+    if (localStream.current && localStream.current.getAudioTracks().length) {
+      localStream.current
+        .getAudioTracks()
+        .forEach((track) => (track.enabled = mute));
+      setMute(!mute);
+    } else {
+      toast.error("No audio track available to mute.");
+    }
+  };
+
+  const handleVideo = () => {
+    if (localStream.current && localStream.current.getVideoTracks().length) {
+      const enabled = !video;
+      localStream.current
+        .getVideoTracks()
+        .forEach((track) => (track.enabled = enabled));
+      setVideo(enabled);
+    } else {
+      toast.error("No video track available to toggle.");
     }
   };
 
@@ -171,17 +193,13 @@ export default function Call() {
         await audioSender.replaceTrack(audioTrack);
       }
       if (!video) {
-        setVideo(prev => !prev);
-        setTimeout(() => {
-          handleVideo()
-        }, 400);
+        setVideo((prev) => !prev);
+        handleVideo();
       }
       if (mute) {
-        setMute(prevMute => !prevMute);
-        setTimeout(() => {
-          handleMute();
-        }, 400);
-      }      
+        setMute((prevMute) => !prevMute);
+        handleMute();
+      }
     } catch (error) {
       toast.error(`Failed to flip camera: ${error.message}`);
       console.error("Error flipping camera:", error);
@@ -206,14 +224,14 @@ export default function Call() {
       socket.off("answer", handleAnswer);
       socket.off("ice-candidate", handleRemoteIce);
       socket.off("end-call", handleCallEnd);
-      socket.off("error-caller", handleCallerError)
+      socket.off("error-caller", handleCallerError);
     };
   }, []);
 
   const handleCallerError = (data) => {
-    toast.error(data.error)
+    toast.error(data.error);
     navigate(window.history.length > 1 ? -1 : "/chat");
-  }
+  };
 
   const handleOffer = async (offer) => {
     try {
@@ -271,29 +289,6 @@ export default function Call() {
       navigate(window.history.length > 1 ? -1 : "/chat");
     } catch (error) {
       console.error("Error ending call:", error);
-    }
-  };
-
-  const handleMute = () => {
-    if (localStream.current && localStream.current.getAudioTracks().length) {
-      localStream.current
-        .getAudioTracks()
-        .forEach((track) => (track.enabled = mute));
-      setMute(!mute);
-    } else {
-      toast.error("No audio track available to mute.");
-    }
-  };
-
-  const handleVideo = () => {
-    if (localStream.current && localStream.current.getVideoTracks().length) {
-      const enabled = !video;
-      localStream.current
-        .getVideoTracks()
-        .forEach((track) => (track.enabled = enabled));
-      setVideo(enabled);
-    } else {
-      toast.error("No video track available to toggle.");
     }
   };
 
