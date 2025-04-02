@@ -155,7 +155,7 @@ export default function ChatContainer() {
           setShowModal(false);
           setMessageId(null);
           socket.emit('delete-message', {
-            id: selectedUser?._id,
+            id: user?.selectedUser?._id,
             msgId: msgId
           });
           toast.success(data?.message || "Comment deleted successfully");
