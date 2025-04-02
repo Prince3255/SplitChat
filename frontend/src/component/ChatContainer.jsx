@@ -10,6 +10,7 @@ import { getSocket } from "../util/socketAction";
 import { fetchUserDetail } from "../util/fetchUserDetail";
 import { Button, Modal } from "flowbite-react";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
+import toast from "react-hot-toast";
 
 export default function ChatContainer() {
   const user = useSelector((state) => state?.user);
@@ -177,15 +178,6 @@ export default function ChatContainer() {
                     ? "chat-end"
                     : "chat-start"
                 }`}
-                onContextMenu={(e) => {
-                  e.preventDefault();
-                  setShowModal((prev) => !prev);
-                  setMessageId(message?._id);
-                }}
-                onTouchStart={() => {
-                  setShowModal((prev) => !prev);
-                  setMessageId(message?._id);
-                }}
               >
                 <div className="chat-image avatar">
                   <div className="size-10 rounded-full border">
@@ -206,7 +198,22 @@ export default function ChatContainer() {
                     {moment(message?.createdAt).fromNow()}
                   </time>
                 </div>
-                <div className="chat-bubble flex flex-col space-y-2">
+                <div
+                  className="chat-bubble flex flex-col space-y-2"
+                  onContextMenu={(e) => {
+                    e?.preventDefault();
+                    if (message?.senderId === user?.currentUser?._id) {
+                      setShowModal((prev) => !prev);
+                      setMessageId(message?._id);
+                    }
+                  }}
+                  onTouchStart={() => {
+                    if (message?.senderId === user?.currentUser?._id) {
+                      setShowModal((prev) => !prev);
+                      setMessageId(message?._id);
+                    }
+                  }}
+                >
                   {message?.image && (
                     <img
                       src={message.image || "/placeholder.svg"}
