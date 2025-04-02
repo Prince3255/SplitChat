@@ -561,7 +561,20 @@ export default function Call() {
       }
     } catch (error) {
       toast.error(`Failed to access camera/microphone: ${error.message}`);
+      if (isCaller) {
+        socket.emit("error-caller", {
+          to: id1,
+          error: "Failed to access camera/microphone of other caller",
+        })
+      }
+      else {
+        socket.emit("error-reciever", {
+          to: id1,
+          error: "Failed to access camera/microphone of reciever",
+        })
+      }
       console.error("Error in accessing media devices:", error);
+      navigate(window.history.length > 1 ? -1 : "/chat");
     }
   };
 
@@ -638,6 +651,7 @@ export default function Call() {
     socket.on("answer", handleAnswer);
     socket.on("ice-candidate", handleRemoteIce);
     socket.on("end-call", handleCallEnd);
+    socket.on("error-caller", handleCallerError);
 
     return () => {
       if (localStream.current) {
@@ -648,8 +662,14 @@ export default function Call() {
       socket.off("answer", handleAnswer);
       socket.off("ice-candidate", handleRemoteIce);
       socket.off("end-call", handleCallEnd);
+      socket.off("error-caller", handleCallerError)
     };
   }, []);
+
+  const handleCallerError = (data) => {
+    toast.error(data.error)
+    navigate(window.history.length > 1 ? -1 : "/chat");
+  }
 
   const handleOffer = async (offer) => {
     try {

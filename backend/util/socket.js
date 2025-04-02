@@ -118,6 +118,24 @@ io.on("connection", (socket) => {
     }
   })
 
+  socket.on("error-caller", (data) => {
+    const targetSocketId = userSocketMap[data.to]
+    if (targetSocketId) {
+      io.to(targetSocketId).emit("error-caller", {
+        error: data.error
+      })
+    }
+  })
+
+  socket.on("error-reciever", (data) => {
+    const targetSocketId = userSocketMap[data.to]
+    if (targetSocketId) {
+      io.to(targetSocketId).emit("error-reciever", {
+        error: data.error
+      })
+    }
+  })
+
   socket.on('end-call', (data) => {
     const receiverSocketId = userSocketMap[data.to];
     if (receiverSocketId) {

@@ -1,5 +1,5 @@
 import { Button } from "flowbite-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RxCross2 } from "react-icons/rx";
 import { setCalling, setSelectedUser } from "../redux/user/userSlice";
@@ -14,10 +14,18 @@ export default function ChatHeader() {
   );
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const socket = getSocket();
+
+  useEffect(() => {
+    socket.on("error-reciever", (data) => {
+      toast.error(data.error);
+      setCalling(false)
+    });
+    navigate(window.history.length > 1 ? -1 : "/chat");
+  }, [socket]);
 
   const handleCrossClick = (user) => {
     if (user?.id) {
-      const socket = getSocket();
       socket.emit("leave-group", user.id);
     }
   };
@@ -33,9 +41,8 @@ export default function ChatHeader() {
   };
 
   const handleVideoCall = () => {
-    let socket = getSocket();
     if (calling) {
-      dispatch(setCalling(false))
+      dispatch(setCalling(false));
       socket.emit("end-call-by-caller", {
         to: selectedUser?._id,
       });
