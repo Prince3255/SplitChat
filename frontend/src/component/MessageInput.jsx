@@ -810,14 +810,15 @@ function MessageInput({ setMessage }) {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
 
-  // Check for back camera availability
+  // Check for camera availability
   useEffect(() => {
     const checkCameras = async () => {
       try {
         const devices = await navigator.mediaDevices.enumerateDevices();
         const videoDevices = devices.filter((device) => device.kind === "videoinput");
+        console.log("Available video devices:", videoDevices); // Debug log
         const backCameraExists = videoDevices.some((device) =>
-          device.label.toLowerCase().includes("back") || device.facingMode === "environment"
+          device.label.toLowerCase().includes("back") || device.label.toLowerCase().includes("rear")
         );
         setHasBackCamera(backCameraExists);
         if (!backCameraExists) {
@@ -825,17 +826,11 @@ function MessageInput({ setMessage }) {
         }
       } catch (error) {
         console.log("Error enumerating devices:", error);
+        toast.error("Unable to detect cameras");
       }
     };
     checkCameras();
   }, []);
-
-  // Restart camera when facingMode changes during capturing or video recording
-  useEffect(() => {
-    if (capturing || mediaType === "video") {
-      startCamera({ video: true, audio: mediaType === "video" && !isAudioMuted });
-    }
-  }, [facingMode, capturing, mediaType]);
 
   const stopStream = () => {
     if (streamRef.current) {
@@ -847,18 +842,19 @@ function MessageInput({ setMessage }) {
 
   const startCamera = async (options = { video: true }) => {
     try {
-      stopStream(); // Ensure previous stream is fully stopped
+      stopStream();
       const constraints = {
-        video: { facingMode: hasBackCamera ? facingMode : "user" },
+        video: { facingMode: facingMode }, // Removed exact constraint for broader compatibility
         ...(options.audio && { audio: true }),
       };
+      console.log("Starting camera with constraints:", constraints); // Debug log
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
       streamRef.current = stream;
       if (videoRef.current) videoRef.current.srcObject = stream;
       return stream;
     } catch (error) {
       console.log("Error accessing camera:", error);
-      toast.error("Error accessing camera");
+      toast.error("Error accessing camera: " + error.message);
       return null;
     }
   };
@@ -873,12 +869,48 @@ function MessageInput({ setMessage }) {
     }
   };
 
-  const flipCamera = () => {
+  const flipCamera = async () => {
     if (!hasBackCamera) {
       toast.error("No back camera available to flip to.");
       return;
     }
-    setFacingMode((prev) => (prev === "environment" ? "user" : "environment"));
+
+    const newFacingMode = facingMode === "environment" ? "user" : "environment";
+    setFacingMode(newFacingMode);
+
+    if (mediaType === "video" && mediaRecorderer.current) {
+      // Pause recording
+      mediaRecorderer.current.pause();
+      console.log("Recording paused, switching camera...");
+
+      // Start new stream with the updated facing mode
+      const newStream = await startCamera({ video: true, audio: !isAudioMuted });
+
+      if (newStream) {
+        // Stop old stream tracks
+        streamRef.current.getTracks().forEach((track) => track.stop());
+
+        // Update stream reference
+        streamRef.current = newStream;
+
+        // Create a new MediaRecorder with the new stream, preserving old chunks
+        const oldRecorder = mediaRecorderer.current;
+        mediaRecorderer.current = new MediaRecorder(newStream);
+
+        mediaRecorderer.current.ondataavailable = (event) => {
+          if (event.data.size > 0) recordedChunks.current.push(event.data);
+        };
+        mediaRecorderer.current.onstop = oldRecorder.onstop; // Reuse the old onstop handler
+
+        // Resume recording
+        mediaRecorderer.current.start();
+        console.log("Recording resumed with new camera");
+      } else {
+        mediaRecorderer.current.resume(); // Resume old recording if new stream fails
+      }
+    } else if (capturing) {
+      await startCamera({ video: true });
+    }
   };
 
   const toggleAudio = async () => {
@@ -906,7 +938,7 @@ function MessageInput({ setMessage }) {
       const constraint =
         type === "audio"
           ? { audio: true }
-          : { video: { facingMode: hasBackCamera ? facingMode : "user" }, audio: true };
+          : { video: { facingMode: facingMode }, audio: true };
       const stream = await navigator.mediaDevices.getUserMedia(constraint);
       if (type === "video") videoRef.current.srcObject = stream;
       streamRef.current = stream;
@@ -939,8 +971,9 @@ function MessageInput({ setMessage }) {
       };
 
       mediaRecorderer.current.start();
+      console.log("Recording started with", facingMode);
     } catch (error) {
-      toast.error("Error accessing media: ", error);
+      toast.error("Error accessing media: " + error.message);
       console.log("Error accessing media: ", error);
     }
   };
