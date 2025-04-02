@@ -29,22 +29,19 @@ app.use(express.json());
 
 app.use(cors({
   origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
-    // if (allowedOrigins.includes(origin) != -1) {
-    //   return callback(null, true);
-    // }
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = `CORS policy: ${origin} not allowed`;
-      return callback(new Error(msg), false);
+
+    // Check if the origin is in the allowedOrigins array
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      return callback(null, true); // Origin is allowed
     }
-    return callback(null, true);
-    // if (!origin || allowedOrigins.includes(origin)) {
-    //   callback(null, true);
-    // } else {
-    //   callback(new Error('Not allowed by CORS'));
-    // }
+
+    // If origin is not allowed, return an error
+    const msg = `CORS policy: ${origin} not allowed`;
+    return callback(new Error(msg), false);
   },
-  credentials: true,
+  credentials: true, // Allow cookies or auth headers
   allowedHeaders: ["Content-Type", "Authorization"],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
 }));
