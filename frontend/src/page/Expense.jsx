@@ -375,20 +375,20 @@ export default function Expense() {
         <div className="mx-2 sm:mx-8 md:mx-20 mt-7">
           <div className="flex flex-col space-y-8">
             {expenseData?.data?.isGroupExpense && (
-              <div className="flex flex-col sm:flex-row sm:space-x-2 space-y-1 sm:space-y-0 sm:items-center">
+              <div className="flex flex-row space-y-0 items-center">
                 <h4 className="text-lg sm:text-xl font-semibold">Group Name:&nbsp;</h4>
                 <span className="text-lg sm:text-xl font-normal">
                   {expenseData1?.data?.groupDetail[0]?.name}
                 </span>
               </div>
             )}
-            <div className="flex flex-col sm:flex-row sm:space-x-2 space-y-1 sm:space-y-0 sm:items-center">
+            <div className="flex flex-row space-y-0 items-center">
               <h4 className="text-lg sm:text-xl font-semibold">Amount:&nbsp;</h4>
               <span className="text-lg sm:text-xl font-normal">
                 ₹{Number(expenseData?.data?.amount).toFixed(2)}
               </span>
             </div>
-            <div className="flex flex-col sm:flex-row sm:space-x-2 space-y-1 sm:space-y-0 sm:items-center">
+            <div className="flex flex-row space-y-0 items-center">
               <h4 className="text-lg sm:text-xl font-semibold">Title:&nbsp;</h4>
               <span className="text-lg sm:text-xl font-normal">
                 {expenseData?.data?.title}
@@ -398,7 +398,7 @@ export default function Expense() {
               <h4 className="text-lg sm:text-xl font-semibold">Paid by</h4>
               <div className="space-y-4">
                 {
-                  <Card className="p-3 sm:p-4">
+                  <Card className="p-1">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2 sm:gap-4">
                         <Avatar
@@ -422,7 +422,7 @@ export default function Expense() {
               <h4 className="text-lg sm:text-xl font-semibold">Split between</h4>
               <div className="space-y-4">
                 {expenseData?.data?.splitbtwn?.map((splitBtwnId) => (
-                  <Card key={splitBtwnId} className="p-3 sm:p-4">
+                  <Card key={splitBtwnId} className="p-1">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2 sm:gap-4">
                         <Avatar 
@@ -443,14 +443,14 @@ export default function Expense() {
               </div>
             </div>
             {expenseData?.data?.note && (
-              <div className="flex flex-col sm:flex-row sm:space-x-2 space-y-1 sm:space-y-0 sm:items-center">
+              <div className="flex flex-row space-y-0 items-center">
                 <h4 className="text-lg sm:text-xl font-semibold">Note:&nbsp;</h4>
                 <span className="text-lg sm:text-xl font-normal">
                   {expenseData?.data?.note}
                 </span>
               </div>
             )}
-            <div className="flex flex-col sm:flex-row sm:space-x-2 space-y-1 sm:space-y-0 sm:items-center">
+            <div className="flex flex-row space-y-0 items-center">
               <h4 className="text-lg sm:text-xl font-semibold">Expense type:&nbsp;</h4>
               <span className="text-lg sm:text-xl font-normal">
                 {expenseData?.data?.expenseType}
