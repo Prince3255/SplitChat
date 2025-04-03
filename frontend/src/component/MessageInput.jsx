@@ -847,7 +847,6 @@ function MessageInput({ setMessage }) {
         video: { facingMode: facingMode },
         ...(options.audio && { audio: true }),
       };
-      console.log("Starting camera with constraints:", constraints);
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
       streamRef.current = stream;
       if (videoRef.current) videoRef.current.srcObject = stream;
@@ -876,12 +875,13 @@ function MessageInput({ setMessage }) {
     }
 
     const newFacingMode = facingMode === "environment" ? "user" : "environment";
+    toast('newFacingMode', newFacingMode)
     setFacingMode(newFacingMode);
 
     if (mediaType === "video" && mediaRecorderer.current) {
       // Pause the current recording
       mediaRecorderer.current.pause();
-      console.log("Recording paused for camera switch");
+      toast("Recording paused for camera switch");
 
       // Stop the current stream's tracks
       if (streamRef.current) {
@@ -896,6 +896,7 @@ function MessageInput({ setMessage }) {
 
         // Create a new MediaRecorder with the new stream, preserving chunks
         const oldRecorder = mediaRecorderer.current;
+        toast(oldRecorder)
         mediaRecorderer.current = new MediaRecorder(newStream);
 
         // Reuse the old event handlers to preserve chunks
@@ -904,9 +905,8 @@ function MessageInput({ setMessage }) {
 
         // Resume recording with the new stream
         mediaRecorderer.current.start();
-        console.log("Recording resumed with", newFacingMode);
+        toast("Recording resumed with", newFacingMode);
       } else {
-        // If new stream fails, resume the old recording
         mediaRecorderer.current.resume();
         toast.error("Failed to switch camera, resuming with previous");
       }
@@ -951,12 +951,10 @@ function MessageInput({ setMessage }) {
       mediaRecorderer.current.ondataavailable = (event) => {
         if (event.data.size > 0) {
           recordedChunks.current.push(event.data);
-          console.log("Chunk recorded, total chunks:", recordedChunks.current.length);
         }
       };
 
       mediaRecorderer.current.onstop = () => {
-        console.log("Recording stopped, combining chunks:", recordedChunks.current.length);
         const blob = new Blob(recordedChunks.current, {
           type: type === "audio" ? "audio/webm" : "video/webm",
         });
@@ -977,7 +975,6 @@ function MessageInput({ setMessage }) {
       };
 
       mediaRecorderer.current.start();
-      console.log("Recording started with", facingMode);
     } catch (error) {
       toast.error("Error accessing media: " + error.message);
       console.log("Error accessing media: ", error);
