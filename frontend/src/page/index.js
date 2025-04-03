@@ -6,11 +6,10 @@ import Signup from './Signup'
 import Profile from './Profile'
 import About from './About'
 import Settleup from './Settleup'
-import Payment from './Payment'
 import Expense from './Expense'
 import Chat from './Chat'
 import NonGroup from './NonGroup'
 import Group from './Group'
 import Call from './Call'
 
-export { Contact, Dashboard, Home, Login, Signup, Profile, About, Settleup, Payment, Expense, Chat, NonGroup, Group, Call }
+export { Contact, Dashboard, Home, Login, Signup, Profile, About, Settleup, Expense, Chat, NonGroup, Group, Call }

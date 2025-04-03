@@ -3,7 +3,7 @@ import { Sidebar } from 'flowbite-react';
 import { Link } from "react-router-dom";
 import { AiOutlineDashboard } from "react-icons/ai";
 import { HiOutlineUsers, HiOutlineUserGroup } from "react-icons/hi";
-import { PiContactlessPaymentLight } from "react-icons/pi";
+import { MdOutlineRoundaboutRight } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
 
 export default function Sidebar1({ activeTab }) {
@@ -12,8 +12,8 @@ export default function Sidebar1({ activeTab }) {
     { path: "/?tab=dashboard", tab: "dashboard", label: "Dashboard", icon: AiOutlineDashboard },
     { path: "/?tab=non-group", tab: "non-group", label: "Non Group", icon: HiOutlineUsers },
     { path: "/?tab=group", tab: "group", label: "Group", icon: HiOutlineUserGroup },
-    { path: "/?tab=payment", tab: "payment", label: "Payment", icon: PiContactlessPaymentLight },
     { path: "/?tab=profile", tab: "profile", label: "Profile", icon: CgProfile },
+    { path: "/?tab=about", tab: "about", label: "about", icon: MdOutlineRoundaboutRight },
   ];
 
   return (

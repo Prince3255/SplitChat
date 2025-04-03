@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Sidebar1 } from "../component/index";
-import { Dashboard, Group, NonGroup, Payment, Profile } from "../page/index";
+import { About, Dashboard, Group, NonGroup, Profile } from "../page/index";
 
 export default function Home() {
   const location = useLocation();
@@ -10,7 +10,7 @@ export default function Home() {
   const queryParams = new URLSearchParams(location.search);
   const currentTab = queryParams.get("tab") || "dashboard";
 
-  const validTabs = ["dashboard", "group", "non-group", "payment", "profile"];
+  const validTabs = ["dashboard", "group", "non-group", "profile", "about"];
 
   useEffect(() => {
     if (!queryParams.get("tab") || !validTabs.includes(queryParams.get("tab"))) {
@@ -44,8 +44,8 @@ export default function Home() {
       dashboard: <Dashboard />,
       group: <Group />,
       "non-group": <NonGroup />,
-      payment: <Payment />,
       profile: <Profile />,
+      about: <About />,
     };
 
     return (
