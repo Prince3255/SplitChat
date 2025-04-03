@@ -802,14 +802,10 @@ function MessageInput({ setMessage }) {
     const checkCameras = async () => {
       try {
         const devices = await navigator.mediaDevices.enumerateDevices();
-        const videoDevices = devices.filter(
-          (device) => device.kind === "videoinput"
-        );
+        const videoDevices = devices.filter((device) => device.kind === "videoinput");
         console.log("Available video devices:", videoDevices);
-        const backCameraExists = videoDevices.some(
-          (device) =>
-            device.label.toLowerCase().includes("back") ||
-            device.label.toLowerCase().includes("rear")
+        const backCameraExists = videoDevices.some((device) =>
+          device.label.toLowerCase().includes("back") || device.label.toLowerCase().includes("rear")
         );
         setHasBackCamera(backCameraExists);
         if (!backCameraExists) {
@@ -841,7 +837,10 @@ function MessageInput({ setMessage }) {
       console.log("Starting camera with constraints:", constraints);
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
       streamRef.current = stream;
-      if (videoRef.current) videoRef.current.srcObject = stream;
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        videoRef.current.muted = true; // Mute the video to prevent echo
+      }
       return stream;
     } catch (error) {
       console.log("Error accessing camera:", error);
@@ -868,16 +867,12 @@ function MessageInput({ setMessage }) {
 
     const newFacingMode = facingMode === "environment" ? "user" : "environment";
     setFacingMode(newFacingMode);
-    toast("Switching to:", newFacingMode);
+    console.log("Switching to:", newFacingMode);
 
     if (mediaType === "video" && mediaRecorderer.current) {
-      // Request data from the current recorder before switching
-      mediaRecorderer.current.requestData();
+      // Pause the current recording
       mediaRecorderer.current.pause();
-      toast(
-        "Recording paused, chunks so far:",
-        recordedChunks.current.length
-      );
+      console.log("Recording paused, chunks so far:", recordedChunks.current.length);
 
       // Stop the current stream
       if (streamRef.current) {
@@ -885,10 +880,7 @@ function MessageInput({ setMessage }) {
       }
 
       // Start a new stream with the updated facing mode
-      const newStream = await startCamera({
-        video: true,
-        audio: !isAudioMuted,
-      });
+      const newStream = await startCamera({ video: true, audio: !isAudioMuted });
 
       if (newStream) {
         streamRef.current = newStream;
@@ -903,7 +895,7 @@ function MessageInput({ setMessage }) {
 
         // Resume recording
         mediaRecorderer.current.start();
-        toast("Recording resumed with", newFacingMode);
+        console.log("Recording resumed with", newFacingMode);
       } else {
         mediaRecorderer.current.resume();
         toast.error("Failed to switch camera, resuming with previous");
@@ -922,12 +914,8 @@ function MessageInput({ setMessage }) {
       setIsAudioMuted(!isAudioMuted);
     } else if (!isAudioMuted) {
       try {
-        const audioStream = await navigator.mediaDevices.getUserMedia({
-          audio: true,
-        });
-        audioStream
-          .getAudioTracks()
-          .forEach((track) => streamRef.current.addTrack(track));
+        const audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        audioStream.getAudioTracks().forEach((track) => streamRef.current.addTrack(track));
         setIsAudioMuted(false);
       } catch (error) {
         console.log("Error adding audio:", error);
@@ -939,14 +927,17 @@ function MessageInput({ setMessage }) {
   const startRecording = async (type) => {
     try {
       setMediaType(type);
-      setVideoPreview(null);
+      setVideoPreview(null); // Clear any previous preview
       setVideoFile(null);
       const constraint =
         type === "audio"
           ? { audio: true }
           : { video: { facingMode: facingMode }, audio: true };
       const stream = await navigator.mediaDevices.getUserMedia(constraint);
-      if (type === "video") videoRef.current.srcObject = stream;
+      if (type === "video") {
+        videoRef.current.srcObject = stream;
+        videoRef.current.muted = true; // Mute to prevent echo
+      }
       streamRef.current = stream;
 
       mediaRecorderer.current = new MediaRecorder(stream);
@@ -955,28 +946,18 @@ function MessageInput({ setMessage }) {
       mediaRecorderer.current.ondataavailable = (event) => {
         if (event.data.size > 0) {
           recordedChunks.current.push(event.data);
-          console.log(
-            "Chunk added, total chunks:",
-            recordedChunks.current.length
-          );
+          console.log("Chunk added, total chunks:", recordedChunks.current.length);
         }
       };
 
       mediaRecorderer.current.onstop = () => {
-        toast(
-          "Recording stopped, combining chunks:",
-          recordedChunks.current.length
-        );
+        console.log("Recording stopped, combining chunks:", recordedChunks.current.length);
         const blob = new Blob(recordedChunks.current, {
           type: type === "audio" ? "audio/webm" : "video/webm",
         });
-        const file = new File(
-          [blob],
-          `recorded_${new Date().toISOString()}_${type}`,
-          {
-            type: blob.type,
-          }
-        );
+        const file = new File([blob], `recorded_${new Date().toISOString()}_${type}`, {
+          type: blob.type,
+        });
         if (type === "audio") {
           const audioUrl = URL.createObjectURL(blob);
           setAudioPreview(audioUrl);
@@ -995,12 +976,6 @@ function MessageInput({ setMessage }) {
     } catch (error) {
       toast.error("Error accessing media: " + error.message);
       console.log("Error accessing media: ", error);
-      setImagePreview(null);
-      setImageFile(null);
-      setAudioFile(null);
-      setAudioPreview(null);
-      setVideoFile(null);
-      setVideoPreview(null);
       setMediaType(null);
     }
   };
@@ -1042,9 +1017,7 @@ function MessageInput({ setMessage }) {
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
     canvas.toBlob((blob) => {
-      const file = new File([blob], `photo_${Date.now()}.png`, {
-        type: "image/png",
-      });
+      const file = new File([blob], `photo_${Date.now()}.png`, { type: "image/png" });
       setImageFile(file);
       setImagePreview(URL.createObjectURL(file));
     });
@@ -1060,23 +1033,9 @@ function MessageInput({ setMessage }) {
     try {
       let data = null;
       if (selectedUser?.id && selectedUser?.groupProfile) {
-        data = await sendMessage(
-          null,
-          selectedUser?._id,
-          text.trim(),
-          imageFile,
-          audioFile,
-          videoFile
-        );
+        data = await sendMessage(null, selectedUser?._id, text.trim(), imageFile, audioFile, videoFile);
       } else {
-        data = await sendMessage(
-          selectedUser?._id,
-          null,
-          text.trim(),
-          imageFile,
-          audioFile,
-          videoFile
-        );
+        data = await sendMessage(selectedUser?._id, null, text.trim(), imageFile, audioFile, videoFile);
       }
       setMessage((prevMessage) => [...prevMessage, data?.data]);
     } catch (error) {
@@ -1113,7 +1072,7 @@ function MessageInput({ setMessage }) {
       {(capturing || mediaType === "video") && (
         <div className="mb-3 flex items-center gap-2">
           <div className="relative">
-            <video ref={videoRef} autoPlay className="w-full h-full"></video>
+            <video ref={videoRef} autoPlay className="w-full h-full" muted></video>
             <Button
               onClick={() => {
                 setMediaType(null);
@@ -1137,11 +1096,7 @@ function MessageInput({ setMessage }) {
                 onClick={toggleAudio}
                 className="absolute bottom-1.5 left-1.5 size-6 rounded-full bg-base-300 flex items-center justify-center"
               >
-                {isAudioMuted ? (
-                  <BsMicMute className="size-4" />
-                ) : (
-                  <BsMic className="size-4" />
-                )}
+                {isAudioMuted ? <BsMicMute className="size-4" /> : <BsMic className="size-4" />}
               </Button>
             )}
           </div>
@@ -1201,20 +1156,8 @@ function MessageInput({ setMessage }) {
           onChange={(e) => setText(e.target.value)}
         />
 
-        <input
-          type="file"
-          accept="image/*"
-          className="hidden"
-          ref={fileInputRef}
-          onChange={handleImageChange}
-        />
-        <input
-          type="file"
-          accept="video/*"
-          className="hidden"
-          ref={videoInputRef}
-          onChange={handleVideoChange}
-        />
+        <input type="file" accept="image/*" className="hidden" ref={fileInputRef} onChange={handleImageChange} />
+        <input type="file" accept="video/*" className="hidden" ref={videoInputRef} onChange={handleVideoChange} />
         <canvas className="hidden" ref={canvasRef}></canvas>
         <Button color="gray" pill onClick={() => startRecording("audio")}>
           <CiMicrophoneOn className="w-4 h-4 text-gray-700 hover:text-blue-500 transition" />
