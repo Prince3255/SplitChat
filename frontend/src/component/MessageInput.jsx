@@ -896,7 +896,6 @@ function MessageInput({ setMessage }) {
 
         // Create a new MediaRecorder with the new stream, preserving chunks
         const oldRecorder = mediaRecorderer.current;
-        toast(oldRecorder)
         mediaRecorderer.current = new MediaRecorder(newStream);
 
         // Reuse the old event handlers to preserve chunks
