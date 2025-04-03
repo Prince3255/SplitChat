@@ -120,7 +120,7 @@ export const logout = asyncHandler( async (req, res) => {
          path: "/"
     }
 
-    return res.status(200).clearCookie("token", cookieOption).json(new ApiResponse(
+    return res.status(200).clearCookie("token", "", cookieOption).json(new ApiResponse(
         200,
         {},
         "User logged out successfully"
