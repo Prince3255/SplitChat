@@ -430,25 +430,25 @@ export default function GroupEdit() {
 
           <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2">
             <Button
-              className="flex items-center gap-2 justify-start text-sm sm:text-base py-2 px-3 sm:py-2.5 sm:px-4"
+              className="flex items-center gap-2 justify-start text-sm sm:text-base py-0.5 px-1 sm:py-1 sm:px-2"
               onClick={() => setAddMemberModal(true)}
             >
               <HiUserGroup className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2" />
               Add people to group
             </Button>
-            <Button
+            {/* <Button
               className="flex items-center gap-2 justify-start text-sm sm:text-base py-2 px-3 sm:py-2.5 sm:px-4"
               onClick={handleInviteLink}
             >
               <HiLink className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2" />
               Invite via link
-            </Button>
+            </Button> */}
           </div>
 
           <div className="space-y-3 sm:space-y-4">
             {memberDetail?.map((member) => (
               <Card key={member?._id}>
-                <div className="flex items-center justify-between p-2 sm:p-3">
+                <div className="flex items-center justify-between p-0.5 sm:p-1">
                   <div className="flex items-center gap-3 sm:gap-4">
                     <Avatar 
                       img={member?.profilePicture} 
