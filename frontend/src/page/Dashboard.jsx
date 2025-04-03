@@ -350,7 +350,7 @@ export default function Dashboard({ onViewNonGroup, onViewGroup }) {
                   type="button"
                   gradientDuoTone="greenToBlue"
                   outline
-                  onClick={onViewNonGroup}
+                  onClick={onViewGroup}
                   className="w-fit"
                 >
                   View all
