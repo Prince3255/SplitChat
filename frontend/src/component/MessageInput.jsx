@@ -867,12 +867,10 @@ function MessageInput({ setMessage }) {
 
     const newFacingMode = facingMode === "environment" ? "user" : "environment";
     setFacingMode(newFacingMode);
-    console.log("Switching to:", newFacingMode);
 
     if (mediaType === "video" && mediaRecorderer.current) {
       // Pause the current recording
       mediaRecorderer.current.pause();
-      console.log("Recording paused, chunks so far:", recordedChunks.current.length);
 
       // Stop the current stream
       if (streamRef.current) {
@@ -895,7 +893,7 @@ function MessageInput({ setMessage }) {
 
         // Resume recording
         mediaRecorderer.current.start();
-        console.log("Recording resumed with", newFacingMode);
+        toast('video preview', videoPreview)
       } else {
         mediaRecorderer.current.resume();
         toast.error("Failed to switch camera, resuming with previous");
@@ -927,7 +925,7 @@ function MessageInput({ setMessage }) {
   const startRecording = async (type) => {
     try {
       setMediaType(type);
-      setVideoPreview(null); // Clear any previous preview
+      setVideoPreview(null);
       setVideoFile(null);
       const constraint =
         type === "audio"
@@ -949,7 +947,7 @@ function MessageInput({ setMessage }) {
           console.log("Chunk added, total chunks:", recordedChunks.current.length);
         }
       };
-
+toast("set video preview", videoPreview)
       mediaRecorderer.current.onstop = () => {
         console.log("Recording stopped, combining chunks:", recordedChunks.current.length);
         const blob = new Blob(recordedChunks.current, {
@@ -976,6 +974,12 @@ function MessageInput({ setMessage }) {
     } catch (error) {
       toast.error("Error accessing media: " + error.message);
       console.log("Error accessing media: ", error);
+      setImagePreview(null);
+      setImageFile(null);
+      setAudioFile(null);
+      setAudioPreview(null);
+      setVideoFile(null);
+      setVideoPreview(null);
       setMediaType(null);
     }
   };
