@@ -18,6 +18,7 @@ import uploadImage from "../util/uploadImage";
 import ProfileSkeleton from "../component/skeleton/ProfileSkeleton";
 import { persistor } from "../redux/store";
 import toast from "react-hot-toast";
+import { disconnectSocket } from "../util/socketAction";
 
 export default function Profile() {
   const user = useSelector((state) => state.user);
@@ -32,7 +33,7 @@ export default function Profile() {
   const fileInputRef = useRef(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const API_URL = import.meta.env.VITE_API_URL
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const {
     data: userData,
@@ -89,14 +90,17 @@ export default function Profile() {
 
   const updateProfile = async (imageUrl) => {
     try {
-      const res = await fetch(`${API_URL}/user/update/${user?.currentUser?._id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ profilePicture: imageUrl }),
-        credentials: "include",
-      });
+      const res = await fetch(
+        `${API_URL}/user/update/${user?.currentUser?._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ profilePicture: imageUrl }),
+          credentials: "include",
+        }
+      );
 
       if (!res.ok) {
         toast.error(res.statusText);
@@ -137,7 +141,7 @@ export default function Profile() {
     try {
       const response = await fetch(`${API_URL}/user/logout`, {
         method: "POST",
-        credentials: "include"
+        credentials: "include",
       });
 
       const data = await response.json();
@@ -151,8 +155,9 @@ export default function Profile() {
         toast(data?.message);
         return;
       } else {
+        disconnectSocket();
         dispatch(logoutUserSuccess());
-        persistor.purge()
+        await persistor.purge();
         navigate("/login");
       }
     } catch (error) {

@@ -19,8 +19,10 @@ function ProtectedRoute() {
                 credentials: 'include'
             })
             const data = await res.json()
+            console.log('authenyticated', isAuthenticated)
             setIsAuthenticated(data.success)
             if (data.success) {
+                console.log('authenyticated1', isAuthenticated)
                 dispatch(authenticateState(data.user))
             }
             else {

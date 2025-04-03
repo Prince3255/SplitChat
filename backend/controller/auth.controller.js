@@ -93,7 +93,7 @@ export const login = asyncHandler (async (req, res, next) => {
     
         const cookieOption = {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
+            secure: true,
             sameSite: "None",
             maxAge: 7 * 24 * 60 * 60 * 1000
         }
@@ -114,9 +114,9 @@ export const logout = asyncHandler( async (req, res) => {
 
     const cookieOption = {
          httpOnly: true,
-         secure: process.env.NODE_ENV === 'production',
+         secure: true,
          sameSite: 'None',
-         maxAge: 7 * 24 * 60 * 60 * 1000
+         maxAge: 0
     }
 
     return res.status(200).clearCookie("token", cookieOption).json(new ApiResponse(
@@ -145,7 +145,7 @@ export const google = asyncHandler (async (req, res, next) => {
 
             const cookieOption = {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
+                secure: true,
                 sameSite: 'None',
                 maxAge: 7 * 24 * 60 * 60 * 1000
             }
@@ -183,7 +183,7 @@ export const google = asyncHandler (async (req, res, next) => {
 
             const cookieOption = {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
+                secure: true,
                 sameSite: 'None',
                 maxAge: 7 * 24 * 60 * 60 * 1000
             }
