@@ -282,7 +282,7 @@ export default function GroupExpense() {
             {groupData[id]?.name}
           </h1>
           <Button
-            className={`w-full bg-white hover:!bg-green-100 !text-green-500 hover:!text-green-600 focus:ring-green-300 border border-slate-200 ${
+            className={`w-full sm:w-auto text-center bg-white hover:!bg-green-100 !text-green-500 hover:!text-green-600 focus:ring-green-300 border border-slate-200 ${
               expenseData?.data?.userExpense[0]?.userExpenses?.length > 0 ||
               expenseData?.data?.otherGroupExpense?.length > 0
                 ? "block"
@@ -484,7 +484,7 @@ export default function GroupExpense() {
                             </span>
                           </div>
                         </div>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
                           {item1?.paidby === user?.currentUser._id ? (
                             <span className="font-semibold text-teal-500 flex flex-col justify-between items-end text-xs">
                               <span>you lent</span>
