@@ -63,9 +63,9 @@ export default function GroupExpense() {
 
   const handleBackButton = () => {
     if (window.history.length > 1) {
-      navigate(-1)
+      navigate(-1);
     } else {
-      navigate('/?tab=dashboard')
+      navigate("/?tab=dashboard");
     }
   };
 
@@ -260,27 +260,29 @@ export default function GroupExpense() {
         >
           <CiSettings className="size-5" />
         </Button>
-        <div className="w-full h-24 sm:h-28 md:h-32 overflow-hidden">
+        <div className="w-full max-h-28 sm:max-h-36 md:max-h-44 overflow-hidden">
           <img
             src={groupData[id]?.coverImage}
             alt="cover image"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover overflow-hidden"
           />
         </div>
-        <div className="w-12 h-12 sm:w-16 sm:h-16 absolute border-2 rounded-lg top-2/3 left-1/2 -translate-x-1/2 sm:left-28 sm:translate-x-0">
+        <div className="w-12 h-12 sm:w-16 sm:h-16 absolute border-2 rounded-lg top-2/3 left-4 sm:left-28">
           <img
             src={groupData[id]?.image}
             alt="img"
-            className="w-full h-full rounded-md border-2"
+            className="w-full h-full rounded-md border-2 object-cover"
           />
         </div>
       </div>
 
-      <div className="w-full p-3 sm:p-4 md:p-6">
+      <div className="w-full p-4 sm:p-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center w-full mb-3 gap-2 sm:gap-0">
-          <h1 className="text-xl sm:text-2xl font-bold">{groupData[id]?.name}</h1>
+          <h1 className="text-xl sm:text-2xl font-bold">
+            {groupData[id]?.name}
+          </h1>
           <Button
-            className={`bg-white hover:!bg-green-100 !text-green-500 hover:!text-green-600 focus:ring-green-300 border border-slate-200 ${
+            className={`w-full bg-white hover:!bg-green-100 !text-green-500 hover:!text-green-600 focus:ring-green-300 border border-slate-200 ${
               expenseData?.data?.userExpense[0]?.userExpenses?.length > 0 ||
               expenseData?.data?.otherGroupExpense?.length > 0
                 ? "block"
@@ -362,7 +364,10 @@ export default function GroupExpense() {
                         No expenses added yet for this group.
                       </p>
                     ) : (
-                      <p key={id} className="text-green-400 text-sm sm:text-base">
+                      <p
+                        key={id}
+                        className="text-green-400 text-sm sm:text-base"
+                      >
                         You are all settled up in this group.
                       </p>
                     )}
@@ -370,7 +375,7 @@ export default function GroupExpense() {
                 );
               })}
             </div>
-            <div className="flex flex-col justify-between items-center w-full mt-6 sm:mt-8 space-y-6 sm:space-y-8 px-2 py-1">
+            <div className="flex flex-col justify-between items-center w-full mt-8 space-y-8 px-2 py-1">
               {expense[0]?.map((item1, id) => (
                 <div
                   className="flex justify-between items-center w-full cursor-pointer hover:bg-gray-100 transition duration-200 p-2 rounded border-b border-gray-300"
@@ -379,15 +384,15 @@ export default function GroupExpense() {
                   {item1?.settledBy || item1?.settledWith ? (
                     <>
                       <div
-                        className="flex justify-between items-center gap-2"
+                        className="flex justify-between items-center gap-2 w-full"
                         onClick={(e) => handleSettleUpClick(item1)}
                       >
                         <img
                           src={getImage(item1?.settledBy)}
                           alt="img"
-                          className="w-6 h-6 sm:w-8 sm:h-8 rounded-full"
+                          className="w-8 h-8 rounded-full flex-shrink-0"
                         />
-                        <div className="text-sm sm:text-base">
+                        <div className="flex-1 text-sm sm:text-base">
                           {item1?.settledBy === user?.currentUser._id ? (
                             <span>
                               <span className="font-medium">
@@ -430,7 +435,7 @@ export default function GroupExpense() {
                   ) : (
                     <>
                       <div
-                        className="flex justify-between items-center w-full"
+                        className="flex flex-col sm:flex-row justify-between items-start sm:items-center w-full gap-2"
                         onClick={() => handleExpenseClick(item1?._id)}
                         key={item1?._id}
                       >
@@ -481,7 +486,7 @@ export default function GroupExpense() {
                         </div>
                         <div className="flex items-center gap-2">
                           {item1?.paidby === user?.currentUser._id ? (
-                            <span className="font-semibold text-teal-500 flex flex-col justify-between items-end text-[10px] sm:text-xs">
+                            <span className="font-semibold text-teal-500 flex flex-col justify-between items-end text-xs">
                               <span>you lent</span>
                               <span>
                                 ₹
@@ -504,7 +509,7 @@ export default function GroupExpense() {
                               {item1?.splitbtwn?.includes(
                                 user?.currentUser._id
                               ) ? (
-                                <span className="font-semibold text-red-400 flex flex-col justify-between items-end text-[10px] sm:text-xs">
+                                <span className="font-semibold text-red-400 flex flex-col justify-between items-end text-xs">
                                   <span>you borrowed</span>
                                   <span>
                                     ₹
