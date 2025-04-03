@@ -465,15 +465,15 @@ export default function NonGroup() {
     //   />
     // </div>
     <div className="w-full min-h-screen">
-      <div className="relative w-full mb-6 md:mb-10">
-        <div className="w-full max-h-28 overflow-hidden">
+      <div className="relative w-full mb-10">
+        <div className="w-full max-h-28 sm:max-h-36 md:max-h-44 overflow-hidden">
           <img
             src={banner1}
             alt="banner"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover overflow-hidden"
           />
         </div>
-        <div className="w-12 h-12 sm:w-16 sm:h-16 absolute border-2 rounded-lg top-3/4 sm:top-2/3 left-4 sm:left-28 transform -translate-y-1/2">
+        <div className="w-12 h-12 sm:w-16 sm:h-16 absolute border-2 rounded-lg top-2/3 left-4 sm:left-28">
           <img
             src={banner1}
             alt="img"
@@ -483,16 +483,15 @@ export default function NonGroup() {
       </div>
 
       <div className="w-full p-4 sm:p-6">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center w-full mb-3 gap-3 sm:gap-0">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center w-full mb-3 gap-4 sm:gap-0">
           <h1 className="text-xl sm:text-2xl font-bold">Non-group expenses</h1>
           <Button
-            className="bg-white hover:!bg-green-100 !text-green-500 hover:!text-green-600 focus:ring-green-300 border border-slate-200 w-full sm:w-auto"
+            className="w-full sm:w-auto bg-white hover:!bg-green-100 !text-green-500 hover:!text-green-600 focus:ring-green-300 border border-slate-200"
             onClick={() => setShowModal(true)}
           >
             Settle up
           </Button>
         </div>
-
         {expenseData?.data?.userExpense?.length > 0 && (
           <>
             <div className="flex flex-col space-y-3.5">
@@ -527,24 +526,23 @@ export default function NonGroup() {
                                   </>
                                 ) : (
                                   <>
-                                    {item?.total[key]?.owed != null &&
-                                      item?.total[key]?.owed != 0 && (
-                                        <>
-                                          <span className="font-medium">
-                                            {getName(key)}
-                                          </span>{" "}
-                                          owes{" "}
-                                          <span className="font-medium">
-                                            {user?.currentUser?.username}
-                                          </span>{" "}
-                                          <span className="text-teal-500">
-                                            ₹
-                                            {Number(
-                                              item?.total[key]?.owed
-                                            ).toFixed(2) || 0}
-                                          </span>
-                                        </>
-                                      )}
+                                    {item?.total[key]?.owed != null && item?.total[key]?.owed != 0 && (
+                                      <>
+                                        <span className="font-medium">
+                                          {getName(key)}
+                                        </span>{" "}
+                                        owes{" "}
+                                        <span className="font-medium">
+                                          {user?.currentUser?.username}
+                                        </span>{" "}
+                                        <span className="text-teal-500">
+                                          ₹
+                                          {Number(
+                                            item?.total[key]?.owed
+                                          ).toFixed(2) || 0}
+                                        </span>
+                                      </>
+                                    )}
                                   </>
                                 )}
                               </p>
@@ -565,66 +563,60 @@ export default function NonGroup() {
                 );
               })}
             </div>
-            <div className="flex flex-col w-full mt-6 sm:mt-8 space-y-6 px-2 py-1">
+            <div className="flex flex-col justify-between items-center w-full mt-8 space-y-8 px-2 py-1">
               {expense[0]?.map((item1, id) => (
                 <div
-                  className="flex flex-col sm:flex-row justify-between items-start sm:items-center w-full cursor-pointer hover:bg-gray-100 transition duration-200 p-2 rounded border-b border-gray-300 gap-3 sm:gap-0"
+                  className="flex justify-between items-center w-full cursor-pointer hover:bg-gray-100 transition duration-200 p-2 rounded border-b border-gray-300"
                   key={id}
                 >
                   {item1?.settledBy || item1?.settledWith ? (
                     <>
                       <div
-                        className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 w-full"
+                        className="flex justify-between items-center gap-2 w-full"
                         onClick={(e) => handleSettleUpClick(item1)}
                       >
-                        <div className="flex items-center gap-2">
-                          <img
-                            src={getImage(item1?.settledBy)}
-                            alt="img"
-                            className="w-8 h-8 rounded-full"
-                          />
-                          <div className="text-sm sm:text-base">
-                            {item1?.settledBy === user?.currentUser._id ? (
-                              <span>
+                        <img
+                          src={getImage(item1?.settledBy)}
+                          alt="img"
+                          className="w-8 h-8 rounded-full flex-shrink-0"
+                        />
+                        <div className="flex-1 text-sm sm:text-base">
+                          {item1?.settledBy === user?.currentUser._id ? (
+                            <span>
+                              <span className="font-medium">
+                                {getName(item1?.settledBy)}
+                              </span>{" "}
+                              settled their{" "}
+                              {<span>₹{Number(item1?.amount).toFixed(2)}</span>}{" "}
+                              with{" "}
+                              {
                                 <span className="font-medium">
-                                  {getName(item1?.settledBy)}
-                                </span>{" "}
-                                settled their{" "}
-                                {
-                                  <span>
-                                    ₹{Number(item1?.amount).toFixed(2)}
-                                  </span>
-                                }{" "}
-                                with{" "}
-                                {
+                                  {getName(item1?.settledWith)}
+                                </span>
+                              }{" "}
+                              on
+                            </span>
+                          ) : (
+                            <span>
+                              {
+                                <span>
+                                  <span className="font-medium">
+                                    {getName(item1?.settledBy)}
+                                  </span>{" "}
+                                  settled their ₹
+                                  {Number(item1?.amount).toFixed(2)} with{" "}
                                   <span className="font-medium">
                                     {getName(item1?.settledWith)}
-                                  </span>
-                                }{" "}
-                                on
-                              </span>
-                            ) : (
-                              <span>
-                                {
-                                  <span>
-                                    <span className="font-medium">
-                                      {getName(item1?.settledBy)}
-                                    </span>{" "}
-                                    settled their ₹
-                                    {Number(item1?.amount).toFixed(2)} with{" "}
-                                    <span className="font-medium">
-                                      {getName(item1?.settledWith)}
-                                    </span>{" "}
-                                    on
-                                  </span>
-                                }
-                              </span>
-                            )}
-                            <span className="text-gray-500">
-                              {" "}
-                              {dateFormater(item1?.updatedAt)}
+                                  </span>{" "}
+                                  on
+                                </span>
+                              }
                             </span>
-                          </div>
+                          )}
+                          <span className="text-gray-500 block sm:inline">
+                            {" "}
+                            {dateFormater(item1?.updatedAt)}
+                          </span>
                         </div>
                       </div>
                     </>
@@ -639,7 +631,7 @@ export default function NonGroup() {
                           <img
                             src={getImage(item1?.paidby)}
                             alt="img"
-                            className="w-8 h-8 rounded-full"
+                            className="w-8 h-8 rounded-full flex-shrink-0"
                           />
                           <div className="text-sm sm:text-base">
                             {item1?.paidby === user?.currentUser._id ? (
@@ -674,13 +666,13 @@ export default function NonGroup() {
                               {item1?.title}{" "}
                             </span>
                             on
-                            <span className="text-gray-500">
+                            <span className="text-gray-500 block sm:inline">
                               {" "}
                               {dateFormater(item1?.updatedAt)}
                             </span>
                           </div>
                         </div>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
                           {item1?.paidby === user?.currentUser._id ? (
                             <span className="font-semibold text-teal-500 flex flex-col justify-between items-end text-xs">
                               <span>you lent</span>
