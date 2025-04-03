@@ -219,7 +219,7 @@ export default function ChatSidebar() {
                 )}
               </div>
 
-              <div className="hidden lg:block text-left min-w-0">
+              <div className="block text-left min-w-0">
                 <div className="font-medium truncate text-gray-800">
                   {user1?.username || user1?.name}
                 </div>
