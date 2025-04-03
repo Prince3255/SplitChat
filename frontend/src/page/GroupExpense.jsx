@@ -238,138 +238,310 @@ export default function GroupExpense() {
   }
 
   return (
-    <div className="w-full min-h-screen max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-  <div className="relative w-full mb-6 md:mb-10">
-    {/* Navigation Buttons */}
-    <Button
-      type="button"
-      size="xs"
-      outline
-      gradientDuoTone="cyanToBlue"
-      className="w-fit absolute text-xs mt-2 ml-2 left-0 z-10"
-      onClick={handleBackButton}
-    >
-      <HiOutlineArrowLeft className="size-3 sm:size-4" />
-    </Button>
-    <Button
-      type="button"
-      size="xs"
-      outline
-      gradientDuoTone="cyanToBlue"
-      className="w-fit absolute text-xs mt-2 right-2 z-10"
-      onClick={() => handleSettingButtonClick()}
-    >
-      <CiSettings className="size-4 sm:size-5" />
-    </Button>
+    <div className="w-full min-h-screen">
+      <div className="relative w-full mb-10">
+        <Button
+          type="button"
+          size="xs"
+          outline
+          gradientDuoTone="cyanToBlue"
+          className="w-fit absolute text-xs mt-2 ml-2 left-0 z-10"
+          onClick={handleBackButton}
+        >
+          <HiOutlineArrowLeft className="size-4" />
+        </Button>
+        <Button
+          type="button"
+          size="xs"
+          outline
+          gradientDuoTone="cyanToBlue"
+          className="w-fit absolute text-xs mt-2 right-2 z-10"
+          onClick={() => handleSettingButtonClick()}
+        >
+          <CiSettings className="size-5" />
+        </Button>
+        <div className="w-full h-24 sm:h-28 md:h-32 overflow-hidden">
+          <img
+            src={groupData[id]?.coverImage}
+            alt="cover image"
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <div className="w-12 h-12 sm:w-16 sm:h-16 absolute border-2 rounded-lg top-2/3 left-1/2 -translate-x-1/2 sm:left-28 sm:translate-x-0">
+          <img
+            src={groupData[id]?.image}
+            alt="img"
+            className="w-full h-full rounded-md border-2"
+          />
+        </div>
+      </div>
 
-    {/* Cover Image Section */}
-    <div className="w-full max-h-32 sm:max-h-40 md:max-h-48 lg:max-h-56 overflow-hidden rounded-lg shadow-sm">
-      <img
-        src={groupData[id]?.coverImage}
-        alt="cover image"
-        className="w-full h-full object-cover"
+      <div className="w-full p-3 sm:p-4 md:p-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center w-full mb-3 gap-2 sm:gap-0">
+          <h1 className="text-xl sm:text-2xl font-bold">{groupData[id]?.name}</h1>
+          <Button
+            className={`bg-white hover:!bg-green-100 !text-green-500 hover:!text-green-600 focus:ring-green-300 border border-slate-200 ${
+              expenseData?.data?.userExpense[0]?.userExpenses?.length > 0 ||
+              expenseData?.data?.otherGroupExpense?.length > 0
+                ? "block"
+                : "hidden"
+            }`}
+            onClick={() => setShowModal(true)}
+          >
+            Settle up
+          </Button>
+        </div>
+        {expenseData?.data?.userExpense?.length > 0 && (
+          <>
+            <div className="flex flex-col space-y-3.5">
+              {expenseData?.data?.userExpense?.map((item, id) => {
+                return (
+                  <div key={id} className="px-2 space-y-2">
+                    {Object.keys(item?.total) ? (
+                      <>
+                        {Object.keys(item?.total)?.map((key) => {
+                          return (
+                            key !== user?.currentUser?._id && (
+                              <p key={key} className="text-sm sm:text-base">
+                                {item?.total[key]?.lent ? (
+                                  <>
+                                    {Number.isNaN(
+                                      Number(item?.total[key]?.lent)
+                                    ) ? null : (
+                                      <>
+                                        {flag === false && setFlag(true)}
+                                        <span className="font-medium">
+                                          {user?.currentUser?.username}
+                                        </span>{" "}
+                                        owe{" "}
+                                        <span className="font-medium">
+                                          {getName(key)}
+                                        </span>{" "}
+                                        <span className="text-red-400">
+                                          ₹
+                                          {Number(
+                                            item?.total[key]?.lent
+                                          ).toFixed(2)}
+                                        </span>
+                                      </>
+                                    )}
+                                  </>
+                                ) : (
+                                  <>
+                                    {Number.isNaN(
+                                      Number(item?.total[key]?.owed)
+                                    ) ? null : (
+                                      <>
+                                        {flag === false && setFlag(true)}
+                                        <span className="font-medium">
+                                          {getName(key)}
+                                        </span>{" "}
+                                        owes{" "}
+                                        <span className="font-medium">
+                                          {user?.currentUser?.username}
+                                        </span>{" "}
+                                        <span className="text-teal-500">
+                                          ₹
+                                          {Number(
+                                            item?.total[key]?.owed
+                                          ).toFixed(2)}
+                                        </span>
+                                      </>
+                                    )}
+                                  </>
+                                )}
+                              </p>
+                            )
+                          );
+                        })}
+                      </>
+                    ) : null}
+                    {flag && Object.keys(item?.total).length > 0 ? null : len ==
+                      0 ? (
+                      <p className="text-gray-400 text-sm sm:text-base">
+                        No expenses added yet for this group.
+                      </p>
+                    ) : (
+                      <p key={id} className="text-green-400 text-sm sm:text-base">
+                        You are all settled up in this group.
+                      </p>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+            <div className="flex flex-col justify-between items-center w-full mt-6 sm:mt-8 space-y-6 sm:space-y-8 px-2 py-1">
+              {expense[0]?.map((item1, id) => (
+                <div
+                  className="flex justify-between items-center w-full cursor-pointer hover:bg-gray-100 transition duration-200 p-2 rounded border-b border-gray-300"
+                  key={id}
+                >
+                  {item1?.settledBy || item1?.settledWith ? (
+                    <>
+                      <div
+                        className="flex justify-between items-center gap-2"
+                        onClick={(e) => handleSettleUpClick(item1)}
+                      >
+                        <img
+                          src={getImage(item1?.settledBy)}
+                          alt="img"
+                          className="w-6 h-6 sm:w-8 sm:h-8 rounded-full"
+                        />
+                        <div className="text-sm sm:text-base">
+                          {item1?.settledBy === user?.currentUser._id ? (
+                            <span>
+                              <span className="font-medium">
+                                {getName(item1?.settledBy)}
+                              </span>{" "}
+                              settled their{" "}
+                              {<span>₹{Number(item1?.amount).toFixed(2)}</span>}{" "}
+                              with{" "}
+                              {
+                                <span className="font-medium">
+                                  {getName(item1?.settledWith)}
+                                </span>
+                              }{" "}
+                              on
+                            </span>
+                          ) : (
+                            <span>
+                              {
+                                <span>
+                                  <span className="font-medium">
+                                    {getName(item1?.settledBy)}
+                                  </span>{" "}
+                                  settled their ₹
+                                  {Number(item1?.amount).toFixed(2)} with{" "}
+                                  <span className="font-medium">
+                                    {getName(item1?.settledWith)}
+                                  </span>{" "}
+                                  on
+                                </span>
+                              }
+                            </span>
+                          )}
+                          <span className="text-gray-500 text-xs sm:text-sm">
+                            {" "}
+                            {dateFormater(item1?.updatedAt)}
+                          </span>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div
+                        className="flex justify-between items-center w-full"
+                        onClick={() => handleExpenseClick(item1?._id)}
+                        key={item1?._id}
+                      >
+                        <div className="flex items-center gap-2">
+                          <img
+                            src={getImage(item1?.paidby)}
+                            alt="img"
+                            className="w-6 h-6 sm:w-8 sm:h-8 rounded-full"
+                          />
+                          <div className="text-sm sm:text-base">
+                            {item1?.paidby === user?.currentUser._id ? (
+                              <span>
+                                <span className="font-medium">
+                                  {user?.currentUser?.username}
+                                </span>{" "}
+                                paid{" "}
+                                {
+                                  <span>
+                                    ₹{Number(item1?.amount).toFixed(2)}
+                                  </span>
+                                }{" "}
+                                for
+                              </span>
+                            ) : (
+                              <span>
+                                <span className="font-medium">
+                                  {getName(item1?.paidby)}
+                                </span>{" "}
+                                paid{" "}
+                                {
+                                  <span>
+                                    ₹{Number(item1?.amount).toFixed(2)}
+                                  </span>
+                                }{" "}
+                                for
+                              </span>
+                            )}
+                            <span className="font-medium">
+                              {" "}
+                              {item1?.title}{" "}
+                            </span>
+                            on
+                            <span className="text-gray-500 text-xs sm:text-sm">
+                              {" "}
+                              {dateFormater(item1?.updatedAt)}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {item1?.paidby === user?.currentUser._id ? (
+                            <span className="font-semibold text-teal-500 flex flex-col justify-between items-end text-[10px] sm:text-xs">
+                              <span>you lent</span>
+                              <span>
+                                ₹
+                                {item1?.splitbtwn?.includes(
+                                  user?.currentUser._id
+                                ) ? (
+                                  <>
+                                    {Number(
+                                      item1?.amount -
+                                        item1?.amount / item1?.splitbtwn?.length
+                                    ).toFixed(2)}
+                                  </>
+                                ) : (
+                                  <>{Number(item1?.amount).toFixed(2)}</>
+                                )}
+                              </span>
+                            </span>
+                          ) : (
+                            <>
+                              {item1?.splitbtwn?.includes(
+                                user?.currentUser._id
+                              ) ? (
+                                <span className="font-semibold text-red-400 flex flex-col justify-between items-end text-[10px] sm:text-xs">
+                                  <span>you borrowed</span>
+                                  <span>
+                                    ₹
+                                    {Number(
+                                      item1?.amount / item1?.splitbtwn?.length
+                                    ).toFixed(2)}
+                                  </span>
+                                </span>
+                              ) : (
+                                <span className="text-slate-400 text-xs sm:text-sm">
+                                  not involved
+                                </span>
+                              )}
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+
+      <Settleup
+        showModal={showModal}
+        setShowModal={setShowModal}
+        userDetail={userDetail}
+        setUserDetail={setUserDetail}
+        id={userId}
+        profilePicture={profilePicture}
+        groupId1={id}
+        user={user}
       />
     </div>
-
-    {/* Group Avatar */}
-    <div className="absolute -bottom-8 left-4 sm:left-6 md:left-8 lg:left-12">
-      <div className="w-14 h-14 sm:w-20 sm:h-20 md:w-24 md:h-24 border-4 border-white rounded-lg shadow-lg">
-        <img
-          src={groupData[id]?.image}
-          alt="group"
-          className="w-full h-full rounded-md object-cover"
-        />
-      </div>
-    </div>
-  </div>
-
-  {/* Main Content Area */}
-  <div className="pt-10 md:pt-12 lg:pt-14 pb-8">
-    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-      <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 truncate max-w-[75%]">
-        {groupData[id]?.name}
-      </h1>
-      <Button
-        className={`bg-white hover:!bg-green-100 !text-green-500 hover:!text-green-600 focus:ring-green-300 border border-slate-200 text-sm md:text-base transition-all ${
-          expenseData?.data?.userExpense[0]?.userExpenses?.length > 0 ||
-          expenseData?.data?.otherGroupExpense?.length > 0
-            ? "block"
-            : "hidden"
-        }`}
-        onClick={() => setShowModal(true)}
-      >
-        Settle up
-      </Button>
-    </div>
-
-    {/* Expenses Section */}
-    {expenseData?.data?.userExpense?.length > 0 && (
-      <div className="space-y-6">
-        {/* Balances Section */}
-        <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
-          <div className="space-y-3.5">
-            {expenseData?.data?.userExpense?.map((item, id) => (
-              <div key={id} className="space-y-2">
-                {Object.keys(item?.total)?.map((key) => (
-                  key !== user?.currentUser?._id && (
-                    <p key={key} className="text-sm md:text-base">
-                      {/* ... existing balance display logic ... */}
-                    </p>
-                  )
-                ))}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Transactions List */}
-        <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
-          <div className="space-y-6">
-            {expense[0]?.map((item1, id) => (
-              <div 
-                key={id}
-                className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-3 hover:bg-gray-50 rounded-md transition-colors"
-              >
-                {/* Transaction Content */}
-                <div className="flex items-center gap-3 flex-1 min-w-0">
-                  <img
-                    src={getImage(item1?.paidby)}
-                    alt="user"
-                    className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex-shrink-0"
-                  />
-                  <div className="min-w-0">
-                    <p className="text-sm sm:text-base text-gray-800 truncate">
-                      {/* ... existing transaction text ... */}
-                    </p>
-                    <span className="text-xs sm:text-sm text-gray-500">
-                      {dateFormater(item1?.updatedAt)}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Amount Display */}
-                <div className="flex-shrink-0 text-right">
-                  {/* ... existing amount display logic ... */}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    )}
-  </div>
-
-  <Settleup
-    showModal={showModal}
-    setShowModal={setShowModal}
-    userDetail={userDetail}
-    setUserDetail={setUserDetail}
-    id={userId}
-    profilePicture={profilePicture}
-    groupId1={id}
-    user={user}
-  />
-</div>
     // <div className="w-full min-h-screen">
     //   <div className="relative w-full mb-10">
     //     <Button
