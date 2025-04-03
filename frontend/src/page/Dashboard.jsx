@@ -219,22 +219,225 @@ export default function Dashboard({ onViewNonGroup, onViewGroup }) {
   // }
 
   return (
-    <div className="w-full p-4 sm:p-6">
-      <h1 className="text-2xl font-bold mb-8">Dashboard</h1>
+    // <div className="w-full p-4 sm:p-6">
+    //   <h1 className="text-2xl font-bold mb-8">Dashboard</h1>
 
-      <div className="space-y-5">
+    //   <div className="space-y-5">
+    //     <Card>
+    //       <h2 className="text-xl font-semibold mb-4">Total summary</h2>
+    //       <div className="flex justify-between mb-8 items-center space-x-2">
+    //         <div className="flex-1 flex flex-col justify-between space-y-5">
+    //           <h3 className="text-gray-500 text-base">Total amount you owe</h3>
+    //           <p className="text-xl sm:text-2xl font-bold text-red-400">
+    //             ₹{Number(lent).toFixed(2)}
+    //           </p>
+    //         </div>
+    //         <div className="flex-1 flex flex-col justify-between space-y-5">
+    //           <h3 className="text-gray-500 text-base">
+    //             Total amount owe to you
+    //           </h3>
+    //           <p className="text-xl sm:text-2xl font-bold text-teal-500">
+    //             ₹{Number(owed).toFixed(2)}
+    //           </p>
+    //         </div>
+    //       </div>
+    //     </Card>
+
+    //     <Card>
+    //       <div className="w-full flex justify-between items-center">
+    //         <h2 className="text-xl font-semibold mb-4">
+    //           Non-Group Expense Summary
+    //         </h2>
+    //         <Link to="/?tab=non-group">
+    //           <Button
+    //             type="button"
+    //             gradientDuoTone="greenToBlue"
+    //             outline
+    //             onClick={onViewNonGroup}
+    //             className="w-fit"
+    //           >
+    //             View all
+    //           </Button>
+    //         </Link>
+    //       </div>
+    //       <div className="flex justify-between mb-8 items-start space-x-2">
+    //         <div className="flex-1 flex flex-col space-y-5 pr-2">
+    //           <h3 className="text-gray-500 text-base">Friends you owe</h3>
+    //           <div className="flex flex-col space-y-2 p-1">
+    //             {nonGroupData?.length > 0 &&
+    //             nonGroupData?.some((item) => item?.lent) ? (
+    //               nonGroupData?.map((item, id) => {
+    //                 return (
+    //                   item?.lent && (
+    //                     <div
+    //                       key={id}
+    //                       className="flex justify-between items-center"
+    //                     >
+    //                       <div className="flex items-center gap-2">
+    //                         <img
+    //                           src={item?.profile}
+    //                           alt="Avatar"
+    //                           className="w-8 h-8 rounded-full"
+    //                         />
+    //                         <span className="text-md font-medium">
+    //                           {item?.name}
+    //                         </span>
+    //                       </div>
+    //                       <span className="text-sm font-semibold text-red-400">
+    //                         ₹{Number(item?.lent).toFixed(2)}
+    //                       </span>
+    //                     </div>
+    //                   )
+    //                 );
+    //               })
+    //             ) : (
+    //               <p className="text-gray-300">No amount to owe</p>
+    //             )}
+    //           </div>
+    //         </div>
+    //         <div className="flex-1 flex flex-col space-y-5 pr-2">
+    //           <h3 className="text-gray-500 text-base">Friends owe to you</h3>
+    //           <div className="flex flex-col space-y-2 p-1">
+    //             {nonGroupData?.length > 0 &&
+    //             nonGroupData?.some((item) => item?.owed) ? (
+    //               nonGroupData?.map((item, id) => {
+    //                 return (
+    //                   item?.owed && (
+    //                     <div
+    //                       key={id}
+    //                       className="flex justify-between items-center"
+    //                     >
+    //                       <div className="flex items-center gap-2">
+    //                         <img
+    //                           src={item?.profile}
+    //                           alt="Avatar"
+    //                           className="w-8 h-8 rounded-full"
+    //                         />
+    //                         <span className="text-md font-medium">
+    //                           {item?.name}
+    //                         </span>
+    //                       </div>
+    //                       <span className="text-sm font-semibold text-teal-500">
+    //                         ₹{Number(item?.owed).toFixed(2)}
+    //                       </span>
+    //                     </div>
+    //                   )
+    //                 );
+    //               })
+    //             ) : (
+    //               <p className="text-gray-300">No amount you owe</p>
+    //             )}
+    //           </div>
+    //         </div>
+    //       </div>
+    //     </Card>
+
+    //     <Card>
+    //       <div className="w-full flex justify-between items-center">
+    //         <h2 className="text-xl font-semibold mb-4">
+    //           Group Expense Summary
+    //         </h2>
+    //         <Link to="/?tab=group">
+    //           <Button
+    //             type="button"
+    //             gradientDuoTone="greenToBlue"
+    //             outline
+    //             onClick={onViewGroup}
+    //             className="w-fit"
+    //           >
+    //             View all
+    //           </Button>
+    //         </Link>
+    //       </div>
+    //       <div className="flex justify-between mb-8 items-start space-x-2">
+    //         <div className="flex-1 flex flex-col space-y-5 pr-2">
+    //           <h3 className="text-gray-500 text-base">Groups you owe</h3>
+    //           <div className="flex flex-col space-y-2 p-1">
+    //             {groupData2?.length > 0 &&
+    //             groupData2.some((item) => item?.lent) ? (
+    //               groupData2?.map((item, id) => {
+    //                 return (
+    //                   item?.lent && (
+    //                     <div
+    //                       key={id}
+    //                       className="flex justify-between items-center"
+    //                     >
+    //                       <div className="flex items-center gap-2">
+    //                         <img
+    //                           src={item?.image}
+    //                           alt="Avatar"
+    //                           className="w-8 h-8 rounded-full"
+    //                         />
+    //                         <span className="text-md font-medium">
+    //                           {item?.name}
+    //                         </span>
+    //                       </div>
+    //                       <span className="text-sm font-semibold text-red-400">
+    //                         ₹{Number(item?.lent).toFixed(2)}
+    //                       </span>
+    //                     </div>
+    //                   )
+    //                 );
+    //               })
+    //             ) : (
+    //               <p className="text-gray-300">No amount to owe</p>
+    //             )}
+    //           </div>
+    //         </div>
+    //         <div className="flex-1 flex flex-col space-y-5 pr-2">
+    //           <h3 className="text-gray-500 text-base">Groups owe to you</h3>
+    //           <div className="flex flex-col space-y-2 p-1">
+    //             {groupData2?.length > 0 &&
+    //             groupData2.some((item) => item?.owed) ? (
+    //               groupData2?.map((item, id) => {
+    //                 return (
+    //                   item?.owed && (
+    //                     <div
+    //                       key={id}
+    //                       className="flex justify-between items-center"
+    //                     >
+    //                       <div className="flex items-center gap-2">
+    //                         <img
+    //                           src={item?.image}
+    //                           alt="Avatar"
+    //                           className="w-8 h-8 rounded-full"
+    //                         />
+    //                         <span className="text-md font-medium">
+    //                           {item?.name}
+    //                         </span>
+    //                       </div>
+    //                       <span className="text-sm font-semibold text-teal-500">
+    //                         ₹{Number(item?.owed).toFixed(2)}
+    //                       </span>
+    //                     </div>
+    //                   )
+    //                 );
+    //               })
+    //             ) : (
+    //               <p className="text-gray-300">No amount you owe</p>
+    //             )}
+    //           </div>
+    //         </div>
+    //       </div>
+    //     </Card>
+    //   </div>
+    // </div>
+    <div className="w-full p-3 sm:p-4 md:p-6">
+      <h1 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-8">Dashboard</h1>
+
+      <div className="space-y-4 sm:space-y-5">
         {/* Total Summary */}
-        <Card>
-          <h2 className="text-xl font-semibold mb-4">Total summary</h2>
-          <div className="flex justify-between mb-8 items-center space-x-2">
-            <div className="flex-1 flex flex-col justify-between space-y-5">
-              <h3 className="text-gray-500 text-base">Total amount you owe</h3>
+        <Card className="overflow-hidden">
+          <h2 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-4">Total summary</h2>
+          <div className="flex flex-col sm:flex-row justify-between mb-4 sm:mb-8 items-start sm:items-center gap-4 sm:gap-6">
+            <div className="w-full sm:flex-1 flex flex-col justify-between space-y-2 sm:space-y-5">
+              <h3 className="text-gray-500 text-sm sm:text-base">Total amount you owe</h3>
               <p className="text-xl sm:text-2xl font-bold text-red-400">
                 ₹{Number(lent).toFixed(2)}
               </p>
             </div>
-            <div className="flex-1 flex flex-col justify-between space-y-5">
-              <h3 className="text-gray-500 text-base">
+            <div className="w-full sm:flex-1 flex flex-col justify-between space-y-2 sm:space-y-5">
+              <h3 className="text-gray-500 text-sm sm:text-base">
                 Total amount owe to you
               </h3>
               <p className="text-xl sm:text-2xl font-bold text-teal-500">
@@ -245,26 +448,27 @@ export default function Dashboard({ onViewNonGroup, onViewGroup }) {
         </Card>
 
         {/* Non Group Expenses */}
-        <Card>
-          <div className="w-full flex justify-between items-center">
-            <h2 className="text-xl font-semibold mb-4">
+        <Card className="overflow-hidden">
+          <div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0 mb-2 sm:mb-0">
+            <h2 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-4">
               Non-Group Expense Summary
             </h2>
-            <Link to="/?tab=non-group">
+            <Link to="/?tab=non-group" className="self-end sm:self-auto">
               <Button
                 type="button"
                 gradientDuoTone="greenToBlue"
                 outline
                 onClick={onViewNonGroup}
-                className="w-fit"
+                className="w-fit text-xs sm:text-sm py-1 px-2 sm:py-2 sm:px-4"
+                size="sm"
               >
                 View all
               </Button>
             </Link>
           </div>
-          <div className="flex justify-between mb-8 items-start space-x-2">
-            <div className="flex-1 flex flex-col space-y-5 pr-2">
-              <h3 className="text-gray-500 text-base">Friends you owe</h3>
+          <div className="flex flex-col sm:flex-row justify-between mb-4 sm:mb-8 items-start gap-6 sm:gap-2">
+            <div className="w-full sm:flex-1 flex flex-col space-y-3 sm:space-y-5 sm:pr-2">
+              <h3 className="text-gray-500 text-sm sm:text-base">Friends you owe</h3>
               <div className="flex flex-col space-y-2 p-1">
                 {nonGroupData?.length > 0 &&
                 nonGroupData?.some((item) => item?.lent) ? (
@@ -277,15 +481,15 @@ export default function Dashboard({ onViewNonGroup, onViewGroup }) {
                         >
                           <div className="flex items-center gap-2">
                             <img
-                              src={item?.profile}
+                              src={item?.profile || "/placeholder.svg"}
                               alt="Avatar"
-                              className="w-8 h-8 rounded-full"
+                              className="w-6 h-6 sm:w-8 sm:h-8 rounded-full"
                             />
-                            <span className="text-md font-medium">
+                            <span className="text-sm sm:text-md font-medium truncate max-w-[100px] sm:max-w-[150px] md:max-w-none">
                               {item?.name}
                             </span>
                           </div>
-                          <span className="text-sm font-semibold text-red-400">
+                          <span className="text-xs sm:text-sm font-semibold text-red-400">
                             ₹{Number(item?.lent).toFixed(2)}
                           </span>
                         </div>
@@ -293,12 +497,12 @@ export default function Dashboard({ onViewNonGroup, onViewGroup }) {
                     );
                   })
                 ) : (
-                  <p className="text-gray-300">No amount to owe</p>
+                  <p className="text-gray-300 text-sm">No amount to owe</p>
                 )}
               </div>
             </div>
-            <div className="flex-1 flex flex-col space-y-5 pr-2">
-              <h3 className="text-gray-500 text-base">Friends owe to you</h3>
+            <div className="w-full sm:flex-1 flex flex-col space-y-3 sm:space-y-5 sm:pr-2">
+              <h3 className="text-gray-500 text-sm sm:text-base">Friends owe to you</h3>
               <div className="flex flex-col space-y-2 p-1">
                 {nonGroupData?.length > 0 &&
                 nonGroupData?.some((item) => item?.owed) ? (
@@ -311,15 +515,15 @@ export default function Dashboard({ onViewNonGroup, onViewGroup }) {
                         >
                           <div className="flex items-center gap-2">
                             <img
-                              src={item?.profile}
+                              src={item?.profile || "/placeholder.svg"}
                               alt="Avatar"
-                              className="w-8 h-8 rounded-full"
+                              className="w-6 h-6 sm:w-8 sm:h-8 rounded-full"
                             />
-                            <span className="text-md font-medium">
+                            <span className="text-sm sm:text-md font-medium truncate max-w-[100px] sm:max-w-[150px] md:max-w-none">
                               {item?.name}
                             </span>
                           </div>
-                          <span className="text-sm font-semibold text-teal-500">
+                          <span className="text-xs sm:text-sm font-semibold text-teal-500">
                             ₹{Number(item?.owed).toFixed(2)}
                           </span>
                         </div>
@@ -327,7 +531,7 @@ export default function Dashboard({ onViewNonGroup, onViewGroup }) {
                     );
                   })
                 ) : (
-                  <p className="text-gray-300">No amount you owe</p>
+                  <p className="text-gray-300 text-sm">No amount you owe</p>
                 )}
               </div>
             </div>
@@ -335,26 +539,27 @@ export default function Dashboard({ onViewNonGroup, onViewGroup }) {
         </Card>
 
         {/* Group Expenses */}
-        <Card>
-          <div className="w-full flex justify-between items-center">
-            <h2 className="text-xl font-semibold mb-4">
+        <Card className="overflow-hidden">
+          <div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0 mb-2 sm:mb-0">
+            <h2 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-4">
               Group Expense Summary
             </h2>
-            <Link to="/?tab=group">
+            <Link to="/?tab=group" className="self-end sm:self-auto">
               <Button
                 type="button"
                 gradientDuoTone="greenToBlue"
                 outline
                 onClick={onViewGroup}
-                className="w-fit"
+                className="w-fit text-xs sm:text-sm py-1 px-2 sm:py-2 sm:px-4"
+                size="sm"
               >
                 View all
               </Button>
             </Link>
           </div>
-          <div className="flex justify-between mb-8 items-start space-x-2">
-            <div className="flex-1 flex flex-col space-y-5 pr-2">
-              <h3 className="text-gray-500 text-base">Groups you owe</h3>
+          <div className="flex flex-col sm:flex-row justify-between mb-4 sm:mb-8 items-start gap-6 sm:gap-2">
+            <div className="w-full sm:flex-1 flex flex-col space-y-3 sm:space-y-5 sm:pr-2">
+              <h3 className="text-gray-500 text-sm sm:text-base">Groups you owe</h3>
               <div className="flex flex-col space-y-2 p-1">
                 {groupData2?.length > 0 &&
                 groupData2.some((item) => item?.lent) ? (
@@ -367,15 +572,15 @@ export default function Dashboard({ onViewNonGroup, onViewGroup }) {
                         >
                           <div className="flex items-center gap-2">
                             <img
-                              src={item?.image}
+                              src={item?.image || "/placeholder.svg"}
                               alt="Avatar"
-                              className="w-8 h-8 rounded-full"
+                              className="w-6 h-6 sm:w-8 sm:h-8 rounded-full"
                             />
-                            <span className="text-md font-medium">
+                            <span className="text-sm sm:text-md font-medium truncate max-w-[100px] sm:max-w-[150px] md:max-w-none">
                               {item?.name}
                             </span>
                           </div>
-                          <span className="text-sm font-semibold text-red-400">
+                          <span className="text-xs sm:text-sm font-semibold text-red-400">
                             ₹{Number(item?.lent).toFixed(2)}
                           </span>
                         </div>
@@ -383,12 +588,12 @@ export default function Dashboard({ onViewNonGroup, onViewGroup }) {
                     );
                   })
                 ) : (
-                  <p className="text-gray-300">No amount to owe</p>
+                  <p className="text-gray-300 text-sm">No amount to owe</p>
                 )}
               </div>
             </div>
-            <div className="flex-1 flex flex-col space-y-5 pr-2">
-              <h3 className="text-gray-500 text-base">Groups owe to you</h3>
+            <div className="w-full sm:flex-1 flex flex-col space-y-3 sm:space-y-5 sm:pr-2">
+              <h3 className="text-gray-500 text-sm sm:text-base">Groups owe to you</h3>
               <div className="flex flex-col space-y-2 p-1">
                 {groupData2?.length > 0 &&
                 groupData2.some((item) => item?.owed) ? (
@@ -401,15 +606,15 @@ export default function Dashboard({ onViewNonGroup, onViewGroup }) {
                         >
                           <div className="flex items-center gap-2">
                             <img
-                              src={item?.image}
+                              src={item?.image || "/placeholder.svg"}
                               alt="Avatar"
-                              className="w-8 h-8 rounded-full"
+                              className="w-6 h-6 sm:w-8 sm:h-8 rounded-full"
                             />
-                            <span className="text-md font-medium">
+                            <span className="text-sm sm:text-md font-medium truncate max-w-[100px] sm:max-w-[150px] md:max-w-none">
                               {item?.name}
                             </span>
                           </div>
-                          <span className="text-sm font-semibold text-teal-500">
+                          <span className="text-xs sm:text-sm font-semibold text-teal-500">
                             ₹{Number(item?.owed).toFixed(2)}
                           </span>
                         </div>
@@ -417,7 +622,7 @@ export default function Dashboard({ onViewNonGroup, onViewGroup }) {
                     );
                   })
                 ) : (
-                  <p className="text-gray-300">No amount you owe</p>
+                  <p className="text-gray-300 text-sm">No amount you owe</p>
                 )}
               </div>
             </div>

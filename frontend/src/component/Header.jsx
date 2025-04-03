@@ -424,7 +424,7 @@ export default function Header() {
                 onClick={() => setShowModal(true)}
               >
                 <span className="mr-1">+</span>
-                Add
+                Add expense
               </Button>
 
               <Link
