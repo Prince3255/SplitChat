@@ -531,7 +531,7 @@ export default function Group() {
 
           <div className="space-y-4 sm:space-y-5">
             {groupData2?.map((item, id) => (
-              <Card key={id} className="p-4 sm:p-6">
+              <Card key={id}>
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6 mb-4 sm:mb-6">
                   <div className="flex items-center gap-3 sm:gap-4">
                     <img
@@ -543,7 +543,7 @@ export default function Group() {
                       {item?.name}
                     </h2>
                   </div>
-                  <div className="text-left sm:text-right">
+                  <div className="text-center sm:text-right">
                     {item?.owed ? (
                       <>
                         {!Number.isNaN(Number(item?.owed)) && (
