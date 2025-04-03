@@ -331,7 +331,158 @@ export default function GroupEdit() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="top-0">
+      <div className="top-0 w-full">
+        <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 sm:gap-4">
+              <Button color="gray" pill size="xs" onClick={() => navigate(-1)}>
+                <HiArrowLeft className="size-4" />
+              </Button>
+              <h1 className="text-xl sm:text-2xl font-semibold">Group settings</h1>
+            </div>
+            <div>
+              {hasChanges && (
+                <Button onClick={handleSave} className="bg-[#4fce9b] text-sm sm:text-base">
+                  Save Changes
+                </Button>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 max-w-3xl">
+        <Card className="mb-4 sm:mb-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div
+                className="relative group cursor-pointer mr-2"
+                onClick={() => handleImageClick(false)}
+              >
+                <img
+                  src={imageFile}
+                  alt=""
+                  className={`w-24 h-24 sm:w-32 sm:h-32 rounded-full object-cover ${
+                    isUploading ? "opacity-40" : ""
+                  }`}
+                />
+                <div className="absolute bottom-0 right-0 bg-slate-700 rounded-full p-1.5 border-2 border-white">
+                  <MdOutlineCameraAlt className="w-4 h-4 text-white" />
+                </div>
+              </div>
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={(e) => handleImageChange(e, false)}
+                accept="image/*"
+                className="hidden"
+              />
+              {isEditing ? (
+                <TextInput
+                  value={groupName}
+                  onChange={(e) => {
+                    setGroupName(e.target.value);
+                  }}
+                  className="max-w-[200px] sm:max-w-xs"
+                />
+              ) : (
+                <h2 className="text-lg sm:text-xl font-semibold break-all">{groupName}</h2>
+              )}
+            </div>
+            <Button color="gray" pill size="sm" onClick={handleNameEdit}>
+              {isEditing ? (
+                <HiCheck className="w-4 h-4 sm:w-5 sm:h-5" onClick={handleNameChange} />
+              ) : (
+                <HiPencil className="w-4 h-4 sm:w-5 sm:h-5" />
+              )}
+            </Button>
+          </div>
+        </Card>
+
+        <Card className="my-4 bg-white w-full overflow-hidden">
+          <h3 className="text-lg sm:text-xl font-semibold mb-3">Cover Image</h3>
+          <div
+            className="relative group cursor-pointer h-36 sm:h-52 w-full"
+            onClick={() => handleImageClick(true)}
+          >
+            <img
+              src={coverImage1}
+              alt=""
+              className={`w-full rounded-md object-cover h-full ${
+                isCoverImageUploading ? "opacity-40" : ""
+              }`}
+            />
+            <div className="absolute bottom-0 right-0 bg-slate-700 rounded-full p-1.5 border-2 border-white">
+              <MdOutlineCameraAlt className="w-4 h-4 text-white" />
+            </div>
+          </div>
+          <input
+            type="file"
+            ref={coverFileInputRef}
+            onChange={(e) => handleImageChange(e, true)}
+            accept="image/*"
+            className="hidden"
+          />
+        </Card>
+
+        <div className="space-y-4 sm:space-y-6">
+          <h3 className="text-lg sm:text-xl font-semibold">Group members</h3>
+
+          <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2">
+            <Button
+              className="flex items-center gap-2 justify-start text-sm sm:text-base py-2 px-3 sm:py-2.5 sm:px-4"
+              onClick={() => setAddMemberModal(true)}
+            >
+              <HiUserGroup className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2" />
+              Add people to group
+            </Button>
+            <Button
+              className="flex items-center gap-2 justify-start text-sm sm:text-base py-2 px-3 sm:py-2.5 sm:px-4"
+              onClick={handleInviteLink}
+            >
+              <HiLink className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2" />
+              Invite via link
+            </Button>
+          </div>
+
+          <div className="space-y-3 sm:space-y-4">
+            {memberDetail?.map((member) => (
+              <Card key={member?._id}>
+                <div className="flex items-center justify-between p-2 sm:p-3">
+                  <div className="flex items-center gap-3 sm:gap-4">
+                    <Avatar 
+                      img={member?.profilePicture} 
+                      rounded 
+                      size="sm"
+                      className="w-8 h-8 sm:w-10 sm:h-10"
+                    />
+                    <div>
+                      <h4 className="font-semibold text-sm sm:text-base">{member?.username}</h4>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-6 sm:mt-8 space-y-6">
+          {len == "0" && (
+            <div className="pt-4 sm:pt-6">
+              <Button
+                color="red"
+                type="button"
+                className="w-full text-sm sm:text-base py-2 sm:py-2.5"
+                onClick={handleLeave}
+              >
+                <IoIosLogOut className="my-auto mr-1.5 size-4 sm:size-5" />
+                Leave group
+              </Button>
+            </div>
+          )}
+        </div>
+      </div>
+      {/* <div className="top-0">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -476,7 +627,7 @@ export default function GroupEdit() {
             </Button>
           </div>
         ) : null}
-      </div>
+      </div> */}
 
       <Modal
         show={showModal}
