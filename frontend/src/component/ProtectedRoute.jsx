@@ -68,14 +68,14 @@ import Header from "./Header";
 import Footer from "./Footer";
 
 function ProtectedRoute() {
-  const { isAuthenticated: reduxAuth, currentUser } = useSelector(
-    (state) => state.user
-  );
+  const { isAuthenticated: reduxAuth, currentUser } = useSelector((state) => state.user);
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
+    let mounted = true; // Prevent updates after unmount
+
     const verifyUser = async () => {
       try {
         const res = await fetch(`${API_URL}/auth/verify`, {
@@ -84,31 +84,40 @@ function ProtectedRoute() {
         });
         const data = await res.json();
 
-        if (data.success) {
-          dispatch(authenticateState(data.user));
-        } else {
-          dispatch(logoutUserSuccess());
+        if (mounted) {
+          if (data.success) {
+            dispatch(authenticateState(data.user));
+          } else {
+            dispatch(logoutUserSuccess());
+          }
         }
       } catch (error) {
-        dispatch(logoutUserSuccess());
-        console.log("Unauthorized:", error);
+        if (mounted) {
+          dispatch(logoutUserSuccess());
+          console.log("Unauthorized:", error);
+        }
       } finally {
-        setLoading(false);
+        if (mounted) {
+          setLoading(false);
+        }
       }
     };
 
-    // Only verify if Redux state isn’t already authenticated
     if (reduxAuth === false || !currentUser) {
       verifyUser();
     } else {
       setLoading(false);
     }
+
+    return () => {
+      mounted = false; // Cleanup to prevent state updates after unmount
+    };
   }, [reduxAuth, currentUser, dispatch]);
 
   if (loading) {
     return (
       <div className="flex justify-center items-center w-full min-h-screen">
-        <Spinner size="lg" className="disabled" />
+        <Spinner size="lg" />
       </div>
     );
   }
