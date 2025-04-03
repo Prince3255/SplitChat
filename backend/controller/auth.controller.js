@@ -116,7 +116,8 @@ export const logout = asyncHandler( async (req, res) => {
          httpOnly: true,
          secure: true,
          sameSite: 'None',
-         maxAge: 0
+         maxAge: 0,
+         path: "/"
     }
 
     return res.status(200).clearCookie("token", cookieOption).json(new ApiResponse(
