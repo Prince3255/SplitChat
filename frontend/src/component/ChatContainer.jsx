@@ -190,13 +190,13 @@ export default function ChatContainer() {
         <ChatHeader />
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      {/* <div className="flex-1 overflow-y-auto p-2 sm:p-4 sm:space-y-4">
         <div className="min-h-full">
           {message?.length > 0 &&
             message?.map((message) => (
               <div
                 key={message?._id}
-                className={`chat ${
+                className={`chat overflow-x-hidden ${
                   message?.senderId === user?.currentUser?._id
                     ? "chat-end"
                     : "chat-start"
@@ -263,6 +263,99 @@ export default function ChatContainer() {
                     </video>
                   )}
                   {message?.message && <p>{message.message}</p>}
+                </div>
+              </div>
+            ))}
+          <div ref={messageEndRef} />
+        </div>
+      </div> */}
+      <div className="flex-1 overflow-y-auto p-2 sm:p-4 space-y-4">
+        <div className="min-h-full">
+          {message?.length > 0 &&
+            message?.map((message) => (
+              <div
+                key={message?._id}
+                className={`chat max-w-full ${
+                  message?.senderId === user?.currentUser?._id
+                    ? "chat-end"
+                    : "chat-start"
+                }`}
+              >
+                <div className="chat-image avatar">
+                  <div className="size-8 sm:size-10 rounded-full border">
+                    <img
+                      src={
+                        message?.senderId === user?.currentUser?._id
+                          ? user?.currentUser?.profilePicture ||
+                            "https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3407.jpg?w=360"
+                          : userDetail[message?.senderId]?.profilePicture ||
+                            "https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3407.jpg?w=360"
+                      }
+                      alt="Profile Pic"
+                      className="object-cover"
+                    />
+                  </div>
+                </div>
+                <div className="chat-header mb-1">
+                  <time className="text-[10px] sm:text-xs opacity-50 ml-1">
+                    {moment(message?.createdAt).fromNow()}
+                  </time>
+                </div>
+                <div
+                  className="chat-bubble max-w-[75vw] sm:max-w-[60vw] md:max-w-[50vw] flex flex-col space-y-2"
+                  onContextMenu={(e) => {
+                    e?.preventDefault();
+                    if (message?.senderId === user?.currentUser?._id) {
+                      setShowModal((prev) => !prev);
+                      setMessageId(message?._id);
+                    }
+                  }}
+                  onTouchStart={() => {
+                    if (message?.senderId === user?.currentUser?._id) {
+                      handleLongPressStart(message?._id);
+                    }
+                  }}
+                  onTouchMove={() => {
+                    if (message?.senderId === user?.currentUser?._id) {
+                      handleLongPressEnd();
+                    }
+                  }}
+                  onTouchEnd={() => {
+                    if (message?.senderId === user?.currentUser?._id) {
+                      handleLongPressEnd();
+                    }
+                  }}
+                >
+                  {message?.image && (
+                    <img
+                      src={message.image || "/placeholder.svg"}
+                      alt="Attachment"
+                      className="max-w-full sm:max-w-[200px] rounded-md mb-2 cursor-pointer"
+                      onClick={() => handleImageClick(message?.image)}
+                    />
+                  )}
+                  {message?.audio && (
+                    <audio 
+                      src={message?.audio} 
+                      controls 
+                      className="max-w-full w-[200px] sm:w-[250px]"
+                      preload="metadata"
+                    />
+                  )}
+                  {message?.video && (
+                    <video 
+                      controls 
+                      preload="metadata" 
+                      className="max-w-full sm:max-w-[300px] rounded-md"
+                    >
+                      <source src={message?.video} />
+                    </video>
+                  )}
+                  {message?.message && (
+                    <p className="break-words text-sm sm:text-base">
+                      {message.message}
+                    </p>
+                  )}
                 </div>
               </div>
             ))}
