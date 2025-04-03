@@ -796,6 +796,7 @@ function MessageInput({ setMessage }) {
   const videoInputRef = useRef(null);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
+  const dropdownRef = useRef(null); // Ref for controlling the dropdown
 
   // Check for camera availability
   useEffect(() => {
@@ -839,7 +840,7 @@ function MessageInput({ setMessage }) {
       streamRef.current = stream;
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
-        videoRef.current.muted = true; // Mute the video to prevent echo
+        videoRef.current.muted = true; // Mute to prevent echo
       }
       return stream;
     } catch (error) {
@@ -867,33 +868,28 @@ function MessageInput({ setMessage }) {
 
     const newFacingMode = facingMode === "environment" ? "user" : "environment";
     setFacingMode(newFacingMode);
+    console.log("Switching to:", newFacingMode);
 
     if (mediaType === "video" && mediaRecorderer.current) {
-      // Pause the current recording
       mediaRecorderer.current.pause();
+      console.log("Recording paused, chunks so far:", recordedChunks.current.length);
 
-      // Stop the current stream
       if (streamRef.current) {
         streamRef.current.getTracks().forEach((track) => track.stop());
       }
 
-      // Start a new stream with the updated facing mode
       const newStream = await startCamera({ video: true, audio: !isAudioMuted });
 
       if (newStream) {
         streamRef.current = newStream;
-
-        // Create a new MediaRecorder with the new stream
         const oldRecorder = mediaRecorderer.current;
         mediaRecorderer.current = new MediaRecorder(newStream);
 
-        // Reuse the old event handlers
         mediaRecorderer.current.ondataavailable = oldRecorder.ondataavailable;
         mediaRecorderer.current.onstop = oldRecorder.onstop;
 
-        // Resume recording
         mediaRecorderer.current.start();
-        toast('video preview', videoPreview)
+        console.log("Recording resumed with", newFacingMode);
       } else {
         mediaRecorderer.current.resume();
         toast.error("Failed to switch camera, resuming with previous");
@@ -925,8 +921,10 @@ function MessageInput({ setMessage }) {
   const startRecording = async (type) => {
     try {
       setMediaType(type);
-      setVideoPreview(null);
+      setVideoPreview(null); // Clear any previous preview
       setVideoFile(null);
+      console.log("Starting recording, cleared videoPreview");
+
       const constraint =
         type === "audio"
           ? { audio: true }
@@ -947,7 +945,7 @@ function MessageInput({ setMessage }) {
           console.log("Chunk added, total chunks:", recordedChunks.current.length);
         }
       };
-toast("set video preview", videoPreview)
+
       mediaRecorderer.current.onstop = () => {
         console.log("Recording stopped, combining chunks:", recordedChunks.current.length);
         const blob = new Blob(recordedChunks.current, {
@@ -963,6 +961,7 @@ toast("set video preview", videoPreview)
         }
         if (type === "video") {
           const videoUrl = URL.createObjectURL(blob);
+          console.log("Setting videoPreview:", videoUrl);
           setVideoPreview(videoUrl);
           setVideoFile(file);
         }
@@ -971,15 +970,14 @@ toast("set video preview", videoPreview)
 
       mediaRecorderer.current.start();
       console.log("Recording started with", facingMode);
+
+      // Close the dropdown after starting recording
+      if (dropdownRef.current) {
+        dropdownRef.current.click(); // Simulate click to close
+      }
     } catch (error) {
       toast.error("Error accessing media: " + error.message);
       console.log("Error accessing media: ", error);
-      setImagePreview(null);
-      setImageFile(null);
-      setAudioFile(null);
-      setAudioPreview(null);
-      setVideoFile(null);
-      setVideoPreview(null);
       setMediaType(null);
     }
   };
@@ -1176,7 +1174,7 @@ toast("set video preview", videoPreview)
           label=""
           dismissOnClick={false}
           renderTrigger={() => (
-            <Button color="gray" pill>
+            <Button color="gray" pill ref={dropdownRef}>
               <BsThreeDotsVertical className="w-4 h-4 text-gray-700 hover:text-blue-500 transition" />
             </Button>
           )}
