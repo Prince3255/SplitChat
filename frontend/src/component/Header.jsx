@@ -204,7 +204,7 @@ export default function Header() {
     setName(null);
     setId(null);
     setProfilePicture(null);
-    dispacth(setCalling(true))
+    dispacth(setCalling(true));
     navigate("/call", {
       state: {
         isCaller: false,
@@ -222,9 +222,8 @@ export default function Header() {
 
   return (
     <>
-      <header className="border-b bg-green-50 px-4 py-1.5 relative top-0 w-full h-[65px]">
+      {/* <header className="border-b bg-green-50 px-4 py-1.5 relative top-0 w-full h-[65px]">
         <div className="flex justify-between items-center px-1">
-          {/* Logo */}
           <div className="flex-shrink-0">
             <Link to="/" className="flex justify-center">
               <img
@@ -235,17 +234,11 @@ export default function Header() {
             </Link>
           </div>
           <div className="w-auto flex-shrink"></div>
-          {/* Search */}
           <div
             className="flex w-1/2 items-center justify-center px-6 rounded-md"
             ref={ref}
           >
             <form className="w-full relative">
-              {/* <label htmlFor="search">
-              <Button className='w-12 h-10 lg:hidden' color='gray' pill onClick={handleSubmit}>
-                <AiOutlineSearch />
-              </Button>
-            </label> */}
               <TextInput
                 type="text"
                 placeholder="Search for expense, settle-up, group & friend..."
@@ -355,7 +348,6 @@ export default function Header() {
                           key={user?._id}
                           className="p-2 hover:bg-gray-100 cursor-pointer flex items-center justify-between w-full"
                         >
-                          {/* onClick={(e) => {e.stopPropagation(); handleGroupClick(group)} left */}
                           <div className="flex space-x-2">
                             <Avatar
                               img={user?.profilePicture}
@@ -377,6 +369,225 @@ export default function Header() {
             </form>
           </div>
           <div className="flex justify-between space-x-4">
+            <div className="flex items-center space-x-5">
+              <Button
+                className="bg-white hover:!bg-green-100 !text-green-500 hover:!text-green-600 focus:ring-green-300 flex justify-center items-center"
+                onClick={() => setShowModal(true)}
+              >
+                <span className="mr-2">+</span>
+                Add expense
+              </Button>
+            </div>
+            <div className="flex justify-center items-center space-x-4">
+              <Link
+                to="/chat"
+                className="flex items-center gap-2.5 hover:opacity-80 transition-all"
+              >
+                <div className="size-9 rounded-lg bg-green-50 hover:bg-green-100 flex items-center justify-center border-2 border-green-200">
+                  <LuMessageCircleMore className="w-5 h-5" />
+                </div>
+              </Link>
+            </div>
+          </div>
+        </div>
+        <AddExpense
+          showModal={showModal}
+          setShowModal={setShowModal}
+          userDetail={userDetail}
+          setUserDetail={setUserDetail}
+          groupDetail={groupDetail}
+          id={id}
+          profilePicture={profilePicture}
+          username={username}
+        />
+      </header> */}
+      <header className="border-b bg-green-50 px-2 sm:px-4 py-1.5 sticky top-0 w-full z-50">
+        <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-2 md:gap-0">
+          {/* Top row with logo and buttons on mobile */}
+          <div className="flex justify-between items-center">
+            {/* Logo */}
+            <div className="flex-shrink-0">
+              <Link to="/" className="flex justify-center">
+                <img
+                  src={logo || "/placeholder.svg"}
+                  alt="SpliChat"
+                  className="w-16 h-12 md:w-20 md:h-14 mix-blend-darken object-contain rounded-md"
+                />
+              </Link>
+            </div>
+
+            {/* Mobile-only buttons */}
+            <div className="flex md:hidden items-center space-x-2">
+              <Button
+                size="sm"
+                className="bg-white hover:!bg-green-100 !text-green-500 hover:!text-green-600 focus:ring-green-300 flex justify-center items-center"
+                onClick={() => setShowModal(true)}
+              >
+                <span className="mr-1">+</span>
+                Add
+              </Button>
+
+              <Link
+                to="/chat"
+                className="flex items-center hover:opacity-80 transition-all"
+              >
+                <div className="size-8 rounded-lg bg-green-50 hover:bg-green-100 flex items-center justify-center border-2 border-green-200">
+                  <LuMessageCircleMore className="w-4 h-4" />
+                </div>
+              </Link>
+            </div>
+          </div>
+
+          {/* Search - full width on mobile, centered on desktop */}
+          <div
+            className="w-full md:w-1/2 md:mx-auto flex items-center justify-center px-0 sm:px-2 md:px-6 rounded-md"
+            ref={ref}
+          >
+            <form className="w-full relative">
+              <TextInput
+                type="text"
+                placeholder="Search expenses, groups & friends..."
+                icon={AiOutlineSearch}
+                className="w-full"
+                value={searchTerm}
+                id="search"
+                onChange={(e) => setSearchTerm(e.target.value)}
+                aria-label="Search expenses, settle-up, groups, or friends"
+              />
+              {searchTerm && (
+                <div className="absolute z-10 w-full bg-white border rounded-md shadow-lg max-h-48 overflow-auto scrollbar-thin mt-1 px-1 left-0">
+                  <div className="my-2">
+                    <Label className="px-2 mb-2">Expense</Label>
+                    {searchData?.data?.expenses?.length > 0 ? (
+                      searchData?.data?.expenses?.map((expense) => (
+                        <div
+                          key={expense._id}
+                          className="p-2 hover:bg-gray-100 cursor-pointer flex items-center justify-between w-full"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleExpenseClick(expense);
+                          }}
+                        >
+                          <div className="flex space-x-2 items-center">
+                            <Avatar img={expense?.image} size="xs" rounded />
+                            <span className="truncate max-w-[150px] sm:max-w-none">
+                              {expense?.title}
+                            </span>
+                          </div>
+                          <div>
+                            <span>₹{Number(expense?.amount).toFixed(2)}</span>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="p-2 text-gray-500 text-sm text-center">
+                        No expense found
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Other search result sections with similar responsive changes */}
+                  <div className="my-2">
+                    <Label className="px-2 mb-2">Settle Up</Label>
+                    {searchData?.data?.settleUps?.length > 0 ? (
+                      searchData?.data?.settleUps?.map((settleUp) => (
+                        <div
+                          key={settleUp?._id}
+                          className="p-2 hover:bg-gray-100 cursor-pointer flex items-center justify-between w-full"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleSettleUpClick(settleUp);
+                          }}
+                        >
+                          <div className="flex space-x-2 items-center">
+                            <Avatar
+                              img={
+                                "https://media.istockphoto.com/id/938887966/vector/two-people-icon-symbol-of-group-or-pair-of-persons-friends-contacts-users-outline-modern.jpg?s=612x612&w=0&k=20&c=575mQXvCuoAjbX6tnVXU4TIlGw9CJH6AVR0QjA4S7JA="
+                              }
+                              size="xs"
+                              rounded
+                            />
+                            <span className="truncate max-w-[150px] sm:max-w-none">
+                              {settleUp?.note}
+                            </span>
+                          </div>
+                          <div>
+                            <span>₹{Number(settleUp?.amount).toFixed(2)}</span>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="p-2 text-gray-500 text-sm text-center">
+                        No settle up found
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="my-2 z-50">
+                    <Label className="px-2 mb-2">Group</Label>
+                    {Array.isArray(searchData?.data?.groups) &&
+                    searchData?.data?.groups.length > 0 ? (
+                      searchData.data.groups.map((group) => (
+                        <div
+                          key={group?._id}
+                          className="p-2 hover:bg-gray-100 cursor-pointer flex items-center justify-between w-full"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleGroupClick(group);
+                          }}
+                        >
+                          <div className="flex space-x-2 items-center">
+                            <Avatar
+                              img={group?.groupProfile}
+                              size="xs"
+                              rounded
+                            />
+                            <span className="truncate max-w-[150px] sm:max-w-none">
+                              {group?.name}
+                            </span>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="p-2 text-gray-500 text-sm text-center">
+                        No group found
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="my-2">
+                    <Label className="px-2 mb-2">User</Label>
+                    {searchData?.data?.users?.length > 0 ? (
+                      searchData?.data?.users?.map((user) => (
+                        <div
+                          key={user?._id}
+                          className="p-2 hover:bg-gray-100 cursor-pointer flex items-center justify-between w-full"
+                        >
+                          <div className="flex space-x-2 items-center">
+                            <Avatar
+                              img={user?.profilePicture}
+                              size="xs"
+                              rounded
+                            />
+                            <span className="truncate max-w-[150px] sm:max-w-none">
+                              {user?.username}
+                            </span>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="p-2 text-gray-500 text-sm text-center">
+                        No user found
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </form>
+          </div>
+
+          {/* Desktop-only buttons */}
+          <div className="hidden md:flex justify-between space-x-4">
             {/* Add Expense */}
             <div className="flex items-center space-x-5">
               <Button
@@ -397,15 +608,6 @@ export default function Header() {
                 </div>
               </Link>
             </div>
-            {/* <div className="flex justify-center items-center">
-            <Link
-              to={"/tab=profile"}
-              className={`btn btn-sm gap-2 bg-transparent`}
-            >
-              <FaUser className="size-5" />
-              <span className="hidden lg:block text-xs">Profile</span>
-            </Link>
-          </div> */}
           </div>
         </div>
         <AddExpense

@@ -13,7 +13,7 @@ export default function Sidebar1({ activeTab }) {
     { path: "/?tab=non-group", tab: "non-group", label: "Non Group", icon: HiOutlineUsers },
     { path: "/?tab=group", tab: "group", label: "Group", icon: HiOutlineUserGroup },
     { path: "/?tab=profile", tab: "profile", label: "Profile", icon: CgProfile },
-    { path: "/?tab=about", tab: "about", label: "about", icon: MdOutlineRoundaboutRight },
+    { path: "/?tab=about", tab: "about", label: "About", icon: MdOutlineRoundaboutRight },
   ];
 
   return (

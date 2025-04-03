@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { Home, Contact, Login, Signup, About, Settleup, Expense, Chat, Call } from "./page/index";
+import { Home, Contact, Login, Signup, Settleup, Expense, Chat, Call } from "./page/index";
 import { ProtectedRoute } from "./component/index";
 import { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
@@ -31,7 +31,6 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<Home />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/about" element={<About />} />
           <Route path="/settleup" element={<Settleup />} />
           <Route path="/expense" element={<Expense />} />
           <Route path="/chat" element={<Chat />} />
