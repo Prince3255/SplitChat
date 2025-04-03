@@ -19,7 +19,7 @@ export default function Chat() {
       <div className="h-full p-2">
         <div className="bg-base-100 rounded-lg shadow-lg h-full">
           <div className="flex h-full rounded-lg overflow-hidden">
-            <div className="w-72 border-r border-base-300 flex-shrink-0 h-full overflow-hidden">
+            <div className="w-full sm:w-72 border-r border-base-300 flex-shrink-0 h-full overflow-hidden">
               <ChatSidebar />
             </div>
             <div className="flex-1 h-full overflow-hidden">

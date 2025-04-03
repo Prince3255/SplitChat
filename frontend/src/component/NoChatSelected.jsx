@@ -3,7 +3,7 @@ import logo from '../assets/logo.png'
 
 export default function NoChatSelected() {
   return (
-    <div className="w-full flex flex-1 flex-col items-center justify-center h-full bg-base-100/50">
+    <div className="hidden w-full sm:flex flex-1 flex-col items-center justify-center h-full bg-base-100/50">
       <div className="text-center space-y-4">
         <div className="flex justify-center gap-4 mb-4">
           <div className="relative">
