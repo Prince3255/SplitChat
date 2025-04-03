@@ -172,7 +172,7 @@ export default function ChatContainer() {
       longPressTimer.current = setTimeout(() => {
         setShowModal(true);
         setMessageId(msgId);
-      }, 1000);
+      }, 1200);
     }
   };
 
@@ -185,7 +185,7 @@ export default function ChatContainer() {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full overflow-x-hidden">
       <div className="flex-shrink-0">
         <ChatHeader />
       </div>
