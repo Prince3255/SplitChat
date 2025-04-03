@@ -215,7 +215,7 @@ export default function SettleUp() {
           size="xs"
           outline
           gradientDuoTone="cyanToBlue"
-          className="w-fit absolute text-xs mt-0 ml-2 left-0 z-10"
+          className="w-fit absolute text-xs mt-2 ml-2 left-0 z-10"
           onClick={handleBackButton}
         >
           <HiOutlineArrowLeft className="size-4" />
@@ -258,21 +258,21 @@ export default function SettleUp() {
         <div className="mx-2 sm:mx-8 md:mx-20 mt-7">
           <div className="flex flex-col space-y-8">
             {settleUpItem?.groupId && (
-              <div className="flex flex-col sm:flex-row sm:space-x-2 space-y-1 sm:space-y-0 sm:items-center">
+              <div className="flex flex-row space-y-0 items-center">
                 <h4 className="text-lg sm:text-xl font-semibold">Group Name:&nbsp;</h4>
                 <span className="text-lg sm:text-xl font-normal">
                   {expenseData?.data?.groupDetail[0]?.name}
                 </span>
               </div>
             )}
-            <div className="flex flex-col sm:flex-row sm:space-x-2 space-y-1 sm:space-y-0 sm:items-center">
+            <div className="flex flex-row space-y-0 items-center">
               <h4 className="text-lg sm:text-xl font-semibold">Amount:&nbsp;</h4>
               <span className="text-lg sm:text-xl font-normal">
                 ₹{Number(settleUpItem?.amount).toFixed(2)}
               </span>
             </div>
             {settleUpItem?.note && (
-              <div className="flex flex-col sm:flex-row sm:space-x-2 space-y-1 sm:space-y-0 sm:items-center">
+              <div className="flex flex-row space-y-0 items-center">
                 <h4 className="text-lg sm:text-xl font-semibold">Note:&nbsp;</h4>
                 <span className="text-lg sm:text-xl font-normal">
                   {settleUpItem?.note}
@@ -283,7 +283,7 @@ export default function SettleUp() {
               <h4 className="text-lg sm:text-xl font-semibold">Payer</h4>
               <div className="space-y-4">
                 {
-                  <Card className="p-3 sm:p-4">
+                  <Card>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2 sm:gap-4">
                         <Avatar
@@ -307,7 +307,7 @@ export default function SettleUp() {
               <h4 className="text-lg sm:text-xl font-semibold">Recipient</h4>
               <div className="space-y-4">
                 {
-                  <Card className="p-3 sm:p-4">
+                  <Card>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2 sm:gap-4">
                         <Avatar

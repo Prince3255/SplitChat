@@ -13,7 +13,7 @@ import { Link, useLocation } from "react-router-dom";
 
 const groupExpense = async ({ queryKey }) => {
   const [_, id] = queryKey;
-  const API_URL = import.meta.env.VITE_API_URL
+  const API_URL = import.meta.env.VITE_API_URL;
   let url = `${API_URL}/user/${id}/expense/group`;
 
   try {
@@ -270,11 +270,258 @@ export default function Group() {
       {view === "expense" ? (
         <GroupExpense />
       ) : (
+        // <div className="w-full p-4 sm:p-6">
+        //   <div className="flex justify-between items-center mb-8">
+        //     <h1 className="text-2xl font-bold">Groups</h1>
+        //     <Button
+        //       className="bg-white hover:!bg-green-100 !text-green-500 hover:!text-green-600 focus:ring-green-300 flex justify-center items-center border border-slate-200"
+        //       onClick={() => setShowModal(true)}
+        //     >
+        //       <span className="mr-2">+</span>
+        //       Add group
+        //     </Button>
+        //   </div>
+
+        //   <div className="space-y-5">
+        //     {groupData2?.map((item, id) => (
+        //       <Card key={id}>
+        //         <div className="flex items-start justify-between mb-6">
+        //           <div className="flex items-center gap-4">
+        //             <img
+        //               src={item?.image}
+        //               alt="img"
+        //               className="w-12 h-12 rounded-full"
+        //             />
+        //             <h2 className="text-xl font-medium">{item?.name}</h2>
+        //           </div>
+        //           <div className="text-right">
+        //             {item?.owed ? (
+        //               <>
+        //                 {Number.isNaN(Number(item?.owed)) ? null : (
+        //                   <>
+        //                     <div className="text-sm text-gray-500">
+        //                       you are owed
+        //                     </div>
+        //                     <div className="text-xl font-bold text-teal-500">
+        //                       ₹{Number(item?.owed).toFixed(2)}
+        //                     </div>
+        //                   </>
+        //                 )}
+        //               </>
+        //             ) : (
+        //               <>
+        //                 {Number.isNaN(Number(item?.lent)) ? null : (
+        //                   <>
+        //                     <div className="text-sm text-gray-500">you owe</div>
+        //                     <div className="text-xl font-bold text-red-400">
+        //                       ₹{Number(item?.lent).toFixed(2)}
+        //                     </div>
+        //                   </>
+        //                 )}
+        //               </>
+        //             )}
+        //           </div>
+        //         </div>
+
+        //         <div className="space-y-5">
+        //           {item?.data?.length > 0 ? (
+        //             <>
+        //               {item?.data?.map((item1, id) => (
+        //                 <div
+        //                   className="flex justify-between items-center group px-5"
+        //                   key={id}
+        //                 >
+        //                   {item1?.settledBy || item1?.settledWith ? (
+        //                     <>
+        //                       <div className="flex items-center gap-2">
+        //                         <img
+        //                           src={getImage(item1?.settledBy)}
+        //                           alt="img"
+        //                           className="w-8 h-8 rounded-full"
+        //                         />
+        //                         <div>
+        //                           {item1?.settledBy ===
+        //                           user?.currentUser._id ? (
+        //                             <span>
+        //                               <span className="font-medium">
+        //                                 {getName(item1?.settledBy)}
+        //                               </span>{" "}
+        //                               settled their{" "}
+        //                               {
+        //                                 <span>
+        //                                   ₹{Number(item1?.amount).toFixed(2)}
+        //                                 </span>
+        //                               }{" "}
+        //                               with{" "}
+        //                               {
+        //                                 <span className="font-medium">
+        //                                   {getName(item1?.settledWith)}
+        //                                 </span>
+        //                               }{" "}
+        //                               on
+        //                             </span>
+        //                           ) : (
+        //                             <span>
+        //                               {
+        //                                 <span>
+        //                                   <span className="font-medium">
+        //                                     {getName(item1?.settledBy)}
+        //                                   </span>{" "}
+        //                                   settled their ₹
+        //                                   {Number(item1?.amount).toFixed(2)}{" "}
+        //                                   with{" "}
+        //                                   <span className="font-medium">
+        //                                     {getName(item1?.settledWith)}
+        //                                   </span>{" "}
+        //                                   on
+        //                                 </span>
+        //                               }
+        //                             </span>
+        //                           )}
+        //                           <span className="text-gray-500">
+        //                             {" "}
+        //                             {dateFormater(item1?.createdAt)}
+        //                           </span>
+        //                         </div>
+        //                       </div>
+        //                     </>
+        //                   ) : (
+        //                     <>
+        //                       <div className="flex items-center gap-2">
+        //                         <img
+        //                           src={item1?.paidByDetails?.profilePicture}
+        //                           alt="img"
+        //                           className="w-8 h-8 rounded-full"
+        //                         />
+        //                         <div>
+        //                           {item1?.paidByDetails?._id ===
+        //                           user?.currentUser._id ? (
+        //                             <span>
+        //                               <span className="font-medium">
+        //                                 {item1?.paidByDetails?.username}
+        //                               </span>{" "}
+        //                               paid{" "}
+        //                               {
+        //                                 <span>
+        //                                   ₹{Number(item1?.amount).toFixed(2)}
+        //                                 </span>
+        //                               }{" "}
+        //                               for
+        //                             </span>
+        //                           ) : (
+        //                             <span>
+        //                               <span className="font-medium">
+        //                                 {item1?.paidByDetails?.username}
+        //                               </span>{" "}
+        //                               paid{" "}
+        //                               {
+        //                                 <span>
+        //                                   ₹{Number(item1?.amount).toFixed(2)}
+        //                                 </span>
+        //                               }{" "}
+        //                               for
+        //                             </span>
+        //                           )}
+        //                           <span className="font-medium">
+        //                             {" "}
+        //                             {item1?.title}{" "}
+        //                           </span>
+        //                           on
+        //                           <span className="text-gray-500">
+        //                             {" "}
+        //                             {dateFormater(item1?.createdAt)}
+        //                           </span>
+        //                         </div>
+        //                       </div>
+        //                       <div className="flex items-center gap-2">
+        //                         {item1?.paidByDetails?._id ===
+        //                         user?.currentUser._id ? (
+        //                           <span className="font-semibold text-teal-500 flex flex-col justify-between items-end text-xs">
+        //                             <span>you lent</span>
+        //                             <span>
+        //                               ₹
+        //                               {item1?.splitbtwn?.includes(
+        //                                 user?.currentUser._id
+        //                               ) ? (
+        //                                 <>
+        //                                   {Number(
+        //                                     item1?.amount -
+        //                                       item1?.amount /
+        //                                         item1?.splitbtwn?.length
+        //                                   ).toFixed(2)}
+        //                                 </>
+        //                               ) : (
+        //                                 <>{Number(item1?.amount).toFixed(2)}</>
+        //                               )}
+        //                             </span>
+        //                           </span>
+        //                         ) : (
+        //                           <>
+        //                             {item1?.splitbtwn?.includes(
+        //                               user?.currentUser?._id
+        //                             ) ? (
+        //                               <span className="font-semibold text-red-400 flex flex-col justify-between items-end text-xs">
+        //                                 <span>you borrowed</span>
+        //                                 <span>
+        //                                   ₹
+        //                                   {Number(
+        //                                     item1?.userLent === 0
+        //                                       ? item1?.userOwes
+        //                                       : item1?.userLent
+        //                                   ).toFixed(2)}
+        //                                 </span>
+        //                               </span>
+        //                             ) : (
+        //                               <span className="text-slate-400 text-sm">
+        //                                 not involved
+        //                               </span>
+        //                             )}
+        //                           </>
+        //                         )}
+        //                       </div>
+        //                     </>
+        //                   )}
+        //                 </div>
+        //               ))}
+        //             </>
+        //           ) : (
+        //             <p className="text-gray-400 px-5">
+        //               No expenses added yet for this group.
+        //             </p>
+        //           )}
+        //         </div>
+        //         <Link
+        //           to={`/?tab=group&view=expense&id=${item?.id}&len=${
+        //             item?.data?.length || 0
+        //           }`}
+        //         >
+        //           <Button
+        //             type="button"
+        //             size="xs"
+        //             outline
+        //             gradientDuoTone="cyanToBlue"
+        //             className="w-fit text-sm flex justify-center items-center mx-auto mt-2"
+        //           >
+        //             View all
+        //             <HiOutlineArrowRight className="ml-2 h-3 w-3 my-auto" />
+        //           </Button>
+        //         </Link>
+        //       </Card>
+        //     ))}
+        //   </div>
+
+        //   {/* Modal */}
+        //   <AddGroup
+        //     showModal={showModal}
+        //     setShowModal={setShowModal}
+        //     userDetail={userDetail}
+        //   />
+        // </div>
         <div className="w-full p-4 sm:p-6">
-          <div className="flex justify-between items-center mb-8">
-            <h1 className="text-2xl font-bold">Groups</h1>
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8 gap-4 sm:gap-0">
+            <h1 className="text-xl sm:text-2xl font-bold">Groups</h1>
             <Button
-              className="bg-white hover:!bg-green-100 !text-green-500 hover:!text-green-600 focus:ring-green-300 flex justify-center items-center border border-slate-200"
+              className="w-full sm:w-auto bg-white hover:!bg-green-100 !text-green-500 hover:!text-green-600 focus:ring-green-300 flex justify-center items-center border border-slate-200"
               onClick={() => setShowModal(true)}
             >
               <span className="mr-2">+</span>
@@ -282,27 +529,29 @@ export default function Group() {
             </Button>
           </div>
 
-          <div className="space-y-5">
+          <div className="space-y-4 sm:space-y-5">
             {groupData2?.map((item, id) => (
-              <Card key={id}>
-                <div className="flex items-start justify-between mb-6">
-                  <div className="flex items-center gap-4">
+              <Card key={id} className="p-4 sm:p-6">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6 mb-4 sm:mb-6">
+                  <div className="flex items-center gap-3 sm:gap-4">
                     <img
                       src={item?.image}
                       alt="img"
-                      className="w-12 h-12 rounded-full"
+                      className="w-10 h-10 sm:w-12 sm:h-12 rounded-full"
                     />
-                    <h2 className="text-xl font-medium">{item?.name}</h2>
+                    <h2 className="text-lg sm:text-xl font-medium">
+                      {item?.name}
+                    </h2>
                   </div>
-                  <div className="text-right">
+                  <div className="text-left sm:text-right">
                     {item?.owed ? (
                       <>
-                        {Number.isNaN(Number(item?.owed)) ? null : (
+                        {!Number.isNaN(Number(item?.owed)) && (
                           <>
-                            <div className="text-sm text-gray-500">
+                            <div className="text-xs sm:text-sm text-gray-500">
                               you are owed
                             </div>
-                            <div className="text-xl font-bold text-teal-500">
+                            <div className="text-lg sm:text-xl font-bold text-teal-500">
                               ₹{Number(item?.owed).toFixed(2)}
                             </div>
                           </>
@@ -310,10 +559,12 @@ export default function Group() {
                       </>
                     ) : (
                       <>
-                        {Number.isNaN(Number(item?.lent)) ? null : (
+                        {!Number.isNaN(Number(item?.lent)) && (
                           <>
-                            <div className="text-sm text-gray-500">you owe</div>
-                            <div className="text-xl font-bold text-red-400">
+                            <div className="text-xs sm:text-sm text-gray-500">
+                              you owe
+                            </div>
+                            <div className="text-lg sm:text-xl font-bold text-red-400">
                               ₹{Number(item?.lent).toFixed(2)}
                             </div>
                           </>
@@ -323,23 +574,23 @@ export default function Group() {
                   </div>
                 </div>
 
-                <div className="space-y-5">
+                <div className="space-y-4 sm:space-y-5">
                   {item?.data?.length > 0 ? (
                     <>
                       {item?.data?.map((item1, id) => (
                         <div
-                          className="flex justify-between items-center group px-5"
+                          className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 group px-3 sm:px-5 py-2"
                           key={id}
                         >
                           {item1?.settledBy || item1?.settledWith ? (
                             <>
-                              <div className="flex items-center gap-2">
+                              <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
                                 <img
                                   src={getImage(item1?.settledBy)}
                                   alt="img"
-                                  className="w-8 h-8 rounded-full"
+                                  className="w-8 h-8 rounded-full flex-shrink-0"
                                 />
-                                <div>
+                                <div className="text-sm sm:text-base">
                                   {item1?.settledBy ===
                                   user?.currentUser._id ? (
                                     <span>
@@ -347,38 +598,29 @@ export default function Group() {
                                         {getName(item1?.settledBy)}
                                       </span>{" "}
                                       settled their{" "}
-                                      {
-                                        <span>
-                                          ₹{Number(item1?.amount).toFixed(2)}
-                                        </span>
-                                      }{" "}
+                                      <span>
+                                        ₹{Number(item1?.amount).toFixed(2)}
+                                      </span>{" "}
                                       with{" "}
-                                      {
-                                        <span className="font-medium">
-                                          {getName(item1?.settledWith)}
-                                        </span>
-                                      }{" "}
+                                      <span className="font-medium">
+                                        {getName(item1?.settledWith)}
+                                      </span>{" "}
                                       on
                                     </span>
                                   ) : (
                                     <span>
-                                      {
-                                        <span>
-                                          <span className="font-medium">
-                                            {getName(item1?.settledBy)}
-                                          </span>{" "}
-                                          settled their ₹
-                                          {Number(item1?.amount).toFixed(2)}{" "}
-                                          with{" "}
-                                          <span className="font-medium">
-                                            {getName(item1?.settledWith)}
-                                          </span>{" "}
-                                          on
-                                        </span>
-                                      }
+                                      <span className="font-medium">
+                                        {getName(item1?.settledBy)}
+                                      </span>{" "}
+                                      settled their ₹
+                                      {Number(item1?.amount).toFixed(2)} with{" "}
+                                      <span className="font-medium">
+                                        {getName(item1?.settledWith)}
+                                      </span>{" "}
+                                      on
                                     </span>
                                   )}
-                                  <span className="text-gray-500">
+                                  <span className="text-gray-500 block sm:inline">
                                     {" "}
                                     {dateFormater(item1?.createdAt)}
                                   </span>
@@ -387,13 +629,13 @@ export default function Group() {
                             </>
                           ) : (
                             <>
-                              <div className="flex items-center gap-2">
+                              <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
                                 <img
                                   src={item1?.paidByDetails?.profilePicture}
                                   alt="img"
-                                  className="w-8 h-8 rounded-full"
+                                  className="w-8 h-8 rounded-full flex-shrink-0"
                                 />
-                                <div>
+                                <div className="text-sm sm:text-base">
                                   {item1?.paidByDetails?._id ===
                                   user?.currentUser._id ? (
                                     <span>
@@ -401,11 +643,9 @@ export default function Group() {
                                         {item1?.paidByDetails?.username}
                                       </span>{" "}
                                       paid{" "}
-                                      {
-                                        <span>
-                                          ₹{Number(item1?.amount).toFixed(2)}
-                                        </span>
-                                      }{" "}
+                                      <span>
+                                        ₹{Number(item1?.amount).toFixed(2)}
+                                      </span>{" "}
                                       for
                                     </span>
                                   ) : (
@@ -414,11 +654,9 @@ export default function Group() {
                                         {item1?.paidByDetails?.username}
                                       </span>{" "}
                                       paid{" "}
-                                      {
-                                        <span>
-                                          ₹{Number(item1?.amount).toFixed(2)}
-                                        </span>
-                                      }{" "}
+                                      <span>
+                                        ₹{Number(item1?.amount).toFixed(2)}
+                                      </span>{" "}
                                       for
                                     </span>
                                   )}
@@ -427,13 +665,13 @@ export default function Group() {
                                     {item1?.title}{" "}
                                   </span>
                                   on
-                                  <span className="text-gray-500">
+                                  <span className="text-gray-500 block sm:inline">
                                     {" "}
                                     {dateFormater(item1?.createdAt)}
                                   </span>
                                 </div>
                               </div>
-                              <div className="flex items-center gap-2">
+                              <div className="flex items-center gap-2 self-end sm:self-auto">
                                 {item1?.paidByDetails?._id ===
                                 user?.currentUser._id ? (
                                   <span className="font-semibold text-teal-500 flex flex-col justify-between items-end text-xs">
@@ -442,17 +680,13 @@ export default function Group() {
                                       ₹
                                       {item1?.splitbtwn?.includes(
                                         user?.currentUser._id
-                                      ) ? (
-                                        <>
-                                          {Number(
+                                      )
+                                        ? Number(
                                             item1?.amount -
                                               item1?.amount /
                                                 item1?.splitbtwn?.length
-                                          ).toFixed(2)}
-                                        </>
-                                      ) : (
-                                        <>{Number(item1?.amount).toFixed(2)}</>
-                                      )}
+                                          ).toFixed(2)
+                                        : Number(item1?.amount).toFixed(2)}
                                     </span>
                                   </span>
                                 ) : (
@@ -472,7 +706,7 @@ export default function Group() {
                                         </span>
                                       </span>
                                     ) : (
-                                      <span className="text-slate-400 text-sm">
+                                      <span className="text-slate-400 text-xs sm:text-sm">
                                         not involved
                                       </span>
                                     )}
@@ -485,7 +719,7 @@ export default function Group() {
                       ))}
                     </>
                   ) : (
-                    <p className="text-gray-400 px-5">
+                    <p className="text-gray-400 text-sm sm:text-base px-3 sm:px-5">
                       No expenses added yet for this group.
                     </p>
                   )}
@@ -500,7 +734,7 @@ export default function Group() {
                     size="xs"
                     outline
                     gradientDuoTone="cyanToBlue"
-                    className="w-fit text-sm flex justify-center items-center mx-auto mt-2"
+                    className="w-fit text-xs sm:text-sm flex justify-center items-center mx-auto mt-4 sm:mt-6"
                   >
                     View all
                     <HiOutlineArrowRight className="ml-2 h-3 w-3 my-auto" />

@@ -398,7 +398,7 @@ export default function Expense() {
               <h4 className="text-lg sm:text-xl font-semibold">Paid by</h4>
               <div className="space-y-4">
                 {
-                  <Card className="p-1">
+                  <Card>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2 sm:gap-4">
                         <Avatar
@@ -422,7 +422,7 @@ export default function Expense() {
               <h4 className="text-lg sm:text-xl font-semibold">Split between</h4>
               <div className="space-y-4">
                 {expenseData?.data?.splitbtwn?.map((splitBtwnId) => (
-                  <Card key={splitBtwnId} className="p-1">
+                  <Card key={splitBtwnId}>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2 sm:gap-4">
                         <Avatar 
