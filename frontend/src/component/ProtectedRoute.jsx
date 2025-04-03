@@ -59,68 +59,16 @@
 
 // export default ProtectedRoute
 
-import { Spinner } from "flowbite-react";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { authenticateState, logoutUserSuccess } from "../redux/user/userSlice";
+import { useSelector } from "react-redux";
 import Header from "./Header";
 import Footer from "./Footer";
 
 function ProtectedRoute() {
-  const { isAuthenticated: reduxAuth, currentUser } = useSelector((state) => state.user);
-  const [loading, setLoading] = useState(true);
-  const dispatch = useDispatch();
-  const API_URL = import.meta.env.VITE_API_URL;
+  const { isAuthenticated: reduxAuth } = useSelector((state) => state.user);
 
-  useEffect(() => {
-    let mounted = true; // Prevent updates after unmount
-
-    const verifyUser = async () => {
-      try {
-        const res = await fetch(`${API_URL}/auth/verify`, {
-          method: "GET",
-          credentials: "include",
-        });
-        const data = await res.json();
-
-        if (mounted) {
-          if (data.success) {
-            dispatch(authenticateState(data.user));
-          } else {
-            dispatch(logoutUserSuccess());
-          }
-        }
-      } catch (error) {
-        if (mounted) {
-          dispatch(logoutUserSuccess());
-          console.log("Unauthorized:", error);
-        }
-      } finally {
-        if (mounted) {
-          setLoading(false);
-        }
-      }
-    };
-
-    if (reduxAuth === false || !currentUser) {
-      verifyUser();
-    } else {
-      setLoading(false);
-    }
-
-    return () => {
-      mounted = false; // Cleanup to prevent state updates after unmount
-    };
-  }, [reduxAuth, currentUser, dispatch]);
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center w-full min-h-screen">
-        <Spinner size="lg" />
-      </div>
-    );
-  }
+  console.log("ProtectedRoute - reduxAuth:", reduxAuth);
 
   return reduxAuth ? (
     <>
