@@ -184,6 +184,145 @@ export default function Expense() {
   };
 
   return (
+    // <div className="w-full min-h-screen">
+    //   <div className="relative w-full mb-10">
+    //     <Button
+    //       type="button"
+    //       size="xs"
+    //       outline
+    //       gradientDuoTone="cyanToBlue"
+    //       className="w-fit absolute text-xs mt-2 ml-2 left-0"
+    //       onClick={handleBackButton}
+    //     >
+    //       <HiOutlineArrowLeft className="size-4" />
+    //     </Button>
+    //     <div className="w-full max-h-28 overflow-hidden">
+    //       <img
+    //         src={expenseCoverImage}
+    //         alt="cover image"
+    //         className="w-full h-full object-contain overflow-hidden"
+    //       />
+    //     </div>
+    //     <div className="w-16 h-16 absolute border-2 rounded-lg top-2/3 left-28">
+    //       <img
+    //         src={expense}
+    //         alt="img"
+    //         className="w-full h-full rounded-md object-cover border-2"
+    //       />
+    //     </div>
+    //   </div>
+
+    //   <div className="container mx-auto px-4 py-4">
+    //     <div className="flex items-center justify-between px-8">
+    //       <div>
+    //         <h1 className="text-2xl font-semibold">Expense details</h1>
+    //       </div>
+    //       <div className="flex w-fit space-x-4">
+    //         <Button
+    //           className="bg-[#4fce9b] hover:!bg-[#2e7c5dea]"
+    //           onClick={() => handleOpenModal()}
+    //         >
+    //           Edit
+    //         </Button>
+    //         <Button
+    //           className="bg-red-500 hover:!bg-red-600"
+    //           onClick={() => setDeleteModal(true)}
+    //         >
+    //           Delete
+    //         </Button>
+    //       </div>
+    //     </div>
+
+    //     <div className="mx-20 mt-7">
+    //       <div className="flex flex-col space-y-8">
+    //         {expenseData?.data?.isGroupExpense && (
+    //           <div className="flex space-x-2 items-center">
+    //             <h4 className="text-xl font-semibold">Group Name:&nbsp;</h4>
+    //             <span className="text-xl font-normal">
+    //               {expenseData1?.data?.groupDetail[0]?.name}
+    //             </span>
+    //           </div>
+    //         )}
+    //         <div className="flex space-x-2 items-center">
+    //           <h4 className="text-xl font-semibold">Amount:&nbsp;</h4>
+    //           <span className="text-xl font-normal">
+    //             ₹{Number(expenseData?.data?.amount).toFixed(2)}
+    //           </span>
+    //         </div>
+    //         <div className="flex space-x-2 items-center">
+    //           <h4 className="text-xl font-semibold">Title:&nbsp;</h4>
+    //           <span className="text-xl font-normal">
+    //             {expenseData?.data?.title}
+    //           </span>
+    //         </div>
+    //         <div className="space-y-4">
+    //           <h4 className="text-xl font-semibold">Paid by</h4>
+    //           <div className="space-y-4">
+    //             {
+    //               <Card>
+    //                 <div className="flex items-center justify-between">
+    //                   <div className="flex items-center gap-4">
+    //                     <Avatar
+    //                       img={userData[expenseData?.data?.paidby]?.image}
+    //                       rounded
+    //                     />
+    //                     <div>
+    //                       <h4 className="font-semibold">
+    //                         {userData[expenseData?.data?.paidby]?.name}
+    //                       </h4>
+    //                     </div>
+    //                   </div>
+    //                 </div>
+    //               </Card>
+    //             }
+    //           </div>
+    //         </div>
+    //         <div className="space-y-4">
+    //           <h4 className="text-xl font-semibold">Split between</h4>
+    //           <div className="space-y-4">
+    //             {expenseData?.data?.splitbtwn?.map((splitBtwnId) => (
+    //               <Card key={splitBtwnId}>
+    //                 <div className="flex items-center justify-between">
+    //                   <div className="flex items-center gap-4">
+    //                     <Avatar img={userData[splitBtwnId]?.image} rounded />
+    //                     <div>
+    //                       <h4 className="font-semibold">
+    //                         {userData[splitBtwnId]?.name}
+    //                       </h4>
+    //                     </div>
+    //                   </div>
+    //                 </div>
+    //               </Card>
+    //             ))}
+    //           </div>
+    //         </div>
+    //         {expenseData?.data?.note && (
+    //           <div className="flex space-x-2 items-center">
+    //             <h4 className="text-xl font-semibold">Note:&nbsp;</h4>
+    //             <span className="text-xl font-normal">
+    //               {expenseData?.data?.note}
+    //             </span>
+    //           </div>
+    //         )}
+    //         <div className="flex space-x-2 items-center">
+    //           <h4 className="text-xl font-semibold">Expense type:&nbsp;</h4>
+    //           <span className="text-xl font-normal">
+    //             {expenseData?.data?.expenseType}
+    //           </span>
+    //         </div>
+    //         <Comment postId={expenseId} />
+    //       </div>
+    //     </div>
+    //   </div>
+    //   {showModal && <EditExpense />}
+    //   {deleteModal && (
+    //     <DeleteModal
+    //       deleteModal={deleteModal}
+    //       setDeleteModal={setDeleteModal}
+    //       handleDelete={handleDelete}
+    //     />
+    //   )}
+    // </div>
     <div className="w-full min-h-screen">
       <div className="relative w-full mb-10">
         <Button
@@ -191,19 +330,19 @@ export default function Expense() {
           size="xs"
           outline
           gradientDuoTone="cyanToBlue"
-          className="w-fit absolute text-xs mt-2 ml-2 left-0"
+          className="w-fit absolute text-xs mt-2 ml-2 left-0 z-10"
           onClick={handleBackButton}
         >
           <HiOutlineArrowLeft className="size-4" />
         </Button>
-        <div className="w-full max-h-28 overflow-hidden">
+        <div className="w-full max-h-28 sm:max-h-36 md:max-h-44 overflow-hidden">
           <img
             src={expenseCoverImage}
             alt="cover image"
             className="w-full h-full object-contain overflow-hidden"
           />
         </div>
-        <div className="w-16 h-16 absolute border-2 rounded-lg top-2/3 left-28">
+        <div className="w-12 h-12 sm:w-16 sm:h-16 absolute border-2 rounded-lg top-2/3 left-4 sm:left-28">
           <img
             src={expense}
             alt="img"
@@ -213,19 +352,19 @@ export default function Expense() {
       </div>
 
       <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between px-8">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-2 sm:px-8 space-y-4 sm:space-y-0">
           <div>
-            <h1 className="text-2xl font-semibold">Expense details</h1>
+            <h1 className="text-xl sm:text-2xl font-semibold">Expense details</h1>
           </div>
-          <div className="flex w-fit space-x-4">
+          <div className="flex w-full sm:w-fit space-x-4">
             <Button
-              className="bg-[#4fce9b] hover:!bg-[#2e7c5dea]"
+              className="flex-1 sm:flex-none bg-[#4fce9b] hover:!bg-[#2e7c5dea]"
               onClick={() => handleOpenModal()}
             >
               Edit
             </Button>
             <Button
-              className="bg-red-500 hover:!bg-red-600"
+              className="flex-1 sm:flex-none bg-red-500 hover:!bg-red-600"
               onClick={() => setDeleteModal(true)}
             >
               Delete
@@ -233,41 +372,43 @@ export default function Expense() {
           </div>
         </div>
 
-        <div className="mx-20 mt-7">
+        <div className="mx-2 sm:mx-8 md:mx-20 mt-7">
           <div className="flex flex-col space-y-8">
             {expenseData?.data?.isGroupExpense && (
-              <div className="flex space-x-2 items-center">
-                <h4 className="text-xl font-semibold">Group Name:&nbsp;</h4>
-                <span className="text-xl font-normal">
+              <div className="flex flex-col sm:flex-row sm:space-x-2 space-y-1 sm:space-y-0 sm:items-center">
+                <h4 className="text-lg sm:text-xl font-semibold">Group Name:&nbsp;</h4>
+                <span className="text-lg sm:text-xl font-normal">
                   {expenseData1?.data?.groupDetail[0]?.name}
                 </span>
               </div>
             )}
-            <div className="flex space-x-2 items-center">
-              <h4 className="text-xl font-semibold">Amount:&nbsp;</h4>
-              <span className="text-xl font-normal">
+            <div className="flex flex-col sm:flex-row sm:space-x-2 space-y-1 sm:space-y-0 sm:items-center">
+              <h4 className="text-lg sm:text-xl font-semibold">Amount:&nbsp;</h4>
+              <span className="text-lg sm:text-xl font-normal">
                 ₹{Number(expenseData?.data?.amount).toFixed(2)}
               </span>
             </div>
-            <div className="flex space-x-2 items-center">
-              <h4 className="text-xl font-semibold">Title:&nbsp;</h4>
-              <span className="text-xl font-normal">
+            <div className="flex flex-col sm:flex-row sm:space-x-2 space-y-1 sm:space-y-0 sm:items-center">
+              <h4 className="text-lg sm:text-xl font-semibold">Title:&nbsp;</h4>
+              <span className="text-lg sm:text-xl font-normal">
                 {expenseData?.data?.title}
               </span>
             </div>
             <div className="space-y-4">
-              <h4 className="text-xl font-semibold">Paid by</h4>
+              <h4 className="text-lg sm:text-xl font-semibold">Paid by</h4>
               <div className="space-y-4">
                 {
-                  <Card>
+                  <Card className="p-3 sm:p-4">
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-2 sm:gap-4">
                         <Avatar
                           img={userData[expenseData?.data?.paidby]?.image}
                           rounded
+                          size="sm"
+                          className="sm:size-10"
                         />
                         <div>
-                          <h4 className="font-semibold">
+                          <h4 className="text-sm sm:text-base font-semibold">
                             {userData[expenseData?.data?.paidby]?.name}
                           </h4>
                         </div>
@@ -278,15 +419,20 @@ export default function Expense() {
               </div>
             </div>
             <div className="space-y-4">
-              <h4 className="text-xl font-semibold">Split between</h4>
+              <h4 className="text-lg sm:text-xl font-semibold">Split between</h4>
               <div className="space-y-4">
                 {expenseData?.data?.splitbtwn?.map((splitBtwnId) => (
-                  <Card key={splitBtwnId}>
+                  <Card key={splitBtwnId} className="p-3 sm:p-4">
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4">
-                        <Avatar img={userData[splitBtwnId]?.image} rounded />
+                      <div className="flex items-center gap-2 sm:gap-4">
+                        <Avatar 
+                          img={userData[splitBtwnId]?.image} 
+                          rounded 
+                          size="sm"
+                          className="sm:size-10"
+                        />
                         <div>
-                          <h4 className="font-semibold">
+                          <h4 className="text-sm sm:text-base font-semibold">
                             {userData[splitBtwnId]?.name}
                           </h4>
                         </div>
@@ -297,16 +443,16 @@ export default function Expense() {
               </div>
             </div>
             {expenseData?.data?.note && (
-              <div className="flex space-x-2 items-center">
-                <h4 className="text-xl font-semibold">Note:&nbsp;</h4>
-                <span className="text-xl font-normal">
+              <div className="flex flex-col sm:flex-row sm:space-x-2 space-y-1 sm:space-y-0 sm:items-center">
+                <h4 className="text-lg sm:text-xl font-semibold">Note:&nbsp;</h4>
+                <span className="text-lg sm:text-xl font-normal">
                   {expenseData?.data?.note}
                 </span>
               </div>
             )}
-            <div className="flex space-x-2 items-center">
-              <h4 className="text-xl font-semibold">Expense type:&nbsp;</h4>
-              <span className="text-xl font-normal">
+            <div className="flex flex-col sm:flex-row sm:space-x-2 space-y-1 sm:space-y-0 sm:items-center">
+              <h4 className="text-lg sm:text-xl font-semibold">Expense type:&nbsp;</h4>
+              <span className="text-lg sm:text-xl font-normal">
                 {expenseData?.data?.expenseType}
               </span>
             </div>
