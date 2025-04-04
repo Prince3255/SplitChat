@@ -160,8 +160,9 @@ const OtpInput = ({ onSubmit, loading, sendOtp }) => {
                   sendOtp(e);
                   setTime(120);
                 }}
+                className="text-blue-500"
               >
-                Resend OTP
+                &nbsp;&nbsp;Resend OTP
               </button>
             )}
           </p>
