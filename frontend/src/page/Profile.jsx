@@ -139,7 +139,7 @@ export default function Profile() {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch(`${API_URL}/user/logout`, {
+      const response = await fetch(`${API_URL}/auth/logout`, {
         method: "POST",
         credentials: "include",
       });

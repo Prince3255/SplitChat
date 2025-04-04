@@ -95,7 +95,8 @@ export const login = asyncHandler (async (req, res, next) => {
             httpOnly: true,
             secure: true,
             sameSite: "None",
-            maxAge: 7 * 24 * 60 * 60 * 1000
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+            path: '/'
         }
         
         return res.status(201).cookie("token", token, cookieOption).json(
@@ -120,7 +121,7 @@ export const logout = asyncHandler( async (req, res) => {
          path: "/"
     }
 
-    return res.status(200).clearCookie("token", "", cookieOption).json(new ApiResponse(
+    return res.status(200).clearCookie("token", cookieOption).json(new ApiResponse(
         200,
         {},
         "User logged out successfully"
@@ -148,7 +149,8 @@ export const google = asyncHandler (async (req, res, next) => {
                 httpOnly: true,
                 secure: true,
                 sameSite: 'None',
-                maxAge: 7 * 24 * 60 * 60 * 1000
+                maxAge: 7 * 24 * 60 * 60 * 1000,
+                path: '/'
             }
 
             return res.status(201).cookie('token', token, cookieOption).json(
@@ -186,7 +188,8 @@ export const google = asyncHandler (async (req, res, next) => {
                 httpOnly: true,
                 secure: true,
                 sameSite: 'None',
-                maxAge: 7 * 24 * 60 * 60 * 1000
+                maxAge: 7 * 24 * 60 * 60 * 1000,
+                path: '/'
             }
 
             return res.status(201).cookie('token', token, cookieOption).json(
