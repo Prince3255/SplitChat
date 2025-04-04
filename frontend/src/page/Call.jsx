@@ -107,6 +107,15 @@ export default function Call() {
         });
       }
       console.error("Error in accessing media devices:", error);
+      if (localStream.current) {
+        localStream.current.getTracks().forEach((track) => track.stop());
+      }
+      pc?.current?.close();
+      socket.off("offer", handleOffer);
+      socket.off("answer", handleAnswer);
+      socket.off("ice-candidate", handleRemoteIce);
+      socket.off("end-call", handleCallEnd);
+      socket.off("error-caller", handleCallerError);
       navigate(window.history.length > 1 ? -1 : "/chat");
     }
   };
@@ -214,7 +223,7 @@ export default function Call() {
       if (localStream.current) {
         localStream.current.getTracks().forEach((track) => track.stop());
       }
-      pc.current?.close();
+      pc?.current?.close();
       socket.off("offer", handleOffer);
       socket.off("answer", handleAnswer);
       socket.off("ice-candidate", handleRemoteIce);
@@ -225,6 +234,15 @@ export default function Call() {
 
   const handleCallerError = (data) => {
     toast.error(data.error);
+    if (localStream.current) {
+      localStream.current.getTracks().forEach((track) => track.stop());
+    }
+    pc?.current?.close();
+    socket.off("offer", handleOffer);
+    socket.off("answer", handleAnswer);
+    socket.off("ice-candidate", handleRemoteIce);
+    socket.off("end-call", handleCallEnd);
+    socket.off("error-caller", handleCallerError);
     navigate(window.history.length > 1 ? -1 : "/chat");
   };
 

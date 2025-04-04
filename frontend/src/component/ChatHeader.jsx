@@ -23,6 +23,10 @@ export default function ChatHeader() {
       setCalling(false);
       navigate(window.history.length > 1 ? -1 : "/chat");
     });
+
+    return () => {
+      socket.off("error-reciever");
+    }
   }, [socket]);
 
   const handleCrossClick = (user) => {
