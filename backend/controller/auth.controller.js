@@ -57,7 +57,7 @@ const sendWelcomeMessage = async (email, username) => {
           <div class="message">
             <h2>Welcome to Split Chat, ${username}!</h2>
             <p>Thank you for joining our community. We're excited to have you on board!</p>
-            <p>With Split Chat, you can connect with friends, share moments, and much more.</p>
+            <p>With Split Chat, you can connect with friends, split your expenses, and much more.</p>
           </div>
           <div class="footer">
             <p>© ${new Date().getFullYear()} Split Chat. All rights reserved.</p>

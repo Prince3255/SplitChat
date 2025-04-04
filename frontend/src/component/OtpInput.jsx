@@ -91,13 +91,6 @@ const OtpInput = ({ onSubmit, loading, sendOtp }) => {
     }
   };
 
-  const formatTime = () => {
-    const minute = Math.floor(time / 60);
-    const second = minute % 60;
-
-    return `${minute}:${second.toString().padStart(2, "0")}`;
-  };
-
   return (
     <div className="w-full max-w-md mx-auto p-6">
       <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
@@ -153,21 +146,24 @@ const OtpInput = ({ onSubmit, loading, sendOtp }) => {
 
           <p className="mt-4 text-sm text-gray-600 text-center">
             Didn't receive the code?
-            <button
-              type="button"
-              className={`ml-1 text-blue-600 hover:text-blue-800 focus:outline-none ${
-                time > 0 ? "opacity-50 cursor-not-allowed" : ""
-              }`}
-              onClick={() => {
-                setOtp(Array(6).fill(""));
-                inputRefs.current[0].focus();
-                sendOtp(e);
-                setTime(120);
-              }}
-              disabled={time > 0}
-            >
-              Resend {time > 0 ? `in ${formatTime()} seconds` : `now`}
-            </button>
+            {time > 0 ? (
+              <p>
+                Resend OTP in {Math.floor(time / 60)}:
+                {String(time % 60).padStart(2, "0")}
+              </p>
+            ) : (
+              <button
+                type="button"
+                onClick={(e) => {
+                  setOtp(Array(6).fill(""));
+                  inputRefs.current[0].focus();
+                  sendOtp(e);
+                  setTime(120);
+                }}
+              >
+                Resend OTP
+              </button>
+            )}
           </p>
         </div>
       </form>
