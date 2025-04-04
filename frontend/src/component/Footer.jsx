@@ -58,7 +58,7 @@ export default function Footer() {
               <FaInstagram className="h-5 w-5" />
               <span className="sr-only">Instagram</span>
             </a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-green-600 hover:text-green-800 transition-colors">
+            <a href="https://www.linkedin.com/in/prince-suthar-876720281/" target="_blank" rel="noopener noreferrer" className="text-green-600 hover:text-green-800 transition-colors">
               <FaLinkedinIn className="h-5 w-5" />
               <span className="sr-only">LinkedIn</span>
             </a>

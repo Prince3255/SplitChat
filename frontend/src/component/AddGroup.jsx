@@ -19,7 +19,7 @@ export default function AddGroup({ showModal, setShowModal, userDetail }) {
   const searchUsersApi = async (searchTerm) => {
     try {
       const res = await fetch(
-        `${VITE_API_URL}/user/search?query=${encodeURIComponent(searchTerm)}`,
+        `${API_URL}/user/search?query=${encodeURIComponent(searchTerm)}`,
         {
           method: "GET",
           headers: {
@@ -89,7 +89,7 @@ export default function AddGroup({ showModal, setShowModal, userDetail }) {
 
   const handleCreateGroup = async () => {
     try {
-      const res = await fetch(`${VITE_API_URL}/group/create`, {
+      const res = await fetch(`${API_URL}/group/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
