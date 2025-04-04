@@ -195,7 +195,7 @@ export default function Comment({ postId }) {
         toast.error(data.message);
         return { success: false, data: [] };
       } else {
-        // toast.success(data?.message || "Comment added successfully");
+        toast.success("Comment added successfully");
         setComment("");
         queryClient.invalidateQueries("fetchComment", { refetchActive: true });
       }

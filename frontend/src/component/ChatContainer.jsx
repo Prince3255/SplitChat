@@ -172,7 +172,7 @@ export default function ChatContainer() {
       longPressTimer.current = setTimeout(() => {
         setShowModal(true);
         setMessageId(msgId);
-      }, 1200);
+      }, 2000);
     }
   };
 
