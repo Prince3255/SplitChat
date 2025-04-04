@@ -172,7 +172,7 @@ export default function Comment({ postId }) {
     }
 
     try {
-      const res = await fetch("${API_URL}/comment/create", {
+      const res = await fetch(`${API_URL}/comment/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
