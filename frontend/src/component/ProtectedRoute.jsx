@@ -7,7 +7,7 @@ import { authenticateState, logoutUserSuccess } from '../redux/user/userSlice'
  import Footer from './Footer'
 
 function ProtectedRoute() {
-   const [isAuthenticated, setIsAuthenticated] = useState(null)    const { isAuthenticated: reduxAuth, currentUser } = useSelector((state) => state.user)
+   const [isAuthenticated, setIsAuthenticated] = useState(null)
     const dispatch = useDispatch()
     const API_URL = import.meta.env.VITE_API_URL
 
