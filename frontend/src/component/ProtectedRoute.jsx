@@ -12,7 +12,8 @@ function ProtectedRoute() {
     const API_URL = import.meta.env.VITE_API_URL
 
    useEffect(() => {
-     const verifyUser = async () => {         try {             const res = await fetch(`${API_URL}/auth/verify`, {
+     const verifyUser = async () => {         try {            
+      const res = await fetch(`${API_URL}/auth/verify`, {
                  method: 'GET',
                  credentials: 'include'
              })
