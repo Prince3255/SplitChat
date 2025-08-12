@@ -52,7 +52,7 @@ function ProtectedRoute() {
         <Footer />
     </>
     ) : (
-        <Navigate to='/login' />
+        <Navigate to='/' />
     )
 }
 
