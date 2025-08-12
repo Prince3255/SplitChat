@@ -158,7 +158,7 @@ export default function Profile() {
         disconnectSocket();
         dispatch(logoutUserSuccess());
         await persistor.purge();
-        navigate("/login");
+        navigate("/");
       }
     } catch (error) {
       console.log(error);

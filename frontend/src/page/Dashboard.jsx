@@ -83,7 +83,7 @@ export default function Dashboard({ onViewNonGroup, onViewGroup }) {
   const [nonGroupData, setNonGroupData] = useState([]);
   const [groupData2, setGroupData] = useState([]);
   const user = useSelector((state) => state.user);
-  const id = user?.currentUser._id;
+  const id = user?.currentUser?._id;
 
   const {
     data: userData,
