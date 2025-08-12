@@ -23,7 +23,9 @@ connect_DB();
 
 const allowedOrigins = [
   "https://splitchat.vercel.app",
-  "http://localhost:5173", // for local testing
+  "http://localhost:5173",
+  "https://split-chat-prince3255s-projects.vercel.app/", // for local testing
+  "https://splitchat.vercel.app/"
 ];
 app.use(express.json());
 
