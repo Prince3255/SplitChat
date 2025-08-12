@@ -243,10 +243,15 @@ export default function Profile() {
                   <span>Member Since</span>
                 </div>
                 <span className="text-gray-900">
-                  {new Date().toLocaleString("en-US", {
-                    month: "long",
-                    year: "numeric",
-                  })}
+                  {user?.currentUser?.createdAt
+                    ? new Date(user?.currentUser?.createdAt).toLocaleString(
+                        "en-US",
+                        {
+                          month: "long",
+                          year: "numeric",
+                        }
+                      )
+                    : ""}
                 </span>
               </div>
 
