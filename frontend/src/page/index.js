@@ -1,6 +1,6 @@
 import Contact from './Contact'
 import Dashboard from './Dashboard'
-import Home from './Tab'
+import Home from './Home'
 import Login from './Login'
 import Signup from './Signup'
 import Profile from './Profile'
