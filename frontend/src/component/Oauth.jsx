@@ -41,7 +41,7 @@ export default function Oauth() {
 
       if (data.success) {
         toast.success(data.message)
-        navigate('/')
+        navigate('/tab')
       }
     } catch (error) {
       console.log("error", error)

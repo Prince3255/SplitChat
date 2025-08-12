@@ -58,7 +58,7 @@ export default function Login() {
       }
       toast.success("Logged in successfull");
       if (data.success) {
-        navigate("/");
+        navigate("/tab");
       }
     } catch (error) {
       setError(error.message);
