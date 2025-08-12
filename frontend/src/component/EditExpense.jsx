@@ -80,10 +80,10 @@ export default function EditExpense() {
     } 
     else {
       if (groupId1) {
-        navigate(`/?tab=group&view=expense&edit=expense&id=${expId}&groupId=${groupId1}&len=${len}`);
+        navigate(`/tab?tab=group&view=expense&edit=expense&id=${expId}&groupId=${groupId1}&len=${len}`);
       }
       else {
-        navigate(`/?tab=non-group&view=expense&edit=expense&id=${expId}&len=${len}`);
+        navigate(`/tab?tab=non-group&view=expense&edit=expense&id=${expId}&len=${len}`);
       }
     }
   };

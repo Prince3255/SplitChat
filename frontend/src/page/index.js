@@ -1,6 +1,6 @@
 import Contact from './Contact'
 import Dashboard from './Dashboard'
-import Home from './Home'
+import Home from './Tab'
 import Login from './Login'
 import Signup from './Signup'
 import Profile from './Profile'
@@ -11,5 +11,6 @@ import Chat from './Chat'
 import NonGroup from './NonGroup'
 import Group from './Group'
 import Call from './Call'
+import Tab from './Tab'
 
-export { Contact, Dashboard, Home, Login, Signup, Profile, About, Settleup, Expense, Chat, NonGroup, Group, Call }
+export { Contact, Dashboard, Home, Login, Signup, Profile, About, Settleup, Expense, Chat, NonGroup, Group, Call, Tab }

@@ -65,7 +65,7 @@ export default function GroupExpense() {
     if (window.history.length > 1) {
       navigate(-1);
     } else {
-      navigate("/?tab=dashboard");
+      navigate("/tab?tab=dashboard");
     }
   };
 
@@ -207,19 +207,19 @@ export default function GroupExpense() {
   };
 
   const handleSettingButtonClick = () => {
-    navigate(`/?tab=group&view=expense&edit=group&id=${id}&flag=${flag}&len=0`);
+    navigate(`/tab?tab=group&view=expense&edit=group&id=${id}&flag=${flag}&len=0`);
   };
 
   const handleExpenseClick = (id1) => {
     setExpenseId(id);
     navigate(
-      `/?tab=group&view=expense&edit=expense&id=${id1}&groupId=${id}&len=${len}`
+      `/tab?tab=group&view=expense&edit=expense&id=${id1}&groupId=${id}&len=${len}`
     );
   };
 
   const handleSettleUpClick = (item1) => {
     navigate(
-      `/?tab=group&view=expense&edit=settleup&sid=${item1?._id}&id=${id}&len=${len}`
+      `/tab?tab=group&view=expense&edit=settleup&sid=${item1?._id}&id=${id}&len=${len}`
     );
     setSettleUpId(item1?._id);
     setSettleUpItem(item1);

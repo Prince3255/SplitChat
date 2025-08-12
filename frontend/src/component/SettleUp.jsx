@@ -164,9 +164,9 @@ export default function SettleUp() {
       navigate(-1);
     } else {
       if (id) {
-        navigate(`/?tab=group&view=expense&id=${id}&len=${len}`);
+        navigate(`/tab?tab=group&view=expense&id=${id}&len=${len}`);
       } else {
-        navigate(`/?tab=non-group`);
+        navigate(`/tab?tab=non-group`);
       }
     }
   };
@@ -174,11 +174,11 @@ export default function SettleUp() {
   const handleOpenModal = () => {
     if (id) {
       navigate(
-        `/?tab=group&view=expense&edit=settleup&sid=${sid}&id=${id}&len=${len}&modal=true`
+        `/tab?tab=group&view=expense&edit=settleup&sid=${sid}&id=${id}&len=${len}&modal=true`
       );
     } else {
       navigate(
-        `/?tab=non-group&view=expense&edit=settleup&sid=${sid}&len=${len}&modal=true`
+        `/tab?tab=non-group&view=expense&edit=settleup&sid=${sid}&len=${len}&modal=true`
       );
     }
   };
@@ -199,9 +199,9 @@ export default function SettleUp() {
         navigate(-1);
       } else {
         if (id) {
-          navigate(`/?tab=group&view=expense&id=${id}&len=${len}`);
+          navigate(`/tab?tab=group&view=expense&id=${id}&len=${len}`);
         } else {
-          navigate(`/?tab=non-group`);
+          navigate(`/tab?tab=non-group`);
         }
       }
     }

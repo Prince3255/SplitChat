@@ -1,6 +1,16 @@
 import React, { useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { Home, Contact, Login, Signup, Settleup, Expense, Chat, Call } from "./page/index";
+import {
+  Home,
+  Contact,
+  Login,
+  Signup,
+  Settleup,
+  Expense,
+  Chat,
+  Call,
+  Tab,
+} from "./page/index";
 import { ProtectedRoute } from "./component/index";
 import { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,7 +20,6 @@ import { connectSocket, disconnectSocket } from "./util/socketAction";
 const queryClient = new QueryClient();
 
 function App() {
-  
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
@@ -24,12 +33,12 @@ function App() {
     };
   }, [user?.isAuthenticated, dispatch]);
 
-
   return (
     <QueryClientProvider client={queryClient}>
       <Routes>
+        <Route path="/" element={<Home />} />
         <Route element={<ProtectedRoute />}>
-          <Route path="/" element={<Home />} />
+          <Route path="/tab" element={<Tab />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/settleup" element={<Settleup />} />
           <Route path="/expense" element={<Expense />} />
@@ -37,10 +46,15 @@ function App() {
           <Route path="/call" element={<Call />} />
         </Route>
 
-        {!user?.isAuthenticated && <Route path="/signup" element={<Signup />} />}
+        {!user?.isAuthenticated && (
+          <Route path="/signup" element={<Signup />} />
+        )}
         {!user?.isAuthenticated && <Route path="/login" element={<Login />} />}
 
-        <Route path="*" element={<Navigate to={user?.isAuthenticated ? "/" : "/login"} />} />
+        <Route
+          path="*"
+          element={<Navigate to={user?.isAuthenticated ? "/tab" : "/"} />}
+        />
       </Routes>
       <Toaster />
     </QueryClientProvider>

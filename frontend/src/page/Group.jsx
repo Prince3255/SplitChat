@@ -491,7 +491,7 @@ export default function Group() {
         //           )}
         //         </div>
         //         <Link
-        //           to={`/?tab=group&view=expense&id=${item?.id}&len=${
+        //           to={`/tab?tab=group&view=expense&id=${item?.id}&len=${
         //             item?.data?.length || 0
         //           }`}
         //         >
@@ -725,7 +725,7 @@ export default function Group() {
                   )}
                 </div>
                 <Link
-                  to={`/?tab=group&view=expense&id=${item?.id}&len=${
+                  to={`/tab?tab=group&view=expense&id=${item?.id}&len=${
                     item?.data?.length || 0
                   }`}
                 >

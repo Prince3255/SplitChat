@@ -126,9 +126,9 @@ export default function Expense() {
       navigate(-1);
     } else {
       if (groupId) {
-        navigate(`/?tab=group&view=expense&id=${groupId}&len=${len}`);
+        navigate(`/tab?tab=group&view=expense&id=${groupId}&len=${len}`);
       } else {
-        navigate("/?tab=non-group");
+        navigate("/tab?tab=non-group");
       }
     }
   }
@@ -140,9 +140,9 @@ export default function Expense() {
       navigate(-1);
     } else {
       if (groupId) {
-        navigate(`/?tab=group&view=expense&id=${groupId}&len=${len}`);
+        navigate(`/tab?tab=group&view=expense&id=${groupId}&len=${len}`);
       } else {
-        navigate("/?tab=non-group");
+        navigate("/tab?tab=non-group");
       }
     }
   };
@@ -150,11 +150,11 @@ export default function Expense() {
   const handleOpenModal = () => {
     if (groupId) {
       navigate(
-        `/?tab=group&view=expense&edit=expense&id=${expenseId}&groupId=${groupId}&len=${len}&modal=true`
+        `/tab?tab=group&view=expense&edit=expense&id=${expenseId}&groupId=${groupId}&len=${len}&modal=true`
       );
     } else {
       navigate(
-        `/?tab=non-group&view=expense&edit=expense&id=${expenseId}&len=${len}&modal=true`
+        `/tab?tab=non-group&view=expense&edit=expense&id=${expenseId}&len=${len}&modal=true`
       );
     }
   };
@@ -175,9 +175,9 @@ export default function Expense() {
         navigate(-1);
       } else {
         if (groupId) {
-          navigate(`/?tab=group&view=expense&id=${groupId}&len=${len}`);
+          navigate(`/tab?tab=group&view=expense&id=${groupId}&len=${len}`);
         } else {
-          navigate("/?tab=non-group");
+          navigate("/tab?tab=non-group");
         }
       }
     }

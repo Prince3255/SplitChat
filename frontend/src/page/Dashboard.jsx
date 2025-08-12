@@ -252,7 +252,7 @@ export default function Dashboard({ onViewNonGroup, onViewGroup }) {
               <h2 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-4">
                 Non-Group Expense Summary
               </h2>
-              <Link to="/?tab=non-group" className="self-end sm:self-auto">
+              <Link to="/tab?tab=non-group" className="self-end sm:self-auto">
                 <Button
                   type="button"
                   gradientDuoTone="greenToBlue"
@@ -345,7 +345,7 @@ export default function Dashboard({ onViewNonGroup, onViewGroup }) {
               <h2 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-4">
                 Group Expense Summary
               </h2>
-              <Link to="/?tab=group" className="self-end sm:self-auto">
+              <Link to="/tab?tab=group" className="self-end sm:self-auto">
                 <Button
                   type="button"
                   gradientDuoTone="greenToBlue"

@@ -38,7 +38,7 @@ export default function ChatHeader() {
   const handleClick = () => {
     if (selectedUser?.groupProfile && selectedUser?.id) {
       navigate(
-        `/?tab=group&view=expense&edit=group&id=${
+        `/tab?tab=group&view=expense&edit=group&id=${
           selectedUser?.id
         }&flag=${false}&len=1`
       );

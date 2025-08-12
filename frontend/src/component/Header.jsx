@@ -167,10 +167,10 @@ export default function Header() {
   const handleGroupClick = (grp) => {
     setSearchTerm("");
     if (grp?.expenseId?.length >= 3) {
-      navigate(`/?tab=group&view=expense&id=${grp?._id}&len=3`);
+      navigate(`/tab?tab=group&view=expense&id=${grp?._id}&len=3`);
     } else {
       navigate(
-        `/?tab=group&view=expense&id=${grp?._id}&len=${grp?.expenseId?.length}`
+        `/tab?tab=group&view=expense&id=${grp?._id}&len=${grp?.expenseId?.length}`
       );
     }
   };
@@ -179,11 +179,11 @@ export default function Header() {
     setSearchTerm("");
     if (settleUp?.isGroupExpense) {
       navigate(
-        `/?tab=group&view=expense&edit=settleup&sid=${settleUp?._id}&id=${settleUp?.groupId}`
+        `/tab?tab=group&view=expense&edit=settleup&sid=${settleUp?._id}&id=${settleUp?.groupId}`
       );
     } else {
       navigate(
-        `/?tab=non-group&view=expense&edit=settleup&sid=${settleUp?._id}`
+        `/tab?tab=non-group&view=expense&edit=settleup&sid=${settleUp?._id}`
       );
     }
   };
@@ -192,10 +192,10 @@ export default function Header() {
     setSearchTerm("");
     if (expense?.isGroupExpense) {
       navigate(
-        `/?tab=group&view=expense&edit=expense&id=${expense?._id}&groupId=${expense?.groupId}`
+        `/tab?tab=group&view=expense&edit=expense&id=${expense?._id}&groupId=${expense?.groupId}`
       );
     } else {
-      navigate(`/?tab=non-group&view=expense&edit=expense&id=${expense?._id}`);
+      navigate(`/tab?tab=non-group&view=expense&edit=expense&id=${expense?._id}`);
     }
   };
 
@@ -228,7 +228,7 @@ export default function Header() {
           <div className="flex justify-between items-center">
             {/* Logo */}
             <div className="flex-shrink-0">
-              <Link to="/" className="flex justify-center">
+              <Link to="/tab" className="flex justify-center">
                 <img
                   src={logo || "/placeholder.svg"}
                   alt="SpliChat"

@@ -16,31 +16,31 @@ export default function Sidebar1({ activeTab }) {
 
   const routes = [
     {
-      path: "/?tab=dashboard",
+      path: "/tab?tab=dashboard",
       tab: "dashboard",
       label: "Dashboard",
       icon: AiOutlineDashboard,
     },
     {
-      path: "/?tab=non-group",
+      path: "/tab?tab=non-group",
       tab: "non-group",
       label: "Non Group",
       icon: HiOutlineUsers,
     },
     {
-      path: "/?tab=group",
+      path: "/tab?tab=group",
       tab: "group",
       label: "Group",
       icon: HiOutlineUserGroup,
     },
     {
-      path: "/?tab=profile",
+      path: "/tab?tab=profile",
       tab: "profile",
       label: "Profile",
       icon: CgProfile,
     },
     {
-      path: "/?tab=about",
+      path: "/tab?tab=about",
       tab: "about",
       label: "About",
       icon: MdOutlineRoundaboutRight,

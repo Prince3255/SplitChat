@@ -178,7 +178,7 @@ export default function NonGroup() {
   const handleExpenseClick = (id1) => {
     // setExpenseId(id);
     navigate(
-      `/?tab=non-group&view=expense&edit=expense&id=${id1}&len=${
+      `/tab?tab=non-group&view=expense&edit=expense&id=${id1}&len=${
         expenseData?.data?.userExpense[0]?.userExpenses?.length || 0
       }`
     );
@@ -186,7 +186,7 @@ export default function NonGroup() {
 
   const handleSettleUpClick = (item1) => {
     navigate(
-      `/?tab=non-group&view=expense&edit=settleup&sid=${item1?._id}&len=${
+      `/tab?tab=non-group&view=expense&edit=settleup&sid=${item1?._id}&len=${
         expenseData?.data?.userExpense[0]?.userExpenses?.length || 0
       }`
     );

@@ -231,9 +231,9 @@ export default function GroupEdit() {
         toast.success(data?.message);
         queryClient.invalidateQueries("groupExpense", { refetchActive: true });
         if (window.history.length > 1) {
-          navigate("/?tab=group");
+          navigate("/tab?tab=group");
         } else {
-          navigate("/?tab=group");
+          navigate("/tab?tab=group");
         }
       }
     } catch (error) {

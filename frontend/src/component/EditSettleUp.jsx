@@ -247,11 +247,11 @@ export default function EditSettleUp() {
     } else {
       if (groupId1) {
         navigate(
-          `/?tab=group&view=expense&edit=settleup&sid=${sid}&id=${groupId1}&len=${len}`
+          `/tab?tab=group&view=expense&edit=settleup&sid=${sid}&id=${groupId1}&len=${len}`
         );
       } else {
         navigate(
-          `/?tab=non-group&view=expense&edit=settleup&sid=${sid}&len=${len}`
+          `/tab?tab=non-group&view=expense&edit=settleup&sid=${sid}&len=${len}`
         );
       }
     }
