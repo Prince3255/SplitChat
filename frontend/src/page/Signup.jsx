@@ -230,6 +230,7 @@ import toast from "react-hot-toast"
 import { Oauth } from "../component"
 import OtpInput from "../component/OtpInput"
 import { HiOutlineArrowLeft, HiOutlineEye, HiOutlineEyeOff } from "react-icons/hi"
+import logo from "../assets/logo.png";
 
 export default function Signup() {
   const [formData, setFormData] = useState({})
@@ -402,7 +403,7 @@ export default function Signup() {
               <button onClick={handleLogoClick} className="transition-transform hover:scale-105">
                 <img
                   className="h-12 w-auto"
-                  src="/src/assets/logo.png"
+                  src={logo}
                   alt="SplitChat"
                   onError={(e) => {
                     e.target.style.display = "none"
@@ -426,7 +427,7 @@ export default function Signup() {
               <button onClick={handleLogoClick} className="transition-transform hover:scale-105">
                 <img
                   className="h-12 w-auto"
-                  src="/src/assets/logo.png"
+                  src={logo}
                   alt="SplitChat"
                   onError={(e) => {
                     e.target.style.display = "none"

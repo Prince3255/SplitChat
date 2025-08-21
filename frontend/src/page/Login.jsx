@@ -126,6 +126,7 @@ import { Button, TextInput, Label, Spinner } from "flowbite-react";
 import toast from "react-hot-toast";
 import { Oauth } from "../component";
 import { HiOutlineEye, HiOutlineEyeOff } from "react-icons/hi";
+import logo from "../assets/logo.png";
 
 export default function Login() {
   const [formData, setFormData] = useState({});
@@ -212,7 +213,7 @@ export default function Login() {
           >
             <img
               className="h-12 w-auto"
-              src="/src/assets/logo.png"
+              src={logo}
               alt="SplitChat"
               onError={(e) => {
                 e.target.style.display = "none";
